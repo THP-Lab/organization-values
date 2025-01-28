@@ -1,0 +1,8 @@
+@use "./resets.scss";
+@use "./variables.scss";
+
+:root {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  font-family: var(--font-atyp-display);
+}
