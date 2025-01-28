@@ -1,8 +1,32 @@
 @use "./resets.scss";
-@use "./variables.scss";
+@use "./variables.scss" as *;
 
 :root {
+  --color-dark: #{$color-dark};
+  --color-light: #{$color-light};
+  --color-accent: #{$color-accent};
+  --color-gray: #{$color-gray};
+  --color-pink: #{$color-pink};
+  --color-blue: #{$color-blue};
+  --color-orange: #{$color-orange};
+
   background-color: var(--color-dark);
   color: var(--color-light);
   font-family: var(--font-atyp-display);
+
+  // Mobile mockup width: 375px
+  font-size: calc(1000vw / 375);
+
+  @include tablet {
+    // Desktop mockup width: 1440px
+    font-size: calc(1000vw / 1440);
+  }
+
+  @include large {
+    font-size: 10px !important;
+  }
+
+  body {
+    font-size: 1.6rem;
+  }
 }
