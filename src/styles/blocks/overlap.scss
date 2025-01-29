@@ -1,0 +1,11 @@
+.overlap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+
+  > * {
+    height: max-content;
+    grid-column: 1 /3;
+    grid-row: 1 / 3;
+  }
+}

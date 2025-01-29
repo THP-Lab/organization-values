@@ -1,0 +1,16 @@
+@use "../variables.scss" as *;
+
+.wrapper {
+  width: 118rem;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: 2rem;
+
+  &[data-wide] {
+    width: 136rem;
+  }
+
+  @include tablet {
+    padding-inline: 0;
+  }
+}

@@ -1,0 +1,10 @@
+.header {
+  margin-block: 4rem;
+
+  .logo {
+    height: 3.5rem;
+    width: auto;
+  }
+}
+
+@import "./header.mobile.module.scss";

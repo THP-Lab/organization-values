@@ -1,0 +1,34 @@
+@use "./variables.scss" as *;
+
+:root {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  font-family: var(--font-atyp-display);
+
+  // Mobile mockup width: 375px
+  font-size: calc(100vw / 375 * 10);
+
+  @include tablet {
+    // Desktop mockup width: 1440px
+    font-size: calc(100vw / 1440 * 10);
+  }
+
+  @include large {
+    font-size: 10px !important;
+  }
+
+  body {
+    width: 100%;
+    font-size: 1.6rem;
+
+    .page {
+      max-width: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+
+  * {
+    // outline: 1px solid lime;
+  }
+}

@@ -12,6 +12,21 @@ $breakpoint-tablet: 767px;
 $breakpoint-desktop: 1440px;
 $breakpoint-large: 1920px;
 
+:root {
+  --color-dark: #{$color-dark};
+  --color-light: #{$color-light};
+  --color-accent: #{$color-accent};
+  --color-gray: #{$color-gray};
+  --color-pink: #{$color-pink};
+  --color-blue: #{$color-blue};
+  --color-orange: #{$color-orange};
+
+  --breakpoint-mobile: #{$breakpoint-mobile};
+  --breakpoint-tablet: #{$breakpoint-tablet};
+  --breakpoint-desktop: #{$breakpoint-desktop};
+  --breakpoint-large: #{$breakpoint-large};
+}
+
 @mixin mobile {
   @media only screen and (max-width: #{$breakpoint-tablet - 1}) {
     @content;

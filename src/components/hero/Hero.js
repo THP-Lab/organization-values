@@ -1,0 +1,33 @@
+import Image from "next/image";
+
+import heroImage from "./hero.png";
+
+import styles from "./hero.module.scss";
+
+const Hero = () => {
+  return (
+    <div className={styles.hero}>
+      <Image
+        aria-hidden="true"
+        src={heroImage}
+        alt="hero"
+        width={1322}
+        height={2328}
+        className={styles.heroImage}
+      />
+      <h1 className={styles.title}>
+        <span>What are</span>
+        <span>Ethereum&apos;s</span>
+        <span>Values?</span>
+      </h1>
+      <div className={styles.description}>
+        <p>
+          Join the community as we build a collaborative system of values that
+          will sit at the heart of Ethereum.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Hero;
