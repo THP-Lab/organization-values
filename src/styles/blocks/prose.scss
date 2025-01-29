@@ -1,0 +1,6 @@
+.prose {
+  font-family: var(--font-atyp-text);
+  p + p {
+    margin-top: 1.6rem;
+  }
+}

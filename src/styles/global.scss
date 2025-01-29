@@ -1,8 +1,11 @@
 @use "./resets.scss";
 @use "./variables.scss";
+@use "./typography.scss";
 
 @use "./base.scss";
 
 @use "./blocks/wrapper.scss";
 @use "./blocks/repel.scss";
 @use "./blocks/overlap.scss";
+@use "./blocks/prose.scss";
+@use "./blocks/section.scss";
