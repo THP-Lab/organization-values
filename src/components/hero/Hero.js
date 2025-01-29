@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ScrollIndicator from "../scroll-indicator/ScrollIndicator";
 
 import heroImage from "./hero.png";
 
@@ -25,6 +26,9 @@ const Hero = () => {
           Join the community as we build a collaborative system of values that
           will sit at the heart of Ethereum.
         </p>
+        <div className={styles.scrollIndicator}>
+          <ScrollIndicator />
+        </div>
       </div>
     </div>
   );
