@@ -1,0 +1,8 @@
+@use "../variables.scss" as *;
+.box {
+  display: flex;
+
+  &[data-end] {
+    justify-content: flex-end;
+  }
+}

@@ -1,3 +1,5 @@
+@use "../../styles/variables.scss" as *;
+
 .header {
   margin-block: 4rem;
 
@@ -7,4 +9,12 @@
   }
 }
 
-@import "./header.mobile.module.scss";
+@include mobile {
+  .header {
+    margin-block: 2rem;
+
+    .logo {
+      height: 2.5rem;
+    }
+  }
+}

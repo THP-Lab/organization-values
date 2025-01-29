@@ -6,6 +6,13 @@
     padding-block: 6rem;
   }
 
+  &[data-space-2] {
+    padding-block: 16rem;
+    @include mobile {
+      padding-block: 6rem;
+    }
+  }
+
   &[data-green-decorated] {
     color: var(--color-dark);
     background-color: var(--color-accent);

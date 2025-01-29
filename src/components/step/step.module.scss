@@ -1,0 +1,42 @@
+@use "../../styles/variables.scss" as *;
+
+.step {
+  .number {
+    font-size: 12.8rem;
+    line-height: 0.8;
+    opacity: 0.2;
+    font-weight: 200;
+    letter-spacing: -0.02em;
+  }
+
+  .title {
+    font-size: 3.6rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .description {
+    margin-bottom: 2.4rem;
+  }
+
+  .stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+@include mobile {
+  .step {
+    .number {
+      font-size: 6.4rem;
+    }
+
+    .title {
+      font-size: 2.4rem;
+      line-height: 1.2;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import Header from "@/components/header/Header";
 import Hero from "@/components/hero/Hero";
+import StepList from "@/components/step-list/StepList";
 import TextBox from "@/components/text-box/TextBox";
 
 export default function Home() {
@@ -34,6 +35,21 @@ export default function Home() {
           </TextBox>
         </div>
       </section>
+      <section className="section" data-space-2>
+        <div className="wrapper">
+          <h2 className="section-title">
+            Propose&nbsp;/&nbsp;Vote on Values
+          </h2>
+          <div className="box" data-end>
+            <StepList />
+          </div>
+        </div>
+      </section>
+      <section className="section"></section>
+      <section className="section"></section>
+      <section className="section"></section>
+      <section className="section"></section>
+      <section className="section"></section>
     </main>
   );
 }
