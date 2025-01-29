@@ -1,3 +1,4 @@
+import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import Hero from "@/components/hero/Hero";
 import StepList from "@/components/step-list/StepList";
@@ -14,7 +15,7 @@ export default function Home() {
           <Hero />
         </div>
       </section>
-      <section className="section" data-green-decorated>
+      <section className="section" data-green data-decorated data-space-1>
         <div className="wrapper repel">
           <h2 className="section-title">Defining Our&nbsp;Future</h2>
           <TextBox>
@@ -37,19 +38,17 @@ export default function Home() {
       </section>
       <section className="section" data-space-2>
         <div className="wrapper">
-          <h2 className="section-title">
-            Propose&nbsp;/&nbsp;Vote on Values
-          </h2>
+          <h2 className="section-title">Propose&nbsp;/&nbsp;Vote on Values</h2>
           <div className="box" data-end>
             <StepList />
           </div>
         </div>
       </section>
-      <section className="section"></section>
-      <section className="section"></section>
-      <section className="section"></section>
-      <section className="section"></section>
-      <section className="section"></section>
+      <section className="section" data-green>
+        <div className="wrapper">
+          <Footer />
+        </div>
+      </section>
     </main>
   );
 }
