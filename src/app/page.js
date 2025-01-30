@@ -3,6 +3,7 @@ import Header from "@/components/header/Header";
 import Hero from "@/components/hero/Hero";
 import StepList from "@/components/step-list/StepList";
 import TextBox from "@/components/text-box/TextBox";
+import ValueListing from "@/components/value-listing/ValueListing";
 
 export default function Home() {
   return (
@@ -42,6 +43,16 @@ export default function Home() {
           <div className="box" data-end>
             <StepList />
           </div>
+        </div>
+      </section>
+      <section className="section" data-space-2>
+        <div className="wrapper">
+          <h2 className="section-title">
+            Explore the Community&apos;s&nbsp;Values
+          </h2>
+        </div>
+        <div className="wrapper">
+          <ValueListing />
         </div>
       </section>
       <section className="section" data-green>
