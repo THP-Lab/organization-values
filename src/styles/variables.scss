@@ -7,11 +7,6 @@ $color-pink: #ff62e6;
 $color-blue: #0038ff;
 $color-orange: #f2420c;
 
-$breakpoint-mobile: 375px;
-$breakpoint-tablet: 767px;
-$breakpoint-desktop: 1440px;
-$breakpoint-large: 1920px;
-
 :root {
   --color-dark: #{$color-dark};
   --color-light: #{$color-light};
@@ -20,33 +15,4 @@ $breakpoint-large: 1920px;
   --color-pink: #{$color-pink};
   --color-blue: #{$color-blue};
   --color-orange: #{$color-orange};
-
-  --breakpoint-mobile: #{$breakpoint-mobile};
-  --breakpoint-tablet: #{$breakpoint-tablet};
-  --breakpoint-desktop: #{$breakpoint-desktop};
-  --breakpoint-large: #{$breakpoint-large};
-}
-
-@mixin mobile {
-  @media only screen and (max-width: #{$breakpoint-tablet - 1}) {
-    @content;
-  }
-}
-
-@mixin tablet {
-  @media only screen and (min-width: #{$breakpoint-tablet}) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media only screen and (min-width: #{$breakpoint-desktop}) {
-    @content;
-  }
-}
-
-@mixin large {
-  @media only screen and (min-width: #{$breakpoint-large}) {
-    @content;
-  }
 }
