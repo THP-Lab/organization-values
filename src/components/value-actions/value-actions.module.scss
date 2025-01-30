@@ -1,0 +1,82 @@
+@use "../../styles/viewports.scss" as *;
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+%button-base {
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-family: var(--font-atyp-text);
+  line-height: 1;
+  padding: 0.8rem 1rem;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.voteButton {
+  @extend %button-base;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  background-color: var(--color-light);
+  border: 0.1rem solid var(--color-dark);
+  border-radius: 0.8rem;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+
+  svg {
+    height: 1.8rem;
+    width: auto;
+  }
+
+  &:hover {
+    background-color: var(--color-dark);
+    color: var(--color-light);
+  }
+}
+
+.withdrawButton {
+  @extend %button-base;
+  padding-left: 0;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  color: currentColor;
+}
+
+.socialActions {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  margin-left: auto;
+}
+
+@include mobile {
+  .actions {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
+
+    .voteButton {
+      width: 100%;
+    }
+
+    .withdrawButton {
+      margin-top: 1.6rem;
+    }
+    .socialActions {
+      margin-top: 1.6rem;
+
+      svg {
+        height: 2.3rem;
+        width: auto;
+      }
+    }
+  }
+}
