@@ -2,6 +2,7 @@ import Image from "next/image";
 import logoImage from "./logo.svg";
 
 import styles from "./header.module.scss";
+import ConnectWalletButton from "../connect-wallet-button/ConnectWalletButton";
 
 const Header = () => {
   return (
@@ -13,7 +14,7 @@ const Header = () => {
         width={162}
         height={35}
       />
-      <button>Connect Wallet</button>
+      <ConnectWalletButton />
     </div>
   );
 };

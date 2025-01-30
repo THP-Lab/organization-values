@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 const AtypDisplay = localFont({
   src: [
     {
-      path: "./AtypDisplay-Regular.woff2",
+      path: "./AtypDisplay-Regular-subset.woff2",
       weight: "400",
       style: "normal",
     },
@@ -13,7 +13,7 @@ const AtypDisplay = localFont({
       style: "italic",
     },
     {
-      path: "./AtypDisplay-Bold.woff2",
+      path: "./AtypDisplay-Bold-subset.woff2",
       weight: "700",
       style: "normal",
     },
@@ -33,7 +33,7 @@ const AtypDisplay = localFont({
       style: "italic",
     },
     {
-      path: "./AtypDisplay-Medium.woff2",
+      path: "./AtypDisplay-Medium-subset.woff2",
       weight: "500",
       style: "normal",
     },
@@ -43,7 +43,7 @@ const AtypDisplay = localFont({
       style: "italic",
     },
     {
-      path: "./AtypDisplay-Semibold.woff2",
+      path: "./AtypDisplay-Semibold-subset.woff2",
       weight: "600",
       style: "normal",
     },
@@ -70,7 +70,7 @@ const AtypDisplay = localFont({
 const AtypText = localFont({
   src: [
     {
-      path: "./AtypText-Regular.woff2",
+      path: "./AtypText-Regular-subset.woff2",
       weight: "400",
       style: "normal",
     },
@@ -100,7 +100,7 @@ const AtypText = localFont({
       style: "italic",
     },
     {
-      path: "./AtypText-Medium.woff2",
+      path: "./AtypText-Medium-subset.woff2",
       weight: "500",
       style: "normal",
     },
@@ -110,7 +110,7 @@ const AtypText = localFont({
       style: "italic",
     },
     {
-      path: "./AtypText-Semibold.woff2",
+      path: "./AtypText-Semibold-subset.woff2",
       weight: "600",
       style: "normal",
     },

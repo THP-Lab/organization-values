@@ -1,0 +1,30 @@
+@use "../../styles/viewports.scss" as *;
+
+.button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 4rem;
+  border: none;
+  padding: 1rem 1.5rem 0.8rem 1.5rem;
+  font-family: var(--font-atyp-text);
+  font-size: 1.4rem;
+  line-height: 1;
+  background-color: var(--color-light);
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-accent);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @include mobile {
+    span {
+      display: none;
+    }
+  }
+}
