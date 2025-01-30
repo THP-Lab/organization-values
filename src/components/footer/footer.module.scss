@@ -18,6 +18,15 @@
     font-size: 1.4rem;
     text-decoration: none;
 
+    &[target="_blank"] {
+      svg {
+        width: 2rem;
+        vertical-align: middle;
+        margin-bottom: 0.2em;
+        margin-left: 0.4rem;
+      }
+    }
+
     &:hover,
     &:focus {
       text-decoration: underline;

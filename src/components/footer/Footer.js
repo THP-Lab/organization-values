@@ -1,3 +1,4 @@
+import ExternalLinkIcon from "../icons/ExternalLinkIcon";
 import styles from "./footer.module.scss";
 
 const Footer = () => {
@@ -14,42 +15,36 @@ const Footer = () => {
         <h3>Social</h3>
         <ul role="list">
           <li>
-            <a href="#" target="_blank">
-              X
+            <a href="https://twitter.com/consensys" target="_blank">
+              X<ExternalLinkIcon />
             </a>
           </li>
           <li>
-            <a href="#" target="_blank">
+            <a href="https://youtube.com/consensys" target="_blank">
               Youtube
+              <ExternalLinkIcon />
             </a>
           </li>
           <li>
-            <a href="#" target="_blank">
+            <a href="https://discord.com/invite/consensys" target="_blank">
               Discord
+              <ExternalLinkIcon />
             </a>
           </li>
           <li>
-            <a href="#" target="_blank">
+            <a href="https://instagram.com/consensysofficial" target="_blank">
               Instagram
+              <ExternalLinkIcon />
             </a>
           </li>
         </ul>
       </div>
       <ul className={styles.legalLinks} role="list">
         <li>
-          <a href="#" target="_blank">
-            Privacy Policy
-          </a>
+          <a href="https://consensys.io/privacy-notice">Privacy Policy</a>
         </li>
         <li>
-          <a href="#" target="_blank">
-            Terms of Use
-          </a>
-        </li>
-        <li>
-          <a href="#" target="_blank">
-            Manage Cookies
-          </a>
+          <a href="https://consensys.io/terms-of-use">Terms of Use</a>
         </li>
       </ul>
     </footer>
