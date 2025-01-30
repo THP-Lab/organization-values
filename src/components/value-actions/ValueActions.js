@@ -3,9 +3,13 @@ import ShareIcon from "../icons/ShareIcon";
 import VoteAgainstIcon from "../icons/VoteAgainstIcon";
 import VoteForIcon from "../icons/VoteForIcon";
 import styles from "./value-actions.module.scss";
-const ValueActions = () => {
+
+// Supports dark and accent hover colors
+const ValueActions = ({ hoverColor = "dark" }) => {
+  const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
+
   return (
-    <div className={styles.actions}>
+    <div className={`${styles.actions} ${hoverColorClass}`}>
       <button className={styles.voteButton}>
         <VoteForIcon />
         Vote for

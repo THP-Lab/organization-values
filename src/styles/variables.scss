@@ -1,5 +1,5 @@
-
 $color-dark: #121212;
+$color-dark-gray: #1c1c1c;
 $color-light: #ffffff;
 $color-accent: #c1ff14;
 $color-gray: #d8d8d8;
@@ -9,6 +9,7 @@ $color-orange: #f2420c;
 
 :root {
   --color-dark: #{$color-dark};
+  --color-dark-gray: #{$color-dark-gray};
   --color-light: #{$color-light};
   --color-accent: #{$color-accent};
   --color-gray: #{$color-gray};

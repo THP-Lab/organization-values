@@ -1,0 +1,91 @@
+@use "../../styles/viewports.scss" as *;
+
+.featuredValue {
+  display: flex;
+  gap: 6.5rem;
+
+  .card {
+    flex: 1;
+    padding: 4rem 4.8rem;
+    border-radius: 1rem;
+    color: var(--color-dark);
+
+    .valueStats {
+      display: none;
+    }
+  }
+
+  &.pink .card {
+    background-color: var(--color-pink);
+  }
+
+  &.blue .card {
+    background-color: var(--color-blue);
+    color: var(--color-light);
+  }
+
+  &.green .card {
+    background-color: var(--color-accent);
+  }
+
+  &.red .card {
+    background-color: var(--color-orange);
+  }
+
+  &.gray .card {
+    background-color: var(--color-gray);
+  }
+
+  .title {
+    margin-bottom: 1.6rem;
+    font-family: var(--font-atyp-text);
+    font-weight: 500;
+    font-size: 2.4rem;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+
+  .description {
+    margin-bottom: 4rem;
+    font-family: var(--font-atyp-text);
+  }
+
+  .sidebar {
+    width: 23.5rem;
+    max-width: 100%;
+    padding-top: 2rem;
+  }
+
+  %text-base {
+    font-family: var(--font-atyp-text);
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+}
+
+@include mobile {
+  .featuredValue {
+    .card {
+      padding: 2rem;
+
+      .title {
+        font-size: 2.4rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .description {
+        font-size: 1.6rem;
+        margin-bottom: 2.4rem;
+      }
+
+      .valueStats {
+        display: block;
+        margin-bottom: 2.4rem;
+      }
+    }
+
+    > .sidebar {
+      display: none;
+    }
+  }
+}

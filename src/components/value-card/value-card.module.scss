@@ -1,0 +1,113 @@
+@use "../../styles/viewports.scss" as *;
+
+.card {
+  position: relative;
+  padding: 4rem 4.8rem;
+  border: 0.1rem solid var(--color-gray);
+  border-radius: 1rem;
+
+  .description,
+  .actions {
+    transition: height 0.2s ease-in-out, margin-top 0.2s ease-in-out;
+  }
+
+  &.expanded {
+    .description {
+      height: var(--expanded-description-height);
+    }
+
+    .actions {
+      height: var(--expanded-actions-height);
+      margin-top: 2.4rem;
+    }
+  }
+
+  .title {
+    padding-right: 15.2rem;
+    font-family: var(--font-atyp-text);
+    font-weight: 500;
+    font-size: 2.4rem;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+
+  .description {
+    height: 0px;
+    overflow: hidden;
+
+    padding-right: 15.2rem;
+    font-family: var(--font-atyp-text);
+  }
+
+  .valueStats {
+    display: block;
+    margin-top: 2.4rem;
+  }
+  .actions {
+    height: 0;
+    margin-top: 0;
+    overflow: hidden;
+  }
+
+  .expandButton {
+    position: absolute;
+    top: 4rem;
+    right: 4.8rem;
+    background-color: var(--color-dark-gray);
+    border: none;
+    width: 8rem;
+    height: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: currentColor;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--color-light);
+      color: var(--color-dark);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    svg {
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+
+  &.expanded {
+    .expandButton {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+@include mobile {
+  .card {
+    padding: 2rem;
+
+    .title {
+      font-size: 2.4rem;
+      padding-right: 5.3rem;
+    }
+
+    .description {
+      padding-top: 0.8rem;
+      font-size: 1.6rem;
+      padding-right: 5.3rem;
+    }
+
+    .expandButton {
+      top: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+}
