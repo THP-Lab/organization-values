@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  font-family: var(--font-atyp-text);
 
   .formGroup {
     display: flex;
@@ -29,7 +28,6 @@
     input[type="number"],
     input[type="url"],
     textarea {
-      font-family: var(--font-atyp-text);
       width: 100%;
       background-color: var(--color-light-gray);
       border-radius: 0;
@@ -37,10 +35,6 @@
       padding: 1.6rem;
       font-size: 1.6rem;
       line-height: 1;
-    }
-
-    textarea {
-      resize: none;
     }
 
     > :has(.ethValueInput) {
@@ -85,7 +79,7 @@
 
     button[type="submit"] {
       cursor: pointer;
-      font-family: var(--font-atyp-text);
+      font-weight: 400;
       font-size: 2rem;
       line-height: 1.4;
       background-color: var(--color-dark);

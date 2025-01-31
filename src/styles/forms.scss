@@ -1,0 +1,18 @@
+form {
+  font-family: var(--font-atyp-text);
+
+  button {
+    font-weight: 400;
+    color: var(--color-dark);
+  }
+
+  input,
+  textarea {
+    font-weight: 400;
+    color: var(--color-dark);
+  }
+
+  textarea {
+    resize: none;
+  }
+}
