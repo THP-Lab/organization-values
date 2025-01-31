@@ -1,6 +1,7 @@
 $color-dark: #121212;
 $color-dark-gray: #1c1c1c;
 $color-light: #ffffff;
+$color-light-border: rgba(255, 255, 255, 0.2);
 $color-accent: #c1ff14;
 $color-gray: #d8d8d8;
 $color-pink: #ff62e6;
@@ -11,6 +12,7 @@ $color-orange: #f2420c;
   --color-dark: #{$color-dark};
   --color-dark-gray: #{$color-dark-gray};
   --color-light: #{$color-light};
+  --color-light-border: #{$color-light-border};
   --color-accent: #{$color-accent};
   --color-gray: #{$color-gray};
   --color-pink: #{$color-pink};
