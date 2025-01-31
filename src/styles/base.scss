@@ -27,9 +27,11 @@
       width: 100%;
       overflow: hidden;
     }
-  }
 
-  * {
-    // outline: 1px solid lime;
+    hr {
+      border: none;
+      border-bottom: 0.1rem solid var(--color-light-border);
+      margin: 0;
+    }
   }
 }

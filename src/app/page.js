@@ -14,8 +14,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "How can I participate in value proposals?",
-    answer:
-      "You can participate by",
+    answer: "You can participate by",
   },
   {
     question: "What makes a good value proposal?",
@@ -84,7 +83,10 @@ export default function Home() {
           <ValueListing />
         </div>
       </section>
-      <section className="section">
+      <div className="wrapper">
+        <hr />
+      </div>
+      <section className="section" data-space-1>
         <div className="wrapper">
           <h2 className="section-title-small">Frequently Asked Questions</h2>
           <Accordion items={FAQ_ITEMS} />
