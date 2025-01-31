@@ -1,0 +1,89 @@
+@use "../../styles/viewports.scss" as *;
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .item {
+    .trigger {
+      width: 100%;
+      padding: 2.6rem 2.4rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+
+      font-family: var(--font-atyp-text);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
+      text-align: left;
+
+      background: var(--color-dark-gray);
+      color: var(--color-light);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      .icon {
+        width: 1.8rem;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+    }
+
+    .content {
+      display: grid;
+      grid-template-rows: 0fr;
+      padding-inline: 2.4rem;
+
+      background: var(--color-dark-gray);
+      color: var(--color-light);
+
+      transition: background-color 0.2s ease, color 0.2s ease,
+        grid-template-rows 0.2s ease-out;
+    }
+
+    .inner {
+      overflow: hidden;
+      padding-block: 0;
+      transition: padding-block 0.2s ease;
+    }
+
+    &.open {
+      .trigger {
+        background: var(--color-accent);
+        color: var(--color-dark);
+
+        .icon {
+          transform: rotate(180deg);
+        }
+      }
+
+      .content {
+        grid-template-rows: 1fr;
+        background: var(--color-accent);
+        color: var(--color-dark);
+      }
+
+      .inner {
+        padding-bottom: 2rem;
+      }
+    }
+  }
+}
+
+@include mobile {
+  .accordion {
+    .item {
+      .trigger {
+        font-size: 1.6rem;
+      }
+    }
+  }
+}

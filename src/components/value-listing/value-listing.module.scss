@@ -32,6 +32,35 @@
     flex-direction: column;
     gap: 3.2rem;
   }
+
+  .loadMore {
+    display: flex;
+    justify-content: center;
+    margin-top: 6rem;
+
+    .loadMoreButton {
+      cursor: pointer;
+      padding: 0.8rem 1.6rem;
+      border: 0.1rem solid var(--color-light);
+      border-radius: 4rem;
+      background: transparent;
+      color: var(--color-light);
+      font-family: var(--font-atyp-text);
+      font-size: 2rem;
+      line-height: 1.4;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+        transform 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--color-light);
+        color: var(--color-dark);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
 }
 
 @include mobile {
@@ -48,6 +77,10 @@
 
     .featuredValues {
       margin-bottom: 5.6rem;
+    }
+
+    .loadMore {
+      margin-top: 3.2rem;
     }
   }
 }

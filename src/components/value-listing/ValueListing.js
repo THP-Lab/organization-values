@@ -80,6 +80,9 @@ const ValueListing = () => {
           />
         ))}
       </div>
+      <div className={styles.loadMore}>
+        <button className={styles.loadMoreButton}>Load More</button>
+      </div>
     </div>
   );
 };
