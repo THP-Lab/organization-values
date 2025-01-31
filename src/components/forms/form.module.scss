@@ -1,0 +1,132 @@
+@use "../../styles/viewports.scss" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  font-family: var(--font-atyp-text);
+
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .error {
+      color: var(--color-error);
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    label {
+      line-height: 1;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    textarea {
+      font-family: var(--font-atyp-text);
+      width: 100%;
+      background-color: var(--color-light-gray);
+      border-radius: 0;
+      border: none;
+      padding: 1.6rem;
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    > :has(.ethValueInput) {
+      position: relative;
+
+      .ethValueInput {
+        /* Remove arrows for Chrome, Safari, Edge, Opera */
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Remove arrows for Firefox */
+        &[type="number"] {
+          -moz-appearance: textfield;
+          appearance: textfield;
+        }
+      }
+
+      &::after {
+        content: "ETH";
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        padding: 1.6rem;
+        pointer-events: none;
+        font-size: 1.6rem;
+        line-height: 1;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 2.4rem;
+    justify-content: center;
+
+    button[type="submit"] {
+      cursor: pointer;
+      font-family: var(--font-atyp-text);
+      font-size: 2rem;
+      line-height: 1.4;
+      background-color: var(--color-dark);
+      color: var(--color-light);
+      padding: 1rem 2.4rem 0.7rem 2.4rem;
+      border-radius: 4rem;
+      border: none;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+        transform 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--color-accent);
+        color: var(--color-dark);
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        background-color: var(--color-light-gray);
+        color: var(--color-dark-gray);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .cancelButton {
+      cursor: pointer;
+      font-family: var(--font-atyp-text);
+      font-size: 2rem;
+      line-height: 1.4;
+      background-color: transparent;
+      color: var(--color-dark);
+      border: none;
+      text-decoration: underline;
+      text-underline-offset: 0.2rem;
+      text-decoration-color: var(--color-dark);
+      transition: transform 0.2s ease-in-out;
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+}

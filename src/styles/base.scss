@@ -4,7 +4,9 @@
   background-color: var(--color-dark);
   color: var(--color-light);
   font-family: var(--font-atyp-display);
-  font-feature-settings: 'ss02' on, 'ss06' on;
+  * {
+    font-feature-settings: "ss02" on, "ss06" on;
+  }
 
   // Mobile mockup width: 375px
   font-size: calc(100vw / 375 * 10);

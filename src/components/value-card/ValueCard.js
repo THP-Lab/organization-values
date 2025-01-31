@@ -45,7 +45,7 @@ const ValueCard = ({ title, description, totalAmount, totalUsers }) => {
         <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
       </div>
       <div className={styles.actions} ref={actionsRef}>
-        <ValueActions hoverColor="accent" />
+        <ValueActions name={title} hoverColor="accent" />
       </div>
     </div>
   );

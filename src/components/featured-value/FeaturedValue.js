@@ -21,10 +21,14 @@ const FeaturedValue = ({
         <div className={styles.valueStats}>
           <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
         </div>
-        <ValueActions />
+        <ValueActions name={title} />
       </div>
       <div className={styles.sidebar}>
-        <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} large={true} />
+        <ValueStats
+          totalAmount={totalAmount}
+          totalUsers={totalUsers}
+          large={true}
+        />
       </div>
     </div>
   );
