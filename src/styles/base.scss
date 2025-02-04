@@ -19,25 +19,25 @@
   @include large {
     font-size: 10px !important;
   }
+}
 
-  body {
+:root body {
+  width: 100%;
+  font-size: 1.6rem;
+
+  .page {
+    max-width: 100%;
     width: 100%;
-    font-size: 1.6rem;
+    overflow: hidden;
+  }
 
-    .page {
-      max-width: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
+  hr {
+    border: none;
+    border-bottom: 0.1rem solid var(--color-light-border);
+    margin: 0;
+  }
 
-    hr {
-      border: none;
-      border-bottom: 0.1rem solid var(--color-light-border);
-      margin: 0;
-    }
-
-    button {
-      color: var(--color-dark);
-    }
+  button {
+    color: var(--color-dark);
   }
 }

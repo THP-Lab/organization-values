@@ -1,5 +1,6 @@
 import { AtypDisplay, AtypText } from "@/fonts/fonts";
 import "../styles/global.scss";
+import Providers from "@/providers/Providers";
 
 export const metadata = {
   title: "Create Next App",
@@ -9,7 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${AtypDisplay.variable} ${AtypText.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
