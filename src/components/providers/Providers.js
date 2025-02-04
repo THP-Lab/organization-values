@@ -4,7 +4,6 @@ import { createConfig, WagmiProvider } from "wagmi";
 import { http } from "viem";
 import { baseSepolia } from "viem/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { injected, metaMask, safe, walletConnect } from "wagmi/connectors";
 
 export const wagmiConfig = createConfig({
   chains: [baseSepolia],
