@@ -1,0 +1,70 @@
+@use "../../styles/viewports.scss" as *;
+
+.carouselWrapper {
+  width: 100%;
+
+  .navigation {
+    margin-top: 3.2rem;
+    display: flex;
+    gap: 0.4rem;
+    &.hidden {
+      visibility: hidden;
+    }
+  }
+
+  .prev,
+  .next {
+    width: 3.2rem;
+    height: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-light);
+    border: none;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    cursor: pointer;
+
+    svg {
+      width: 1.1rem;
+      height: auto;
+    }
+
+    &.disabled {
+      background-color: var(--color-light-border);
+      cursor: not-allowed;
+    }
+    &:hover:not(.disabled),
+    &:focus:not(.disabled) {
+      background-color: var(--color-accent);
+    }
+    &:active:not(.disabled) {
+      transform: scale(0.98);
+    }
+  }
+  .prev svg {
+    transform: rotate(180deg);
+  }
+
+  .carousel {
+    padding-top: 0.5rem;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none; /* Hide the scrollbar */
+    }
+
+    .track {
+      display: flex;
+      gap: 2.8rem;
+      width: max-content;
+      padding-right: 50vw;
+      > * {
+        scroll-snap-align: start;
+      }
+    }
+  }
+}

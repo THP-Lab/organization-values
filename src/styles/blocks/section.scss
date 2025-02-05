@@ -3,20 +3,20 @@
 .section {
   padding-block: 6rem;
   @include mobile {
-    padding-block: 4rem;
+    padding-block: 3rem;
   }
 
   &[data-space-1] {
     padding-block: 8rem;
     @include mobile {
-      padding-block: 6rem;
+      padding-block: 3rem;
     }
   }
 
   &[data-space-2] {
     padding-block: 16rem;
     @include mobile {
-      padding-block: 6rem;
+      padding-block: 3rem;
     }
   }
 

@@ -9,9 +9,21 @@
   gap: 5.6rem 12rem;
 }
 
+.carousel {
+  display: none;
+}
+
 @include mobile {
-  .stepList {
+  .carousel {
     margin-top: 3.2rem;
-    grid-template-columns: 1fr;
+    display: block;
+
+    .carouselItem {
+      width: 33.5rem;
+    }
+  }
+
+  .stepList {
+    display: none;
   }
 }
