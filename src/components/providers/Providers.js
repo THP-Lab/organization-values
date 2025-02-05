@@ -2,8 +2,8 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, WagmiProvider, createConfig } from "wagmi";
-import { linea, baseSepolia } from "wagmi/chains";
 import { metaMask } from "wagmi/connectors";
+import { linea, baseSepolia } from "wagmi/chains";
 
 export const wagmiConfig = createConfig({
   chains: [process.env.NODE_ENV === "development" ? baseSepolia : linea],
