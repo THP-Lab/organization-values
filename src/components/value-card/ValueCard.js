@@ -5,7 +5,7 @@ import ValueActions from "../value-actions/ValueActions";
 import ValueStats from "../value-stats/ValueStats";
 import styles from "./value-card.module.scss";
 
-const ValueCard = ({ title, description, totalAmount, totalUsers }) => {
+const ValueCard = ({ title, description, totalAmount, totalUsers, forumPost }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [descriptionHeight, setDescriptionHeight] = useState(0);
   const [actionsHeight, setActionsHeight] = useState(0);
@@ -45,7 +45,7 @@ const ValueCard = ({ title, description, totalAmount, totalUsers }) => {
         <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
       </div>
       <div className={styles.actions} ref={actionsRef}>
-        <ValueActions name={title} hoverColor="accent" />
+        <ValueActions name={title} hoverColor="accent" forumPost={forumPost} />
       </div>
     </div>
   );

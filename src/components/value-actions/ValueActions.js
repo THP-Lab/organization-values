@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StakeAgainstForm from "../forms/StakeAgainstForm";
 import StakeForForm from "../forms/StakeForForm";
 import WithdrawForm from "../forms/WithdrawForm";
@@ -12,11 +12,20 @@ import Modal from "../modal/Modal";
 import styles from "./value-actions.module.scss";
 
 // Supports dark and accent hover colors
-const ValueActions = ({ name, hoverColor = "dark" }) => {
+const ValueActions = ({ name, hoverColor = "dark", forumPost }) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    setShareUrl(
+      `https://x.com/intent/tweet?url=${encodeURIComponent(
+        window.location.origin + window.location.pathname
+      )}`
+    );
+  }, []);
 
   return (
     <>
@@ -42,13 +51,12 @@ const ValueActions = ({ name, hoverColor = "dark" }) => {
           Withdraw
         </button>
         <div className={styles.socialActions}>
-          <a href="https://www.kialo-edu.com/" target="_blank">
-            <ForumIcon />
-          </a>
-          <a
-            href="https://x.com/intent/tweet?url=https%3A%2F%2Fethereum-values.consensys.io%2F"
-            target="_blank"
-          >
+          {forumPost && (
+            <a href={forumPost} target="_blank">
+              <ForumIcon />
+            </a>
+          )}
+          <a href={shareUrl} target="_blank">
             <ShareIcon />
           </a>
         </div>

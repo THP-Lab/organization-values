@@ -17,6 +17,7 @@ const FEATURED_VALUES = [
       "Decentralization is viewed as essential to preventing censorship, increasing transparency, and creating more resilient systems. It's a response to centralized systems that can be manipulated, controlled, or restricted by governments or large entities.",
     totalAmount: 2.3789,
     totalUsers: 7123,
+    forumPost: "https://kialo.com/decentralization-discussion",
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ const FEATURED_VALUES = [
       "Anyone can develop on Ethereum without needing permission, ensuring inclusivity. This openness encourages innovation, as developers can freely build dapps and experiment with smart contracts.",
     totalAmount: 1.9572,
     totalUsers: 5643,
+    forumPost: "https://kialo.com/permissionless-innovation",
   },
   {
     id: 3,
@@ -44,6 +46,7 @@ const FEATURED_VALUES = [
       "Ethereum supports the concept of individual autonomy, where users have control over their data, assets, and digital identities. Ethereum empowers individuals to manage their assets without relying on traditional institutions, promoting personal freedom and economic independence.",
     totalAmount: 1.9572,
     totalUsers: 5643,
+    forumPost: "https://kialo.com/autonomy-sovereignty",
   },
   {
     id: 5,
@@ -53,6 +56,7 @@ const FEATURED_VALUES = [
       "Molestie volutpat enim amet ut porta pellentesque. Orci lorem vitae blandit dignissim eu mauris justo praesent. Vulputate in commodo neque mauris sapien.",
     totalAmount: 1.9572,
     totalUsers: 5643,
+    forumPost: "https://kialo.com/value-title",
   },
 ];
 
@@ -130,6 +134,7 @@ const ValueListing = () => {
             totalAmount={value.totalAmount}
             totalUsers={value.totalUsers}
             color={value.color}
+            forumPost={value.forumPost}
           />
         ))}
       </div>
@@ -142,6 +147,7 @@ const ValueListing = () => {
               totalAmount={value.totalAmount}
               totalUsers={value.totalUsers}
               color={value.color}
+              forumPost={value.forumPost}
             />
           </div>
         ))}
@@ -155,6 +161,7 @@ const ValueListing = () => {
             totalAmount={value.totalStaked}
             totalUsers={value.totalUsers}
             color="gray"
+            forumPost={value.forumPost}
           />
         ))}
       </div>

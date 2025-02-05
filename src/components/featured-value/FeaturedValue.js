@@ -1,4 +1,3 @@
-import UserIcon from "../icons/UserIcon";
 import ValueActions from "../value-actions/ValueActions";
 import ValueStats from "../value-stats/ValueStats";
 
@@ -10,6 +9,7 @@ const FeaturedValue = ({
   description,
   totalAmount,
   totalUsers,
+  forumPost,
 }) => {
   const colorClass = styles[color] ? styles[color] : "";
 
@@ -21,7 +21,7 @@ const FeaturedValue = ({
         <div className={styles.valueStats}>
           <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
         </div>
-        <ValueActions name={title} />
+        <ValueActions name={title} forumPost={forumPost} />
       </div>
       <div className={styles.sidebar}>
         <ValueStats
