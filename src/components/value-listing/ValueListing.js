@@ -6,6 +6,7 @@ import ProposeValueButton from "../propose-value-button/ProposeValueButton";
 import SearchControls from "../search-controls/SearchControls";
 import ValueCard from "../value-card/ValueCard";
 import styles from "./value-listing.module.scss";
+import Carousel from "../carousel/Carousel";
 
 const FEATURED_VALUES = [
   {
@@ -132,6 +133,19 @@ const ValueListing = () => {
           />
         ))}
       </div>
+      <Carousel className={styles.featuredValuesMobile}>
+        {FEATURED_VALUES.map((value) => (
+          <div key={value.id} className={styles.carouselItem}>
+            <FeaturedValue
+              title={value.title}
+              description={value.description}
+              totalAmount={value.totalAmount}
+              totalUsers={value.totalUsers}
+              color={value.color}
+            />
+          </div>
+        ))}
+      </Carousel>
       <div className={styles.values}>
         {values.map((value) => (
           <ValueCard

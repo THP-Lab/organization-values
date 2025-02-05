@@ -26,6 +26,9 @@
     gap: 3.2rem;
     margin-bottom: 6rem;
   }
+  .featuredValuesMobile {
+    display: none;
+  }
 
   .values {
     display: flex;
@@ -64,6 +67,10 @@
 }
 
 @include mobile {
+  .carouselItem {
+    width: 33.5rem;
+  }
+
   .listing {
     .toolbar {
       flex-direction: column-reverse;
@@ -76,6 +83,11 @@
     }
 
     .featuredValues {
+      display: none;
+    }
+
+    .featuredValuesMobile {
+      display: block;
       margin-bottom: 5.6rem;
     }
 

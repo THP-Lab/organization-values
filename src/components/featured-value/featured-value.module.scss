@@ -65,8 +65,12 @@
 
 @include mobile {
   .featuredValue {
+    height: 100%;
+
     .card {
       padding: 2rem;
+      display: flex;
+      flex-direction: column;
 
       .title {
         font-size: 2.4rem;
@@ -76,6 +80,7 @@
       .description {
         font-size: 1.6rem;
         margin-bottom: 2.4rem;
+        flex: 1;
       }
 
       .valueStats {
