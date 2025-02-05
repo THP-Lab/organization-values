@@ -1,11 +1,19 @@
 import styles from "./search-controls.module.scss";
 
-const SearchControls = () => {
+const SearchControls = ({ onSortChange, onFilterChange }) => {
+  const handleSortChange = (e) => {
+    onSortChange(e.target.value);
+  };
+
+  const handleFilterChange = (e) => {
+    onFilterChange(e.target.checked);
+  };
+
   return (
     <div className={styles.controls}>
       <div className={styles.orderby}>
         <label htmlFor="rankSelect">Ranked by</label>
-        <select id="rankSelect">
+        <select id="rankSelect" onChange={handleSortChange}>
           <option value="supporters">Most Support</option>
           <option value="stake">Most Staked</option>
           <option value="newest">Most Recent</option>
@@ -14,7 +22,7 @@ const SearchControls = () => {
       </div>
       <div className={styles.involved}>
         <label className={styles.checkbox}>
-          <input type="checkbox" />
+          <input type="checkbox" onChange={handleFilterChange} />
           <span>Show only values I&apos;ve voted on</span>
         </label>
       </div>

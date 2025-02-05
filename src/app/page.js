@@ -1,3 +1,4 @@
+import { backendApi } from "@/api/backendApi";
 import Accordion from "@/components/accordion/Accordion";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
@@ -5,6 +6,8 @@ import Hero from "@/components/hero/Hero";
 import StepList from "@/components/step-list/StepList";
 import TextBox from "@/components/text-box/TextBox";
 import ValueListing from "@/components/value-listing/ValueListing";
+
+export const revalidate = 600;
 
 const FAQ_ITEMS = [
   {
@@ -33,7 +36,12 @@ const FAQ_ITEMS = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const valuesCount = await backendApi.valuesCount();
+  const totalStakedEth = await backendApi.totalStakedEth();
+  const totalRewards = await backendApi.totalRewards();
+  const totalUsers = await backendApi.totalUsers();
+
   return (
     <main className="page">
       <section className="overlap">
@@ -69,7 +77,12 @@ export default function Home() {
         <div className="wrapper">
           <h2 className="section-title">Propose&nbsp;/&nbsp;Vote on Values</h2>
           <div className="box" data-end>
-            <StepList />
+            <StepList
+              valuesCount={valuesCount}
+              totalStakedEth={totalStakedEth}
+              totalUsers={totalUsers}
+              totalRewards={totalRewards}
+            />
           </div>
         </div>
       </section>

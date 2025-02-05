@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import FeaturedValue from "../featured-value/FeaturedValue";
 import ProposeValueButton from "../propose-value-button/ProposeValueButton";
 import SearchControls from "../search-controls/SearchControls";
@@ -6,6 +9,7 @@ import styles from "./value-listing.module.scss";
 
 const FEATURED_VALUES = [
   {
+    id: 1,
     color: "pink",
     title: "Decentralization",
     description:
@@ -14,6 +18,7 @@ const FEATURED_VALUES = [
     totalUsers: 7123,
   },
   {
+    id: 2,
     color: "blue",
     title: "Permissionlessness",
     description:
@@ -22,6 +27,7 @@ const FEATURED_VALUES = [
     totalUsers: 5643,
   },
   {
+    id: 3,
     color: "green",
     title: "Trustlessness and Transparency",
     description:
@@ -30,6 +36,7 @@ const FEATURED_VALUES = [
     totalUsers: 5643,
   },
   {
+    id: 4,
     color: "red",
     title: "Autonomy and Self-Sovereignty",
     description:
@@ -38,6 +45,7 @@ const FEATURED_VALUES = [
     totalUsers: 5643,
   },
   {
+    id: 5,
     color: "gray",
     title: "Value Title",
     description:
@@ -48,10 +56,66 @@ const FEATURED_VALUES = [
 ];
 
 const ValueListing = () => {
+  const [values, setValues] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [sortBy, setSortBy] = useState("stake");
+  const [showOnlyVoted, setShowOnlyVoted] = useState(false);
+
+  const pageSize = 5;
+
+  useEffect(() => {
+    const fetchValues = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `/values?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}${
+            showOnlyVoted ? "&address=user123" : ""
+          }`
+        );
+        const data = await response.json();
+
+        if (currentPage === 1) {
+          setValues(data.values);
+        } else {
+          setValues((prev) => [...prev, ...data.values]);
+        }
+
+        setHasMore(currentPage + 1 < data.totalPages);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchValues();
+  }, [currentPage, sortBy, showOnlyVoted]);
+
+  const handleLoadMore = () => {
+    if (!isLoading) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handleSortChange = (newSortBy) => {
+    setSortBy(newSortBy);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (checked) => {
+    setShowOnlyVoted(checked);
+    setCurrentPage(1);
+  };
+
+  const showLoadMore = values.length > 0 && hasMore;
+
   return (
     <div className={styles.listing}>
       <div className={styles.toolbar}>
-        <SearchControls />
+        <SearchControls
+          onSortChange={handleSortChange}
+          onFilterChange={handleFilterChange}
+        />
         <div>
           <ProposeValueButton />
         </div>
@@ -59,7 +123,7 @@ const ValueListing = () => {
       <div className={styles.featuredValues}>
         {FEATURED_VALUES.map((value) => (
           <FeaturedValue
-            key={value.title}
+            key={value.id}
             title={value.title}
             description={value.description}
             totalAmount={value.totalAmount}
@@ -69,20 +133,28 @@ const ValueListing = () => {
         ))}
       </div>
       <div className={styles.values}>
-        {FEATURED_VALUES.map((value) => (
+        {values.map((value) => (
           <ValueCard
-            key={value.title}
-            title={value.title}
+            key={value.id}
+            title={value.valueName}
             description={value.description}
-            totalAmount={value.totalAmount}
+            totalAmount={value.totalStaked}
             totalUsers={value.totalUsers}
-            color={value.color}
+            color="gray"
           />
         ))}
       </div>
-      <div className={styles.loadMore}>
-        <button className={styles.loadMoreButton}>Load More</button>
-      </div>
+      {showLoadMore && (
+        <div className={styles.loadMore}>
+          <button
+            className={styles.loadMoreButton}
+            onClick={handleLoadMore}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
