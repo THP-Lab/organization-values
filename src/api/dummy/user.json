@@ -3,19 +3,16 @@
   "values": [
     {
       "id": 1,
-      "valueName": "Decentralization",
       "forStake": 0.5,
       "againstStake": 0
     },
     {
       "id": 9,
-      "valueName": "Privacy",
       "forStake": 0.3,
       "againstStake": 0.1
     },
     {
       "id": 14,
-      "valueName": "Security",
       "forStake": 0,
       "againstStake": 0.4
     }

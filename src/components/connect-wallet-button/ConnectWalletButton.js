@@ -1,45 +1,20 @@
 "use client";
 
-import { useAccount, useDisconnect, useConnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 import ConnectWalletIcon from "../icons/ConnectWalletIcon";
 import styles from "./connect-wallet-button.module.scss";
-import { useEffect, useState } from "react";
 
 const ConnectWalletButton = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
+  const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { connectors, connect } = useConnect();
-  const [ready, setReady] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const connector = connectors[0];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      (async () => {
-        const provider = await connector.getProvider();
-        setReady(!!provider);
-      })();
-    }
-  }, [connector, mounted]);
-
-  if (!mounted) {
-    return null;
-  }
-
-  if (!address) {
+  if (isConnected) {
     return (
       <div>
-        <button
-          className={styles.button}
-          disabled={!ready}
-          onClick={() => connect({ connector })}
-        >
+        <button className={styles.button} onClick={() => disconnect()}>
           <ConnectWalletIcon />
-          Connect<span>Wallet</span>
+          Disconnect
         </button>
       </div>
     );
@@ -47,10 +22,23 @@ const ConnectWalletButton = () => {
 
   return (
     <div>
-      <button className={styles.button} onClick={() => disconnect()}>
-        <ConnectWalletIcon />
-        Disconnect
-      </button>
+      {connectors.map((connector) => (
+        <button
+          key={connector.uid}
+          className={styles.button}
+          onClick={() => connect({ connector })}
+          disabled={isPending}
+        >
+          <ConnectWalletIcon />
+          {isPending ? (
+            "Connecting..."
+          ) : (
+            <>
+              Connect<span>Wallet</span>
+            </>
+          )}
+        </button>
+      ))}
     </div>
   );
 };

@@ -1,26 +1,27 @@
 "use client";
 
-import { createConfig, WagmiProvider } from "wagmi";
-import { http } from "viem";
-import { baseSepolia } from "viem/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { http, WagmiProvider, createConfig } from "wagmi";
+import { linea, baseSepolia } from "wagmi/chains";
+import { metaMask } from "wagmi/connectors";
 
 export const wagmiConfig = createConfig({
-  chains: [baseSepolia],
+  chains: [process.env.NODE_ENV === "development" ? baseSepolia : linea],
+  connectors: [metaMask()],
   transports: {
-    [baseSepolia.id]: http(),
+    [process.env.NODE_ENV === "development" ? baseSepolia.id : linea.id]:
+      http(),
   },
+  ssr: true,
 });
 
-const queryClient = new QueryClient();
+const client = new QueryClient();
 
 const Providers = ({ children }) => {
   return (
     <>
       <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
       </WagmiProvider>
     </>
   );
