@@ -5,7 +5,7 @@ import ConnectWalletIcon from "../icons/ConnectWalletIcon";
 import styles from "./connect-wallet-button.module.scss";
 
 const ConnectWalletButton = () => {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
 
@@ -22,11 +22,10 @@ const ConnectWalletButton = () => {
 
   return (
     <div>
-      {connectors.map((connector) => (
+      {connectors.length > 0 && (
         <button
-          key={connector.uid}
           className={styles.button}
-          onClick={() => connect({ connector })}
+          onClick={() => connect({ connector: connectors[0] })}
           disabled={isPending}
         >
           <ConnectWalletIcon />
@@ -38,7 +37,7 @@ const ConnectWalletButton = () => {
             </>
           )}
         </button>
-      ))}
+      )}
     </div>
   );
 };

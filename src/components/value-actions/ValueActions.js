@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useContext } from "react";
+import { useAccount, useConnect } from "wagmi";
 import StakeAgainstForm from "../forms/StakeAgainstForm";
 import StakeForForm from "../forms/StakeForForm";
 import WithdrawForm from "../forms/WithdrawForm";
@@ -17,6 +18,8 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
 
   const { user } = useContext(UserContext);
+  const { isConnected } = useAccount();
+  const { connectors, connect } = useConnect();
 
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
@@ -50,6 +53,14 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
     }
   }, [user, valueId]);
 
+  const handleAction = (action) => {
+    if (!isConnected && connectors.length > 0) {
+      connect({ connector: connectors[0] });
+      return;
+    }
+    action();
+  };
+
   return (
     <>
       <div className={`${styles.actions} ${hoverColorClass}`}>
@@ -57,7 +68,7 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
           className={`${styles.voteButton} ${
             forStake > 0 ? styles.staked : ""
           }`}
-          onClick={() => setIsStakeForOpen(true)}
+          onClick={() => handleAction(() => setIsStakeForOpen(true))}
           disabled={againstStake > 0}
         >
           <VoteForIcon />
@@ -67,7 +78,7 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
           className={`${styles.voteButton} ${
             againstStake > 0 ? styles.staked : ""
           }`}
-          onClick={() => setIsStakeAgainstOpen(true)}
+          onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
           disabled={forStake > 0}
         >
           <VoteAgainstIcon />
@@ -78,7 +89,7 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
         {(forStake > 0 || againstStake > 0) && (
           <button
             className={styles.withdrawButton}
-            onClick={() => setIsWithdrawOpen(true)}
+            onClick={() => handleAction(() => setIsWithdrawOpen(true))}
           >
             Withdraw
           </button>
