@@ -12,7 +12,7 @@
     line-height: 1;
     padding: 0.8rem 1rem;
 
-    &:active {
+    &:active:not(:disabled) {
       transform: scale(0.98);
     }
   }
@@ -33,9 +33,19 @@
       width: auto;
     }
 
-    &:hover {
+    &.staked {
       background-color: var(--color-dark);
       color: var(--color-light);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-dark);
+      color: var(--color-light);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 
@@ -57,7 +67,12 @@
 
   &.accent {
     .voteButton {
-      &:hover {
+      &.staked {
+        background-color: var(--color-accent);
+        color: var(--color-dark);
+      }
+
+      &:hover:not(:disabled) {
         background-color: var(--color-accent);
         color: var(--color-dark);
       }

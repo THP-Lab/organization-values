@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import StakeAgainstForm from "../forms/StakeAgainstForm";
 import StakeForForm from "../forms/StakeForForm";
 import WithdrawForm from "../forms/WithdrawForm";
@@ -10,14 +10,20 @@ import VoteAgainstIcon from "../icons/VoteAgainstIcon";
 import VoteForIcon from "../icons/VoteForIcon";
 import Modal from "../modal/Modal";
 import styles from "./value-actions.module.scss";
+import { UserContext } from "../providers/UserProvider";
 
 // Supports dark and accent hover colors
-const ValueActions = ({ name, hoverColor = "dark", forumPost }) => {
+const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
+
+  const { user } = useContext(UserContext);
+
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const [forStake, setForStake] = useState(0);
+  const [againstStake, setAgainstStake] = useState(0);
 
   useEffect(() => {
     setShareUrl(
@@ -27,29 +33,56 @@ const ValueActions = ({ name, hoverColor = "dark", forumPost }) => {
     );
   }, []);
 
+  useEffect(() => {
+    if (!user || !user.values) {
+      setForStake(0);
+      setAgainstStake(0);
+      return;
+    }
+
+    const value = user.values.find((value) => value.id === valueId);
+    if (value) {
+      setForStake(value.forStake);
+      setAgainstStake(value.againstStake);
+    } else {
+      setForStake(0);
+      setAgainstStake(0);
+    }
+  }, [user, valueId]);
+
   return (
     <>
       <div className={`${styles.actions} ${hoverColorClass}`}>
         <button
-          className={styles.voteButton}
+          className={`${styles.voteButton} ${
+            forStake > 0 ? styles.staked : ""
+          }`}
           onClick={() => setIsStakeForOpen(true)}
+          disabled={againstStake > 0}
         >
           <VoteForIcon />
-          Vote for
+          {forStake > 0 ? `${forStake.toFixed(3)} Voted For` : "Vote for"}
         </button>
         <button
-          className={styles.voteButton}
+          className={`${styles.voteButton} ${
+            againstStake > 0 ? styles.staked : ""
+          }`}
           onClick={() => setIsStakeAgainstOpen(true)}
+          disabled={forStake > 0}
         >
           <VoteAgainstIcon />
-          Vote against
+          {againstStake > 0
+            ? `${againstStake.toFixed(3)} Voted Against`
+            : "Vote against"}
         </button>
-        <button
-          className={styles.withdrawButton}
-          onClick={() => setIsWithdrawOpen(true)}
-        >
-          Withdraw
-        </button>
+        {(forStake > 0 || againstStake > 0) && (
+          <button
+            className={styles.withdrawButton}
+            onClick={() => setIsWithdrawOpen(true)}
+          >
+            Withdraw
+          </button>
+        )}
         <div className={styles.socialActions}>
           {forumPost && (
             <a href={forumPost} target="_blank">

@@ -4,6 +4,7 @@ import ValueStats from "../value-stats/ValueStats";
 import styles from "./featured-value.module.scss";
 
 const FeaturedValue = ({
+  valueId,
   color,
   title,
   description,
@@ -21,7 +22,7 @@ const FeaturedValue = ({
         <div className={styles.valueStats}>
           <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
         </div>
-        <ValueActions name={title} forumPost={forumPost} />
+        <ValueActions valueId={valueId} name={title} forumPost={forumPost} />
       </div>
       <div className={styles.sidebar}>
         <ValueStats

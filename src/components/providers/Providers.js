@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, WagmiProvider, createConfig } from "wagmi";
 import { metaMask } from "wagmi/connectors";
 import { linea, baseSepolia } from "wagmi/chains";
+import UserProvider from "./UserProvider";
 
 export const wagmiConfig = createConfig({
   chains: [process.env.NODE_ENV === "development" ? baseSepolia : linea],
@@ -21,7 +22,9 @@ const Providers = ({ children }) => {
   return (
     <>
       <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+        <QueryClientProvider client={client}>
+          <UserProvider>{children}</UserProvider>
+        </QueryClientProvider>
       </WagmiProvider>
     </>
   );
