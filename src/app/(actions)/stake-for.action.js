@@ -11,7 +11,7 @@ const stakeForSchema = z.object({
     .min(0.001, "Amount must be at least 0.001 ETH"),
 });
 
-export async function stakeFor(formData) {
+export async function stakeFor(valueId, formData) {
   const validatedFields = stakeForSchema.safeParse({
     amount: Number(formData.get("amount")),
   });

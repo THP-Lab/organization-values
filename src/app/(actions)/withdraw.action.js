@@ -11,7 +11,7 @@ const withdrawSchema = z.object({
     .min(0.001, "Amount must be at least 0.001 ETH"),
 });
 
-export async function withdraw(formData) {
+export async function withdraw(valueId, formData) {
   const validatedFields = withdrawSchema.safeParse({
     amount: Number(formData.get("amount")),
   });

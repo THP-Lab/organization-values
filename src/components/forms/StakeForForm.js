@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 
 import styles from "./form.module.scss";
 
-const StakeForForm = ({ onCancel }) => {
+const StakeForForm = ({ valueId, onCancel }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   const [isPending, startTransition] = useTransition();
@@ -16,7 +16,7 @@ const StakeForForm = ({ onCancel }) => {
       setErrors({});
 
       startTransition(async () => {
-        const result = await stakeFor(formData);
+        const result = await stakeFor(valueId, formData);
         if (!result.success) {
           console.log("Errors", result.errors);
           setErrors(result.errors);

@@ -100,7 +100,10 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
           subtitle={name}
           onClose={() => setIsStakeForOpen(false)}
         >
-          <StakeForForm onCancel={() => setIsStakeForOpen(false)} />
+          <StakeForForm
+            valueId={valueId}
+            onCancel={() => setIsStakeForOpen(false)}
+          />
         </Modal>
       )}
       {isStakeAgainstOpen && (
@@ -109,7 +112,10 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
           subtitle={name}
           onClose={() => setIsStakeAgainstOpen(false)}
         >
-          <StakeAgainstForm onCancel={() => setIsStakeAgainstOpen(false)} />
+          <StakeAgainstForm
+            valueId={valueId}
+            onCancel={() => setIsStakeAgainstOpen(false)}
+          />
         </Modal>
       )}
       {isWithdrawOpen && (
@@ -118,7 +124,10 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
           subtitle={name}
           onClose={() => setIsWithdrawOpen(false)}
         >
-          <WithdrawForm onCancel={() => setIsWithdrawOpen(false)} />
+          <WithdrawForm
+            valueId={valueId}
+            onCancel={() => setIsWithdrawOpen(false)}
+          />
         </Modal>
       )}
     </>

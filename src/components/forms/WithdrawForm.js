@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 
 import styles from "./form.module.scss";
 
-const WithdrawForm = ({ onCancel }) => {
+const WithdrawForm = ({ valueId, onCancel }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   const [isPending, startTransition] = useTransition();
@@ -16,7 +16,7 @@ const WithdrawForm = ({ onCancel }) => {
       setErrors({});
 
       startTransition(async () => {
-        const result = await withdraw(formData);
+        const result = await withdraw(valueId, formData);
         if (!result.success) {
           console.log("Errors", result.errors);
           setErrors(result.errors);
