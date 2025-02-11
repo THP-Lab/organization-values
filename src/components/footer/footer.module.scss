@@ -26,7 +26,6 @@
     grid-area: social;
     width: 30rem;
     max-width: 100%;
-    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -47,6 +46,7 @@
     grid-area: legal;
     display: flex;
     gap: 3.5rem;
+    margin-top: 4rem;
   }
 
   .socialLinks a,
@@ -83,6 +83,7 @@
       position: relative;
       flex-direction: column;
       gap: 0.8rem;
+      margin-top: 0;
 
       &:before {
         content: "";

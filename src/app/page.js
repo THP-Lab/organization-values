@@ -6,35 +6,9 @@ import Hero from "@/components/hero/Hero";
 import StepList from "@/components/step-list/StepList";
 import TextBox from "@/components/text-box/TextBox";
 import ValueListing from "@/components/value-listing/ValueListing";
+import { FAQ_ITEMS } from "@/data/faq-items";
 
 export const revalidate = 600;
-
-const FAQ_ITEMS = [
-  {
-    question: "What is the purpose of this website?",
-    answer:
-      "This website is a platform for Ethereum enthusiasts to explore and discuss the core values of Ethereum. It allows community members to propose, vote on, and engage with the fundamental principles that guide the ecosystem's development.",
-  },
-  {
-    question: "How can I participate in value proposals?",
-    answer: "You can participate by",
-  },
-  {
-    question: "What makes a good value proposal?",
-    answer:
-      "A good value proposal should be well-articulated, reflect the spirit of Ethereum, and resonate with the community. It should consider both technical and social aspects, while being specific enough to guide decision-making but flexible enough to adapt as the ecosystem evolves.",
-  },
-  {
-    question: "How does the voting process work?",
-    answer:
-      "Voting uses a quadratic voting mechanism where users can allocate voting power across multiple proposals. This ensures that passionate minorities can have meaningful input while preventing any single group from dominating the process.",
-  },
-  {
-    question: "Can values be modified after being accepted?",
-    answer:
-      "Yes, values can evolve through community consensus. While core values provide stability, their interpretation and application may need to adapt as Ethereum grows and faces new challenges. Any significant changes require broad community support.",
-  },
-];
 
 export default async function Home() {
   const valuesCount = await backendApi.valuesCount();

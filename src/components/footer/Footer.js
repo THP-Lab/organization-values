@@ -6,11 +6,16 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.content}>
-        <p>A collaboration with Consensys and Intuition</p>
         <p>
+          A collaboration with Consensys and Intuition
+          <br />
+          <br />
           This is an experimental project to explore how the Ethereum community
           can surface and align on the values that matter the most, in a
-          transparent and inclusive way. Please contact{" "}
+          transparent and inclusive way.
+          <br />
+          <br />
+          Please contact{" "}
           <Link href="mailto:community-values-support@consensys.io">
             community-values-support@consensys.io
           </Link>{" "}
