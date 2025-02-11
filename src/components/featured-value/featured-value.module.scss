@@ -9,31 +9,11 @@
     padding: 4rem 4.8rem;
     border-radius: 1rem;
     color: var(--color-dark);
+    background-color: var(--color-accent);
 
     .valueStats {
       display: none;
     }
-  }
-
-  &.pink .card {
-    background-color: var(--color-pink);
-  }
-
-  &.blue .card {
-    background-color: var(--color-blue);
-    color: var(--color-light);
-  }
-
-  &.green .card {
-    background-color: var(--color-accent);
-  }
-
-  &.red .card {
-    background-color: var(--color-orange);
-  }
-
-  &.gray .card {
-    background-color: var(--color-gray);
   }
 
   .title {

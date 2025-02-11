@@ -8,8 +8,6 @@ import ValueCard from "../value-card/ValueCard";
 import styles from "./value-listing.module.scss";
 import Carousel from "../carousel/Carousel";
 
-const FEATURED_CARD_COLORS = ["pink", "blue", "green", "red", "gray"];
-
 const ValueListing = () => {
   const [featuredValues, setFeaturedValues] = useState([]);
   const [values, setValues] = useState([]);
@@ -99,7 +97,6 @@ const ValueListing = () => {
             totalAmount={value.totalStaked}
             totalUsers={value.totalUsers}
             forumPost={value.forumPost}
-            color={FEATURED_CARD_COLORS[index]}
           />
         ))}
       </div>
@@ -113,7 +110,6 @@ const ValueListing = () => {
               totalAmount={value.totalStaked}
               totalUsers={value.totalUsers}
               forumPost={value.forumPost}
-              color={FEATURED_CARD_COLORS[index]}
             />
           </div>
         ))}

@@ -4,10 +4,6 @@ $color-light-gray: #f2f2f2;
 $color-light: #ffffff;
 $color-light-border: rgba(255, 255, 255, 0.2);
 $color-accent: #c1ff14;
-$color-gray: #d8d8d8;
-$color-pink: #ff62e6;
-$color-blue: #0038ff;
-$color-orange: #f2420c;
 $color-error: #ff0000;
 
 :root {
@@ -17,9 +13,5 @@ $color-error: #ff0000;
   --color-light: #{$color-light};
   --color-light-border: #{$color-light-border};
   --color-accent: #{$color-accent};
-  --color-gray: #{$color-gray};
-  --color-pink: #{$color-pink};
-  --color-blue: #{$color-blue};
-  --color-orange: #{$color-orange};
   --color-error: #{$color-error};
 }
