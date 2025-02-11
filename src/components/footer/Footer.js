@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ExternalLinkIcon from "../icons/ExternalLinkIcon";
 import styles from "./footer.module.scss";
 
@@ -7,8 +8,13 @@ const Footer = () => {
       <div className={styles.content}>
         <p>A collaboration with Consensys and Intuition</p>
         <p>
-          Ipsum fermentum lorem a nunc et dictum mauris dolor. Accumsan in velit
-          aliquam aliquam congue dolor sed id.
+          This is an experimental project to explore how the Ethereum community
+          can surface and align on the values that matter the most, in a
+          transparent and inclusive way. Please contact{" "}
+          <Link href="mailto:community-values-support@consensys.io">
+            community-values-support@consensys.io
+          </Link>{" "}
+          for more info.
         </p>
       </div>
       <div className={styles.socialLinks}>

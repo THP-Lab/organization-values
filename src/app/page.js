@@ -88,9 +88,7 @@ export default async function Home() {
       </section>
       <section className="section" data-space-1>
         <div className="wrapper">
-          <h2 className="section-title">
-            Explore the Community&apos;s&nbsp;Values
-          </h2>
+          <h2 className="section-title">Join the Discussion</h2>
         </div>
         <div className="wrapper">
           <ValueListing />

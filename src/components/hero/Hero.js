@@ -23,8 +23,8 @@ const Hero = () => {
       </h1>
       <div className={styles.description}>
         <p>
-          Join the community as we build a collaborative system of values that
-          will sit at the heart of Ethereum.
+          Join the community in an experiment to collectively align on the
+          values at the core of Ethereum.
         </p>
         <div className={styles.scrollIndicator}>
           <ScrollIndicator />
