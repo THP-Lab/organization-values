@@ -9,9 +9,9 @@ const ArrowIcon = () => (
   >
     <path
       d="M6.66663 10.6667L11.3333 6.00008L6.66663 1.33341"
-      stroke="currentColor"
+      stroke="#121212"
     />
-    <path d="M0.666626 6L11.3333 6" stroke="currentColor" />
+    <path d="M0.666626 6L11.3333 6" stroke="#121212" />
   </svg>
 );
 

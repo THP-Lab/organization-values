@@ -20,6 +20,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--color-light);
+    color: var(--color-dark);
     border: none;
     border-radius: 50%;
     transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
@@ -28,7 +29,8 @@
     svg {
       color: var(--color-dark);
       width: 1.1rem;
-      height: auto;
+      height: 1.3rem;
+      z-index: 1;
     }
 
     &.disabled {
