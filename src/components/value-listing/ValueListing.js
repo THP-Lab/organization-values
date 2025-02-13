@@ -76,11 +76,13 @@ const ValueListing = () => {
   const handleSortChange = (newSortBy) => {
     setSortBy(newSortBy);
     setCurrentPage(1);
+    setValues([]);
   };
 
   const handleFilterChange = (checked) => {
     setShowOnlyVoted(checked);
     setCurrentPage(1);
+    setValues([]);
   };
 
   const showLoadMore = values.length > 0 && hasMore;
