@@ -1,7 +1,7 @@
 "use client";
 
 import { createValue } from "@/app/(actions)/create-value.action";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCreateAtom } from "@/hooks/useCreateAtom";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { useAccount } from "wagmi";
@@ -10,8 +10,11 @@ import { parseEther } from "viem";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
 import { useCreateTriple } from "@/hooks/useCreateTriple";
 import { useActionState } from "react";
+import { UserContext } from "@/contexts/UserContext";
 
 const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
+  const { refreshUser } = useContext(UserContext);
+
   const [errors, setErrors] = useState({});
   const { address } = useAccount();
   const { createAtom } = useCreateAtom();
