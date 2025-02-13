@@ -5,6 +5,8 @@ import styles from "./featured-value.module.scss";
 
 const FeaturedValue = ({
   valueId,
+  vaultId,
+  counterVaultId,
   title,
   description,
   totalAmount,
@@ -19,7 +21,13 @@ const FeaturedValue = ({
         <div className={styles.valueStats}>
           <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
         </div>
-        <ValueActions valueId={valueId} name={title} forumPost={forumPost} />
+        <ValueActions
+          valueId={valueId}
+          name={title}
+          vaultId={vaultId}
+          counterVaultId={counterVaultId}
+          forumPost={forumPost}
+        />
       </div>
       <div className={styles.sidebar}>
         <ValueStats

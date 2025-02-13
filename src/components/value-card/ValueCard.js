@@ -7,6 +7,8 @@ import styles from "./value-card.module.scss";
 
 const ValueCard = ({
   valueId,
+  vaultId,
+  counterVaultId,
   title,
   description,
   totalAmount,
@@ -55,6 +57,8 @@ const ValueCard = ({
         <ValueActions
           valueId={valueId}
           name={title}
+          vaultId={vaultId}
+          counterVaultId={counterVaultId}
           hoverColor="accent"
           forumPost={forumPost}
         />

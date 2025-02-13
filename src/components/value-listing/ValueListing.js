@@ -7,8 +7,14 @@ import SearchControls from "../search-controls/SearchControls";
 import ValueCard from "../value-card/ValueCard";
 import styles from "./value-listing.module.scss";
 import Carousel from "../carousel/Carousel";
+import { useAccount } from "wagmi";
+import { useGetValuesListing } from "@/hooks/useGetValuesListing";
+import { formatEther } from "viem";
 
 const ValueListing = () => {
+  const { address, isConnected } = useAccount();
+  const { getValuesData } = useGetValuesListing();
+
   const [featuredValues, setFeaturedValues] = useState([]);
   const [values, setValues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,12 +29,13 @@ const ValueListing = () => {
     const fetchValues = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `/values?page=${currentPage}&pageSize=${pageSize}&sortBy=${sortBy}${
-            showOnlyVoted ? "&address=user123" : ""
-          }`
+        const data = await getValuesData(
+          currentPage,
+          pageSize,
+          sortBy,
+          showOnlyVoted,
+          isConnected ? address : null
         );
-        const data = await response.json();
 
         if (currentPage === 1) {
           setValues(data.values);
@@ -36,14 +43,14 @@ const ValueListing = () => {
           setValues((prev) => [...prev, ...data.values]);
         }
 
-        setHasMore(currentPage + 1 < data.totalPages);
+        setHasMore(currentPage < data.totalPages);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchValues();
-  }, [currentPage, sortBy, showOnlyVoted]);
+  }, [currentPage, sortBy, showOnlyVoted, address, isConnected, getValuesData]);
 
   useEffect(() => {
     if (!values || !values.length) {
@@ -92,9 +99,11 @@ const ValueListing = () => {
           <FeaturedValue
             key={value.id}
             valueId={value.id}
+            vaultId={value.vaultId}
+            counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={value.totalStaked}
+            totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
             totalUsers={value.totalUsers}
             forumPost={value.forumPost}
           />
@@ -105,9 +114,11 @@ const ValueListing = () => {
           <div key={value.id} className={styles.carouselItem}>
             <FeaturedValue
               valueId={value.id}
+              vaultId={value.vaultId}
+              counterVaultId={value.counterVaultId}
               title={value.valueName}
               description={value.description}
-              totalAmount={value.totalStaked}
+              totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
               totalUsers={value.totalUsers}
               forumPost={value.forumPost}
             />
@@ -119,9 +130,11 @@ const ValueListing = () => {
           <ValueCard
             key={value.id}
             valueId={value.id}
+            vaultId={value.vaultId}
+            counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={value.totalStaked}
+            totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
             totalUsers={value.totalUsers}
             forumPost={value.forumPost}
           />

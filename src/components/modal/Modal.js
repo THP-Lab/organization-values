@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import styles from "./modal.module.scss";
 import CloseIcon from "../icons/CloseIcon";
 
-const Modal = ({ title, subtitle, onClose, children }) => {
+const Modal = ({ title, subtitle, isSubmitting, onClose, children }) => {
   const closeButtonRef = useRef(null);
   const containerRef = useRef(null);
+
+  const handleClose = useCallback(() => {
+    if (!isSubmitting) {
+      onClose();
+    }
+  }, [isSubmitting, onClose]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -21,7 +27,7 @@ const Modal = ({ title, subtitle, onClose, children }) => {
 
     const handleEscape = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
 
@@ -33,7 +39,7 @@ const Modal = ({ title, subtitle, onClose, children }) => {
       document.removeEventListener("focusin", handleFocus);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [onClose]);
+  }, [onClose, handleClose]);
 
   return (
     <div
@@ -43,16 +49,19 @@ const Modal = ({ title, subtitle, onClose, children }) => {
       aria-labelledby="modal-title"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
-          onClose();
+          handleClose();
         }
       }}
     >
-      <div ref={containerRef} className={styles.container}>
+      <div
+        ref={containerRef}
+        className={`${styles.container} ${isSubmitting ? styles.loading : ""}`}
+      >
         <div className={styles.content}>
           <button
             ref={closeButtonRef}
             className={styles.close}
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close modal"
           >
             <CloseIcon />

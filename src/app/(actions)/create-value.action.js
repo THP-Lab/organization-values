@@ -1,5 +1,7 @@
 "use server";
 
+import { gqlClient } from "@/backend/gqlClient";
+import { pinThingMutation } from "@/backend/mutations";
 import { z } from "zod";
 
 const valueSchema = z.object({
@@ -52,9 +54,43 @@ export async function createValue(formData) {
     };
   }
 
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  // Upload value to IPFS
+  try {
+    const result = await gqlClient.mutate({
+      mutation: pinThingMutation,
+      variables: {
+        thing: {
+          name: validatedFields.data.valueName,
+          description: validatedFields.data.description,
+          url: validatedFields.data.forumPost,
+          image: "",
+        },
+      },
+    });
 
-  console.log("Value created successfully");
-  return { success: true };
+    if (!result.data?.pinThing?.uri) {
+      return {
+        success: false,
+        errors: {
+          description: "Failed to create value, please try again.",
+        },
+      };
+    }
+
+    console.log("Value created successfully");
+    return {
+      success: true,
+      ipfsUri: result.data.pinThing.uri,
+      initialStake: validatedFields.data.initialStake,
+    };
+  } catch (error) {
+    console.error("GraphQL mutation failed:", JSON.stringify(error, null, 2));
+    return {
+      success: false,
+      errors: {
+        description:
+          "Failed to create value: " + (error.message || "Unknown error"),
+      },
+    };
+  }
 }

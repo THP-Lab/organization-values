@@ -1,4 +1,3 @@
-import { backendApi } from "@/api/backendApi";
 import Accordion from "@/components/accordion/Accordion";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
@@ -11,10 +10,10 @@ import { FAQ_ITEMS } from "@/data/faq-items";
 export const revalidate = 600;
 
 export default async function Home() {
-  const valuesCount = await backendApi.valuesCount();
-  const totalStakedEth = await backendApi.totalStakedEth();
-  const totalRewards = await backendApi.totalRewards();
-  const totalUsers = await backendApi.totalUsers();
+  const valuesCount = 0;
+  const totalStakedEth = 0;
+  const totalRewards = 0;
+  const totalUsers = 0;
 
   return (
     <main className="page">

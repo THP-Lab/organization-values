@@ -1,35 +1,29 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { useRedeemTriple } from "@/hooks/useRedeemTriple";
+import { useDepositTriple } from "@/hooks/useDepositTriple";
 import styles from "./form.module.scss";
 import { useAccount } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 
-const WithdrawForm = ({
-  vaultId,
-  initialAmount,
-  isSubmitting,
-  setIsSubmitting,
-  onCancel,
-}) => {
+const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
   const { refreshUser } = useContext(UserContext);
   const [errors, setErrors] = useState({});
   const { address } = useAccount();
-  const { redeemTriple } = useRedeemTriple();
+  const { depositTriple } = useDepositTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
-  const handleWithdraw = async (amount) => {
+  const handleDeposit = async (amount) => {
     try {
-      const hash = await redeemTriple(vaultId, address, amount);
+      const hash = await depositTriple(vaultId, address, amount);
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
       refreshUser();
       onCancel();
     } catch (error) {
-      console.error("Error during withdrawal:", error);
+      console.error("Error during deposit:", error);
 
       // Handle user rejection case
       if (error.code === 4001) {
@@ -50,10 +44,10 @@ const WithdrawForm = ({
       const formData = new FormData(event.target);
       const amount = formData.get("amount");
 
-      console.log("Attempting withdrawal", { vaultId, address, amount });
-      await handleWithdraw(amount);
+      console.log("Attempting deposit", { vaultId, address, amount });
+      await handleDeposit(amount);
 
-      console.log("Withdrawal completed successfully");
+      console.log("Deposit completed successfully");
     } finally {
       setIsSubmitting(false);
     }
@@ -62,14 +56,15 @@ const WithdrawForm = ({
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
-        <label htmlFor="amount">Amount to Withdraw *</label>
+        <label htmlFor="amount">Amount to Deposit *</label>
         <div className={styles.inputGroup}>
           <input
             type="number"
             id="amount"
             name="amount"
-            max={initialAmount}
-            defaultValue={initialAmount}
+            defaultValue={0.001}
+            min="0.001"
+            step="0.001"
             required
             aria-describedby={errors.amount ? "amount-error" : undefined}
             className={styles.ethValueInput}
@@ -84,7 +79,7 @@ const WithdrawForm = ({
 
       <div className={styles.actions}>
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Loading..." : "Withdraw ETH"}
+          {isSubmitting ? "Loading..." : "Deposit ETH"}
         </button>
         <button
           type="button"
@@ -99,4 +94,4 @@ const WithdrawForm = ({
   );
 };
 
-export default WithdrawForm;
+export default StakeForm;

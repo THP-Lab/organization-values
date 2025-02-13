@@ -12,6 +12,7 @@ const ProposeValueButton = () => {
   const { connectors, connect } = useConnect();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
@@ -31,8 +32,16 @@ const ProposeValueButton = () => {
         Propose a Value
       </button>
       {isModalOpen && (
-        <Modal title={"Propose a Value"} onClose={() => setIsModalOpen(false)}>
-          <ProposeValueForm />
+        <Modal
+          title={"Propose a Value"}
+          isSubmitting={isSubmitting}
+          onClose={() => setIsModalOpen(false)}
+        >
+          <ProposeValueForm
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+            onCancel={() => setIsModalOpen(false)}
+          />
         </Modal>
       )}
     </>

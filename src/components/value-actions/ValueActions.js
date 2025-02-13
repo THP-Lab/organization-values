@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useContext } from "react";
 import { useAccount, useConnect } from "wagmi";
-import StakeAgainstForm from "../forms/StakeAgainstForm";
-import StakeForForm from "../forms/StakeForForm";
+import StakeForm from "../forms/StakeForm";
 import WithdrawForm from "../forms/WithdrawForm";
 import ForumIcon from "../icons/ForumIcon";
 import ShareIcon from "../icons/ShareIcon";
@@ -11,10 +10,18 @@ import VoteAgainstIcon from "../icons/VoteAgainstIcon";
 import VoteForIcon from "../icons/VoteForIcon";
 import Modal from "../modal/Modal";
 import styles from "./value-actions.module.scss";
-import { UserContext } from "../providers/UserProvider";
+import { UserContext } from "../../contexts/UserContext";
+import { formatEther } from "viem";
 
 // Supports dark and accent hover colors
-const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
+const ValueActions = ({
+  name,
+  valueId,
+  vaultId,
+  counterVaultId,
+  hoverColor = "dark",
+  forumPost,
+}) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
 
   const { user } = useContext(UserContext);
@@ -22,11 +29,15 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
   const { connectors, connect } = useConnect();
 
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
+  const [isStakeForSubmitting, setIsStakeForSubmitting] = useState(false);
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
+  const [isStakeAgainstSubmitting, setIsStakeAgainstSubmitting] =
+    useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [isWithdrawSubmitting, setIsWithdrawSubmitting] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
-  const [forStake, setForStake] = useState(0);
-  const [againstStake, setAgainstStake] = useState(0);
+  const [forPosition, setForPosition] = useState(0);
+  const [againstPosition, setAgainstPosition] = useState(0);
 
   useEffect(() => {
     setShareUrl(
@@ -37,21 +48,22 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
   }, []);
 
   useEffect(() => {
-    if (!user || !user.values) {
-      setForStake(0);
-      setAgainstStake(0);
+    if (!user) {
+      setForPosition(0);
+      setAgainstPosition(0);
       return;
     }
 
-    const value = user.values.find((value) => value.id === valueId);
-    if (value) {
-      setForStake(value.forStake);
-      setAgainstStake(value.againstStake);
-    } else {
-      setForStake(0);
-      setAgainstStake(0);
-    }
-  }, [user, valueId]);
+    const forVaultPosition = user.vaultPositions.find(
+      (position) => position.vaultId === vaultId
+    );
+    const againstVaultPosition = user.counterVaultPositions.find(
+      (position) => position.vaultId === counterVaultId
+    );
+
+    setForPosition(forVaultPosition ? forVaultPosition.shares : 0);
+    setAgainstPosition(againstVaultPosition ? againstVaultPosition.shares : 0);
+  }, [user, vaultId, counterVaultId]);
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
@@ -66,27 +78,29 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
       <div className={`${styles.actions} ${hoverColorClass}`}>
         <button
           className={`${styles.voteButton} ${
-            forStake > 0 ? styles.staked : ""
+            forPosition > 0 ? styles.staked : ""
           }`}
           onClick={() => handleAction(() => setIsStakeForOpen(true))}
-          disabled={againstStake > 0}
+          disabled={againstPosition > 0}
         >
           <VoteForIcon />
-          {forStake > 0 ? `${forStake.toFixed(3)} Voted For` : "Vote for"}
+          {forPosition > 0
+            ? `${Number(formatEther(forPosition)).toFixed(3)} Voted For`
+            : "Vote for"}
         </button>
         <button
           className={`${styles.voteButton} ${
-            againstStake > 0 ? styles.staked : ""
+            againstPosition > 0 ? styles.staked : ""
           }`}
           onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
-          disabled={forStake > 0}
+          disabled={forPosition > 0}
         >
           <VoteAgainstIcon />
-          {againstStake > 0
-            ? `${againstStake.toFixed(3)} Voted Against`
+          {againstPosition > 0
+            ? `${Number(formatEther(againstPosition)).toFixed(3)} Voted Against`
             : "Vote against"}
         </button>
-        {(forStake > 0 || againstStake > 0) && (
+        {(forPosition > 0 || againstPosition > 0) && (
           <button
             className={styles.withdrawButton}
             onClick={() => handleAction(() => setIsWithdrawOpen(true))}
@@ -109,10 +123,13 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
         <Modal
           title={"Staking For"}
           subtitle={name}
+          isSubmitting={isStakeForSubmitting}
           onClose={() => setIsStakeForOpen(false)}
         >
-          <StakeForForm
-            valueId={valueId}
+          <StakeForm
+            vaultId={vaultId}
+            isSubmitting={isStakeForSubmitting}
+            setIsSubmitting={setIsStakeForSubmitting}
             onCancel={() => setIsStakeForOpen(false)}
           />
         </Modal>
@@ -121,10 +138,13 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
         <Modal
           title={"Staking Against"}
           subtitle={name}
+          isSubmitting={isStakeAgainstSubmitting}
           onClose={() => setIsStakeAgainstOpen(false)}
         >
-          <StakeAgainstForm
-            valueId={valueId}
+          <StakeForm
+            vaultId={counterVaultId}
+            isSubmitting={isStakeAgainstSubmitting}
+            setIsSubmitting={setIsStakeAgainstSubmitting}
             onCancel={() => setIsStakeAgainstOpen(false)}
           />
         </Modal>
@@ -133,10 +153,18 @@ const ValueActions = ({ name, valueId, hoverColor = "dark", forumPost }) => {
         <Modal
           title={"Withdraw"}
           subtitle={name}
+          isSubmitting={isWithdrawSubmitting}
           onClose={() => setIsWithdrawOpen(false)}
         >
           <WithdrawForm
-            valueId={valueId}
+            vaultId={forPosition > 0 ? vaultId : counterVaultId}
+            initialAmount={
+              forPosition > 0
+                ? formatEther(forPosition)
+                : formatEther(againstPosition)
+            }
+            isSubmitting={isWithdrawSubmitting}
+            setIsSubmitting={setIsWithdrawSubmitting}
             onCancel={() => setIsWithdrawOpen(false)}
           />
         </Modal>

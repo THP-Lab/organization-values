@@ -1,11 +1,12 @@
 import { AtypDisplay, AtypText } from "@/fonts/fonts";
 import "../styles/global.scss";
-import Providers from "@/components/providers/Providers";
+import Providers from "@/contexts/providers";
 
 /**
  * @type {import('next').Metadata}
  */
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   title: "Ethereum Values",
   description:
     "Join the community in an experiment to collectively align on the values at the core of Ethereum.",
