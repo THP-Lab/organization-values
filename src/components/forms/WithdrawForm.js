@@ -26,7 +26,6 @@ const WithdrawForm = ({
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
-      refreshUser();
       onCancel();
     } catch (error) {
       console.error("Error during withdrawal:", error);
@@ -55,6 +54,7 @@ const WithdrawForm = ({
 
       console.log("Withdrawal completed successfully");
     } finally {
+      refreshUser();
       setIsSubmitting(false);
     }
   };

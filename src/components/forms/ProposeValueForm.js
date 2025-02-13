@@ -65,6 +65,8 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       // Handle other errors
       setErrors({ form: "Something went wrong. Please try again." });
       throw error;
+    } finally {
+      refreshUser();
     }
   };
 

@@ -40,7 +40,13 @@ const ValueListing = () => {
         if (currentPage === 1) {
           setValues(data.values);
         } else {
-          setValues((prev) => [...prev, ...data.values]);
+          setValues((prev) => {
+            const newValues = data.values.filter(
+              (newValue) =>
+                !prev.some((existingValue) => existingValue.id === newValue.id)
+            );
+            return [...prev, ...newValues];
+          });
         }
 
         setHasMore(currentPage < data.totalPages);
@@ -140,15 +146,17 @@ const ValueListing = () => {
           />
         ))}
       </div>
-      {showLoadMore && (
+      {(showLoadMore || isLoading) && (
         <div className={styles.loadMore}>
-          <button
-            className={styles.loadMoreButton}
-            onClick={handleLoadMore}
-            disabled={isLoading}
-          >
-            {isLoading ? "Loading..." : "Load More"}
-          </button>
+          {isLoading ? (
+            <div className={styles.spinner}>
+              <span className={styles.loadingSpinner}></span>
+            </div>
+          ) : (
+            <button className={styles.loadMoreButton} onClick={handleLoadMore}>
+              Load More
+            </button>
+          )}
         </div>
       )}
     </div>
