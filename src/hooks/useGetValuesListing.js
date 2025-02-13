@@ -9,7 +9,7 @@ export function useGetValuesListing() {
     async (
       page = 1,
       pageSize = 5,
-      sortBy = "stake",
+      sortBy = "upvotes",
       onlyVoted = false,
       address = null
     ) => {
@@ -19,11 +19,11 @@ export function useGetValuesListing() {
       // Build order by clause based on sortBy
       let orderBy = [];
       switch (sortBy) {
-        case "supporters":
-          orderBy = [{ vault: { position_count: "desc" } }];
-          break;
-        case "stake":
+        case "upvotes":
           orderBy = [{ vault: { total_shares: "desc" } }];
+          break;
+        case "downvotes":
+          orderBy = [{ counter_vault: { total_shares: "desc" } }];
           break;
         case "newest":
           orderBy = [{ id: "desc" }];

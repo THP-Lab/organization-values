@@ -14,8 +14,8 @@ const SearchControls = ({ onSortChange, onFilterChange }) => {
       <div className={styles.orderby}>
         <label htmlFor="rankSelect">Ranked by</label>
         <select id="rankSelect" onChange={handleSortChange}>
-          <option value="supporters">Most Support</option>
-          <option value="stake">Most Staked</option>
+          <option value="upvotes">Most Upvoted</option>
+          <option value="downvotes">Most Downvoted</option>
           <option value="newest">Most Recent</option>
           <option value="oldest">Least Recent</option>
         </select>
