@@ -39,7 +39,7 @@ export async function createValue(formData) {
   const validatedFields = valueSchema.safeParse({
     valueName: formData.get("valueName"),
     initialStake: Number(formData.get("initialStake")),
-    forumPost: forumPost || null,
+    forumPost: forumPost || "",
     description: formData.get("description"),
   });
 
