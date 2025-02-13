@@ -27,12 +27,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     refreshUser();
-
-    const interval = setInterval(() => {
-      refreshUser();
-    }, 20000);
-
-    return () => clearInterval(interval);
   }, [isConnected, address, refreshUser]);
 
   return (
