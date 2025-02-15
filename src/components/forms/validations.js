@@ -30,6 +30,6 @@ export const proposeValueFormSchema = z.object({
     .or(z.literal("")),
   description: z
     .string()
-    .min(20, "Description must be at least 20 characters")
+    .min(3, "Description must be at least 3 characters")
     .max(640, "Description cannot exceed 640 characters"),
 });

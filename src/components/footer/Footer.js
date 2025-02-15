@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.content}>
         <p>
-          A collaboration with Consensys and Intuition
+          A collaboration between Consensys and Intuition
           <br />
           <br />
           This is an experimental project to explore how the Ethereum community

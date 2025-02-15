@@ -16,7 +16,7 @@ const STEPS = [
     number: 2,
     title: "Vote with ETH",
     description:
-      "Vote on proposed values vying for depositing ETH or against, and pay a small fee to the value pool",
+      "Vote on proposed values by depositing ETH For or Against, and pay a small fee to the value pool",
     statImageSrc: "/images/steps/vote.svg",
     getStats: (_, totalStakedEth) => `${totalStakedEth} ETH in votes`,
   },
