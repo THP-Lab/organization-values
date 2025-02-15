@@ -79,7 +79,6 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       const formData = {
         valueName: event.target.valueName.value,
         initialStake: Number(event.target.initialStake.value),
-        forumPost: event.target.forumPost.value || "",
         description: event.target.description.value,
       };
 
@@ -93,7 +92,7 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
           thing: {
             name: data.valueName,
             description: data.description,
-            url: data.forumPost,
+            url: "",
             image: "",
           },
         },
@@ -154,36 +153,6 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
         {errors.initialStake && (
           <span id="initialStake-error" className={styles.error}>
             {errors.initialStake}
-          </span>
-        )}
-      </div>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="forumPost">
-          Forum Post{" "}
-          <span className={styles.optional}>
-            (optional -{" "}
-            <Link
-              href={
-                "https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
-              }
-              target="_blank"
-            >
-              create forum post here
-            </Link>
-            )
-          </span>
-        </label>
-        <input
-          type="url"
-          id="forumPost"
-          name="forumPost"
-          placeholder="https://kialo.com/"
-          aria-describedby={errors.forumPost ? "forumPost-error" : undefined}
-        />
-        {errors.forumPost && (
-          <span id="forumPost-error" className={styles.error}>
-            {errors.forumPost}
           </span>
         )}
       </div>

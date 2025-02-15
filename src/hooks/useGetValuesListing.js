@@ -91,7 +91,6 @@ export function useGetValuesListing() {
         totalUsers:
           (triple.vault.position_count || 0) +
           (triple.counter_vault.position_count || 0),
-        forumPost: triple.object.value.thing.url,
       }));
 
       return {

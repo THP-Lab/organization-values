@@ -11,7 +11,6 @@ const FeaturedValue = ({
   description,
   totalAmount,
   totalUsers,
-  forumPost,
 }) => {
   return (
     <div className={styles.featuredValue}>
@@ -26,7 +25,6 @@ const FeaturedValue = ({
           name={title}
           vaultId={vaultId}
           counterVaultId={counterVaultId}
-          forumPost={forumPost}
         />
       </div>
       <div className={styles.sidebar}>

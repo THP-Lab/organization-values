@@ -19,15 +19,6 @@ export const proposeValueFormSchema = z.object({
     .min(3, "Name must be at least 3 characters")
     .max(50, "Name cannot exceed 50 characters"),
   initialStake: z.number().min(0.001, "Minimum stake amount is 0.001 ETH"),
-  forumPost: z
-    .string()
-    .url("Must be a valid URL")
-    .regex(
-      /^https:\/\/(www\.)?(kialo\.com\/.*)$/,
-      "Must be a Kialo URL (e.g. https://www.kialo.com/...)"
-    )
-    .optional()
-    .or(z.literal("")),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters")

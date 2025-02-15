@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 import { useAccount, useConnect } from "wagmi";
 import StakeForm from "../forms/StakeForm";
 import WithdrawForm from "../forms/WithdrawForm";
-import ForumIcon from "../icons/ForumIcon";
 import ShareIcon from "../icons/ShareIcon";
 import VoteAgainstIcon from "../icons/VoteAgainstIcon";
 import VoteForIcon from "../icons/VoteForIcon";
@@ -20,7 +19,6 @@ const ValueActions = ({
   vaultId,
   counterVaultId,
   hoverColor = "dark",
-  forumPost,
 }) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
 
@@ -109,11 +107,6 @@ const ValueActions = ({
           </button>
         )}
         <div className={styles.socialActions}>
-          {forumPost && (
-            <a href={forumPost} target="_blank">
-              <ForumIcon />
-            </a>
-          )}
           <a href={shareUrl} target="_blank">
             <ShareIcon />
           </a>

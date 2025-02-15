@@ -13,7 +13,6 @@ const ValueCard = ({
   description,
   totalAmount,
   totalUsers,
-  forumPost,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [descriptionHeight, setDescriptionHeight] = useState(0);
@@ -60,7 +59,6 @@ const ValueCard = ({
           vaultId={vaultId}
           counterVaultId={counterVaultId}
           hoverColor="accent"
-          forumPost={forumPost}
         />
       </div>
     </div>
