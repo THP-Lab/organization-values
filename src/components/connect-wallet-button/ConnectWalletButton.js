@@ -5,16 +5,19 @@ import ConnectWalletIcon from "../icons/ConnectWalletIcon";
 import styles from "./connect-wallet-button.module.scss";
 
 const ConnectWalletButton = () => {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
 
   if (isConnected) {
     return (
       <div>
-        <button className={styles.button} onClick={() => disconnect()}>
+        <button
+          className={`${styles.button} ${styles.connected}`}
+          onClick={() => disconnect()}
+        >
           <ConnectWalletIcon />
-          Disconnect
+          Disconnect ({address?.slice(0, 6)}...{address?.slice(-4)} )
         </button>
       </div>
     );
