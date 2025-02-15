@@ -12,6 +12,7 @@ import { useFormValidation } from "@/hooks/useFormValidation";
 import { proposeValueFormSchema } from "./validations";
 import { gqlClient } from "@/backend/gqlClient";
 import { pinThingMutation } from "@/backend/mutations";
+import Link from "next/link";
 
 import styles from "./form.module.scss";
 
@@ -158,7 +159,21 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       </div>
 
       <div className={styles.formGroup}>
-        <label htmlFor="forumPost">Forum Post</label>
+        <label htmlFor="forumPost">
+          Forum Post{" "}
+          <span className={styles.optional}>
+            (optional -{" "}
+            <Link
+              href={
+                "https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
+              }
+              target="_blank"
+            >
+              create forum post here
+            </Link>
+            )
+          </span>
+        </label>
         <input
           type="url"
           id="forumPost"

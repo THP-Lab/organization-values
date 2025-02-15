@@ -287,7 +287,14 @@ export const FAQ_ITEMS = [
       <>
         <ul>
           <li>
-            Click on the link [where is the link?] to go to the Kialo forum.
+            Click on the{" "}
+            <Link
+              href="https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
+              target="_blank"
+            >
+              link
+            </Link>{" "}
+            to go to the Kialo forum.
           </li>
           <li>
             Click on the <strong>+</strong> button on the right hand side of the

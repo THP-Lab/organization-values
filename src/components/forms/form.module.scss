@@ -22,6 +22,12 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+
+      .optional {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--color-dark-gray);
+      }
     }
 
     input[type="text"],
