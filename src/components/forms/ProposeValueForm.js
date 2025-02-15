@@ -1,33 +1,30 @@
 "use client";
 
-import { createValue } from "@/app/(actions)/create-value.action";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useCreateAtom } from "@/hooks/useCreateAtom";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { useAccount } from "wagmi";
-import styles from "./form.module.scss";
 import { parseEther } from "viem";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
 import { useCreateTriple } from "@/hooks/useCreateTriple";
-import { useActionState } from "react";
 import { UserContext } from "@/contexts/UserContext";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { proposeValueFormSchema } from "./validations";
+import { gqlClient } from "@/backend/gqlClient";
+import { pinThingMutation } from "@/backend/mutations";
+
+import styles from "./form.module.scss";
 
 const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
   const { refreshUser } = useContext(UserContext);
-
-  const [errors, setErrors] = useState({});
+  const { errors, validateForm, setErrors } = useFormValidation(
+    proposeValueFormSchema
+  );
   const { address } = useAccount();
   const { createAtom } = useCreateAtom();
   const { waitForTxEvents } = useWaitForTxEvents();
   const { getAtomId } = useGetAtomId();
   const { createTriple } = useCreateTriple();
-
-  const initialState = {
-    success: false,
-    ipfsUri: null,
-    initialStake: null,
-    errors: {},
-  };
 
   const handleChainInteractions = async (ipfsUri, initialStake) => {
     try {
@@ -73,51 +70,55 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
     }
   };
 
-  const [state, formAction, isPending] = useActionState(
-    async (prevState, formData) => {
-      try {
-        console.log("Attempting proposal", { address });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
 
-        const result = await createValue(formData);
-        if (!result.success || !result.ipfsUri) {
-          return {
-            ...prevState,
-            errors: result.errors,
-          };
-        }
+    try {
+      const formData = {
+        valueName: event.target.valueName.value,
+        initialStake: Number(event.target.initialStake.value),
+        forumPost: event.target.forumPost.value || "",
+        description: event.target.description.value,
+      };
 
-        await handleChainInteractions(result.ipfsUri, result.initialStake);
-        console.log("Proposal completed successfully");
+      const { isValid, data } = validateForm(formData);
+      if (!isValid) return;
 
-        return {
-          success: true,
-          ipfsUri: result.ipfsUri,
-          initialStake: result.initialStake,
-          errors: {},
-        };
-      } catch (error) {
-        console.error("Error during proposal:", {
-          error,
-          address,
-          message: error.message,
-        });
-        return {
-          ...prevState,
-          errors: { form: error.message },
-        };
+      // Upload value to IPFS
+      const result = await gqlClient.mutate({
+        mutation: pinThingMutation,
+        variables: {
+          thing: {
+            name: data.valueName,
+            description: data.description,
+            url: data.forumPost,
+            image: "",
+          },
+        },
+      });
+
+      if (!result.data?.pinThing?.uri) {
+        setErrors({ form: "Failed to create value, please try again." });
+        return;
       }
-    },
-    initialState
-  );
 
-  useEffect(() => {
-    setIsSubmitting(isPending);
-
-    return () => setIsSubmitting(false);
-  }, [isPending, setIsSubmitting]);
+      await handleChainInteractions(
+        result.data.pinThing.uri,
+        data.initialStake
+      );
+      onCancel();
+    } catch (error) {
+      console.error("Error during proposal:", error);
+      setErrors({ form: "Something went wrong. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+      refreshUser();
+    }
+  };
 
   return (
-    <form action={formAction} className={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="valueName">Name of Value *</label>
         <input
@@ -125,16 +126,11 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
           id="valueName"
           name="valueName"
           placeholder="Credible Neutrality"
-          required
-          minLength={3}
-          maxLength={50}
-          aria-describedby={
-            state.errors.valueName ? "valueName-error" : undefined
-          }
+          aria-describedby={errors.valueName ? "valueName-error" : undefined}
         />
-        {state.errors.valueName && (
+        {errors.valueName && (
           <span id="valueName-error" className={styles.error}>
-            {state.errors.valueName}
+            {errors.valueName}
           </span>
         )}
       </div>
@@ -147,18 +143,16 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
             id="initialStake"
             name="initialStake"
             defaultValue={0.001}
-            min="0.001"
             step="0.001"
-            required
             aria-describedby={
-              state.errors.initialStake ? "initialStake-error" : undefined
+              errors.initialStake ? "initialStake-error" : undefined
             }
             className={styles.ethValueInput}
           />
         </div>
-        {state.errors.initialStake && (
+        {errors.initialStake && (
           <span id="initialStake-error" className={styles.error}>
-            {state.errors.initialStake}
+            {errors.initialStake}
           </span>
         )}
       </div>
@@ -169,15 +163,12 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
           type="url"
           id="forumPost"
           name="forumPost"
-          pattern="^https:\/\/kialo\.com\/.*"
           placeholder="https://kialo.com/"
-          aria-describedby={
-            state.errors.forumPost ? "forumPost-error" : undefined
-          }
+          aria-describedby={errors.forumPost ? "forumPost-error" : undefined}
         />
-        {state.errors.forumPost && (
+        {errors.forumPost && (
           <span id="forumPost-error" className={styles.error}>
-            {state.errors.forumPost}
+            {errors.forumPost}
           </span>
         )}
       </div>
@@ -189,16 +180,13 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
           name="description"
           rows="3"
           placeholder="Ethereum should above all strive to be credibly neutral because..."
-          required
-          minLength={20}
-          maxLength={640}
           aria-describedby={
-            state.errors.description ? "description-error" : undefined
+            errors.description ? "description-error" : undefined
           }
         />
-        {state.errors.description && (
+        {errors.description && (
           <span id="description-error" className={styles.error}>
-            {state.errors.description}
+            {errors.description}
           </span>
         )}
       </div>

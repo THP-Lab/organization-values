@@ -1,11 +1,14 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useRedeemTriple } from "@/hooks/useRedeemTriple";
-import styles from "./form.module.scss";
 import { useAccount } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { withdrawFormSchema } from "./validations";
+import { parseEther } from "viem";
+import styles from "./form.module.scss";
 
 const WithdrawForm = ({
   vaultId,
@@ -15,14 +18,19 @@ const WithdrawForm = ({
   onCancel,
 }) => {
   const { refreshUser } = useContext(UserContext);
-  const [errors, setErrors] = useState({});
+  const { errors, validateForm, setErrors } =
+    useFormValidation(withdrawFormSchema);
   const { address } = useAccount();
   const { redeemTriple } = useRedeemTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
   const handleWithdraw = async (amount) => {
     try {
-      const hash = await redeemTriple(vaultId, address, amount);
+      const hash = await redeemTriple(
+        vaultId,
+        address,
+        parseEther(`${amount}`)
+      );
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
@@ -32,12 +40,12 @@ const WithdrawForm = ({
 
       // Handle user rejection case
       if (error.code === 4001) {
-        setErrors({ amount: "Transaction was rejected. Please try again." });
+        setErrors({ form: "Transaction was rejected. Please try again." });
         return;
       }
 
       // Handle other errors
-      setErrors({ amount: "Something went wrong. Please try again." });
+      setErrors({ form: "Something went wrong. Please try again." });
     }
   };
 
@@ -46,11 +54,24 @@ const WithdrawForm = ({
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData(event.target);
-      const amount = formData.get("amount");
+      const formData = {
+        amount: Number(event.target.amount.value),
+        maxAmount: Number(initialAmount),
+      };
 
-      console.log("Attempting withdrawal", { vaultId, address, amount });
-      await handleWithdraw(amount);
+      const { isValid, data } = validateForm(formData);
+
+      if (!isValid) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Attempting withdrawal", {
+        vaultId,
+        address,
+        amount: data.amount,
+      });
+      await handleWithdraw(data.amount);
 
       console.log("Withdrawal completed successfully");
     } finally {
@@ -81,6 +102,12 @@ const WithdrawForm = ({
           </span>
         )}
       </div>
+
+      {errors.form && (
+        <div className={styles.formGroup}>
+          <span className={styles.error}>{errors.form}</span>
+        </div>
+      )}
 
       <div className={styles.actions}>
         <button type="submit" disabled={isSubmitting}>

@@ -2,10 +2,12 @@
 
 import { useContext, useState } from "react";
 import { useDepositTriple } from "@/hooks/useDepositTriple";
-import styles from "./form.module.scss";
 import { useAccount } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
+import { parseEther } from "viem";
+
+import styles from "./form.module.scss";
 
 const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
   const { refreshUser } = useContext(UserContext);
@@ -16,7 +18,11 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
 
   const handleDeposit = async (amount) => {
     try {
-      const hash = await depositTriple(vaultId, address, amount);
+      const hash = await depositTriple(
+        vaultId,
+        address,
+        parseEther(`${amount}`)
+      );
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });

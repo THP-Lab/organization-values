@@ -7,7 +7,7 @@ export function useRedeemTriple() {
   const { writeContractAsync } = useWriteContract();
   const { ensureCorrectChain } = useEnsureCorrectChain();
 
-  const redeemTriple = async (vaultId, address, shares) => {
+  const redeemTriple = async (vaultId, address, shares = 0n) => {
     try {
       // Ensure we're on the correct chain before proceeding
       ensureCorrectChain();
@@ -16,7 +16,7 @@ export function useRedeemTriple() {
         abi: abi,
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
         functionName: "redeemTriple",
-        args: [parseEther(shares), address.toLowerCase(), BigInt(vaultId)],
+        args: [shares, address.toLowerCase(), BigInt(vaultId)],
       });
       return hash;
     } catch (err) {
