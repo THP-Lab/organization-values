@@ -37,7 +37,7 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
 
       const atomId = await getAtomId(ipfsUri);
       const createTripleHash = await createTriple(
-        535,
+        process.env.NEXT_PUBLIC_SUBJECT_ID,
         process.env.NEXT_PUBLIC_PREDICATE_ID,
         Number(atomId),
         parseEther(`${initialStake}`)
