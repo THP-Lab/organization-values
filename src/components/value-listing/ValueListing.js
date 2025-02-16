@@ -85,6 +85,13 @@ const ValueListing = () => {
     setValues([]);
   };
 
+  const handleProposeSuccess = () => {
+    setCurrentPage(1);
+    setSortBy("newest");
+    setShowOnlyVoted(true);
+    setValues([]);
+  };
+
   const showLoadMore = values.length > 0 && hasMore;
 
   const nonFeaturedValues = values.filter(
@@ -95,11 +102,13 @@ const ValueListing = () => {
     <div className={styles.listing}>
       <div className={styles.toolbar}>
         <SearchControls
-          onSortChange={handleSortChange}
-          onFilterChange={handleFilterChange}
+          sortValue={sortBy}
+          setSortValue={handleSortChange}
+          involved={showOnlyVoted}
+          setInvolved={handleFilterChange}
         />
         <div>
-          <ProposeValueButton />
+          <ProposeValueButton onSuccess={() => handleProposeSuccess()} />
         </div>
       </div>
       <div className={styles.featuredValues}>

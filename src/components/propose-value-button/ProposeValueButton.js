@@ -7,7 +7,7 @@ import Modal from "../modal/Modal";
 import ProposeValueForm from "../forms/ProposeValueForm";
 import { useAccount, useConnect } from "wagmi";
 
-const ProposeValueButton = () => {
+const ProposeValueButton = ({ onSuccess }) => {
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
 
@@ -44,6 +44,7 @@ const ProposeValueButton = () => {
             setIsSubmitting={setIsSubmitting}
             setLoadingText={setLoadingText}
             onCancel={() => setIsModalOpen(false)}
+            onSuccess={() => onSuccess()}
           />
         </Modal>
       )}

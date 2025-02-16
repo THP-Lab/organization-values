@@ -20,6 +20,7 @@ const ProposeValueForm = ({
   setIsSubmitting,
   setLoadingText,
   onCancel,
+  onSuccess,
 }) => {
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } = useFormValidation(
@@ -57,6 +58,7 @@ const ProposeValueForm = ({
 
       setLoadingText("Your value has been successfully proposed!");
       await new Promise((resolve) => setTimeout(resolve, 3000));
+      onSuccess();
       onCancel();
     } catch (error) {
       console.error("Error during chain interactions:", {
