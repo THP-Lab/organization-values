@@ -12,11 +12,15 @@ import { useFormValidation } from "@/hooks/useFormValidation";
 import { proposeValueFormSchema } from "./validations";
 import { gqlClient } from "@/backend/gqlClient";
 import { pinThingMutation } from "@/backend/mutations";
-import Link from "next/link";
 
 import styles from "./form.module.scss";
 
-const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
+const ProposeValueForm = ({
+  isSubmitting,
+  setIsSubmitting,
+  setLoadingText,
+  onCancel,
+}) => {
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } = useFormValidation(
     proposeValueFormSchema
@@ -29,6 +33,9 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
 
   const handleChainInteractions = async (ipfsUri, initialStake) => {
     try {
+      setLoadingText(
+        "Transaction 1/2: Registering your value on the blockchain"
+      );
       const createAtomHash = await createAtom(ipfsUri, parseEther("0.0004"));
       console.log("Transaction submitted", { ipfsUri, createAtomHash });
 
@@ -36,6 +43,7 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       console.log("Atom created", { ipfsUri, createAtomHash });
 
       const atomId = await getAtomId(ipfsUri);
+      setLoadingText("Transaction 2/2: Connecting your value to Ethereum");
       const createTripleHash = await createTriple(
         process.env.NEXT_PUBLIC_SUBJECT_ID,
         process.env.NEXT_PUBLIC_PREDICATE_ID,
@@ -47,6 +55,8 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       await waitForTxEvents(createTripleHash);
       console.log("Triple created", { atomId, createTripleHash });
 
+      setLoadingText("Your value has been successfully proposed!");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
     } catch (error) {
       console.error("Error during chain interactions:", {
@@ -60,11 +70,13 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
       // Handle user rejection case
       if (error.code === 4001) {
         setErrors({ form: "Transaction was rejected. Please try again." });
+        setLoadingText("");
         return;
       }
 
       // Handle other errors
       setErrors({ form: "Something went wrong. Please try again." });
+      setLoadingText("");
       throw error;
     } finally {
       refreshUser();
@@ -100,6 +112,7 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
 
       if (!result.data?.pinThing?.uri) {
         setErrors({ form: "Failed to create value, please try again." });
+        setLoadingText("");
         return;
       }
 
@@ -107,10 +120,10 @@ const ProposeValueForm = ({ isSubmitting, setIsSubmitting, onCancel }) => {
         result.data.pinThing.uri,
         data.initialStake
       );
-      onCancel();
     } catch (error) {
       console.error("Error during proposal:", error);
       setErrors({ form: "Something went wrong. Please try again." });
+      setLoadingText("");
     } finally {
       setIsSubmitting(false);
       refreshUser();

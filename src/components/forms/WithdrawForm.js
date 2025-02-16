@@ -15,6 +15,7 @@ const WithdrawForm = ({
   initialAmount,
   isSubmitting,
   setIsSubmitting,
+  setLoadingText,
   onCancel,
 }) => {
   const { refreshUser } = useContext(UserContext);
@@ -26,6 +27,7 @@ const WithdrawForm = ({
 
   const handleWithdraw = async (amount) => {
     try {
+      setLoadingText("Transaction 1/1: Withdrawing ETH from vault");
       const hash = await redeemTriple(
         vaultId,
         address,
@@ -34,6 +36,9 @@ const WithdrawForm = ({
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
+
+      setLoadingText("Your withdrawal has been successfully processed!");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
     } catch (error) {
       console.error("Error during withdrawal:", error);
@@ -41,11 +46,22 @@ const WithdrawForm = ({
       // Handle user rejection case
       if (error.code === 4001) {
         setErrors({ form: "Transaction was rejected. Please try again." });
+        setLoadingText("");
+        return;
+      }
+
+      // Handle transaction revert
+      if (error.message.includes("Transaction failed")) {
+        setErrors({
+          form: "Transaction failed. The withdrawal could not be processed. Please try again.",
+        });
+        setLoadingText("");
         return;
       }
 
       // Handle other errors
       setErrors({ form: "Something went wrong. Please try again." });
+      setLoadingText("");
     }
   };
 

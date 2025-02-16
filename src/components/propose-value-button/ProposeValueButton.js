@@ -13,6 +13,7 @@ const ProposeValueButton = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
@@ -35,11 +36,13 @@ const ProposeValueButton = () => {
         <Modal
           title={"Propose a Value"}
           isSubmitting={isSubmitting}
+          loadingText={loadingText}
           onClose={() => setIsModalOpen(false)}
         >
           <ProposeValueForm
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            setLoadingText={setLoadingText}
             onCancel={() => setIsModalOpen(false)}
           />
         </Modal>

@@ -25,54 +25,43 @@
     background-color: var(--color-light);
     border-radius: 1rem;
 
-    &.loading {
-      position: relative;
+    .loadingOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(0.25rem);
+      background-color: rgba(0, 0, 0, 0.05);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.6rem;
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--color-light);
-        backdrop-filter: blur(0.1rem);
-        z-index: 1;
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
+      .spinner {
         width: 4rem;
         height: 4rem;
-        margin: -2rem 0 0 -2rem;
         border: 0.4rem solid var(--color-dark);
         border-top-color: transparent;
         border-radius: 50%;
         animation: spin 1s linear infinite;
-        z-index: 2;
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
       }
 
-      &::before {
-        opacity: 0.5;
+      .loadingText {
+        color: var(--color-dark);
+        font-size: 2rem;
+        text-align: center;
       }
-      &::after {
-        opacity: 1;
-      }
+    }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
       }
     }
   }

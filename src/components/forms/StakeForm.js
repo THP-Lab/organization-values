@@ -9,7 +9,7 @@ import { parseEther } from "viem";
 
 import styles from "./form.module.scss";
 
-const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
+const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onCancel }) => {
   const { refreshUser } = useContext(UserContext);
   const [errors, setErrors] = useState({});
   const { address } = useAccount();
@@ -18,6 +18,7 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
 
   const handleDeposit = async (amount) => {
     try {
+      setLoadingText("Transaction 1/1: Depositing ETH into vault");
       const hash = await depositTriple(
         vaultId,
         address,
@@ -26,6 +27,9 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
+      
+      setLoadingText("Your deposit has been successfully processed!");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
     } catch (error) {
       console.error("Error during deposit:", error);
@@ -33,11 +37,13 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, onCancel }) => {
       // Handle user rejection case
       if (error.code === 4001) {
         setErrors({ amount: "Transaction was rejected. Please try again." });
+        setLoadingText("");
         return;
       }
 
       // Handle other errors
       setErrors({ amount: "Something went wrong. Please try again." });
+      setLoadingText("");
     }
   };
 

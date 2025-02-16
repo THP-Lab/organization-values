@@ -1,6 +1,5 @@
 import { useWriteContract } from "wagmi";
 import { abi } from "@/backend/abi";
-import { parseEther } from "viem";
 import { useEnsureCorrectChain } from "./useEnsureCorrectChain";
 
 export function useRedeemTriple() {

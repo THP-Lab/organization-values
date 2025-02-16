@@ -4,7 +4,18 @@ import { useEffect, useRef, useCallback } from "react";
 import styles from "./modal.module.scss";
 import CloseIcon from "../icons/CloseIcon";
 
-const Modal = ({ title, subtitle, isSubmitting, onClose, children }) => {
+const ModalLoadingSpinner = () => {
+  return <div className={styles.spinner} />;
+};
+
+const Modal = ({
+  title,
+  subtitle,
+  isSubmitting,
+  loadingText = "Submitting...",
+  onClose,
+  children,
+}) => {
   const closeButtonRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -57,6 +68,12 @@ const Modal = ({ title, subtitle, isSubmitting, onClose, children }) => {
         ref={containerRef}
         className={`${styles.container} ${isSubmitting ? styles.loading : ""}`}
       >
+        {isSubmitting && (
+          <div className={styles.loadingOverlay}>
+            <ModalLoadingSpinner />
+            {loadingText && <p className={styles.loadingText}>{loadingText}</p>}
+          </div>
+        )}
         <div className={styles.content}>
           <button
             ref={closeButtonRef}

@@ -28,11 +28,14 @@ const ValueActions = ({
 
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeForSubmitting, setIsStakeForSubmitting] = useState(false);
+  const [stakeForLoadingText, setStakeForLoadingText] = useState("");
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
   const [isStakeAgainstSubmitting, setIsStakeAgainstSubmitting] =
     useState(false);
+  const [stakeAgainstLoadingText, setStakeAgainstLoadingText] = useState("");
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isWithdrawSubmitting, setIsWithdrawSubmitting] = useState(false);
+  const [withdrawLoadingText, setWithdrawLoadingText] = useState("");
   const [shareUrl, setShareUrl] = useState("");
   const [forPosition, setForPosition] = useState(0);
   const [againstPosition, setAgainstPosition] = useState(0);
@@ -117,12 +120,14 @@ const ValueActions = ({
           title={"Staking For"}
           subtitle={name}
           isSubmitting={isStakeForSubmitting}
+          loadingText={stakeForLoadingText}
           onClose={() => setIsStakeForOpen(false)}
         >
           <StakeForm
             vaultId={vaultId}
             isSubmitting={isStakeForSubmitting}
             setIsSubmitting={setIsStakeForSubmitting}
+            setLoadingText={setStakeForLoadingText}
             onCancel={() => setIsStakeForOpen(false)}
           />
         </Modal>
@@ -132,12 +137,14 @@ const ValueActions = ({
           title={"Staking Against"}
           subtitle={name}
           isSubmitting={isStakeAgainstSubmitting}
+          loadingText={stakeAgainstLoadingText}
           onClose={() => setIsStakeAgainstOpen(false)}
         >
           <StakeForm
             vaultId={counterVaultId}
             isSubmitting={isStakeAgainstSubmitting}
             setIsSubmitting={setIsStakeAgainstSubmitting}
+            setLoadingText={setStakeAgainstLoadingText}
             onCancel={() => setIsStakeAgainstOpen(false)}
           />
         </Modal>
@@ -147,6 +154,7 @@ const ValueActions = ({
           title={"Withdraw"}
           subtitle={name}
           isSubmitting={isWithdrawSubmitting}
+          loadingText={withdrawLoadingText}
           onClose={() => setIsWithdrawOpen(false)}
         >
           <WithdrawForm
@@ -158,6 +166,7 @@ const ValueActions = ({
             }
             isSubmitting={isWithdrawSubmitting}
             setIsSubmitting={setIsWithdrawSubmitting}
+            setLoadingText={setWithdrawLoadingText}
             onCancel={() => setIsWithdrawOpen(false)}
           />
         </Modal>
