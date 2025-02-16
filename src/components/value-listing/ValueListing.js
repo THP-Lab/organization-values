@@ -36,6 +36,11 @@ const ValueListing = () => {
         isConnected ? address : null
       );
 
+      if (!data?.values) {
+        console.error("No values returned from getValuesData");
+        return;
+      }
+
       if (currentPage === 1) {
         setValues(data.values);
       } else {
@@ -49,6 +54,8 @@ const ValueListing = () => {
       }
 
       setHasMore(currentPage < data.totalPages);
+    } catch (error) {
+      console.error("Error fetching values:", error);
     } finally {
       setIsLoading(false);
     }
@@ -85,12 +92,17 @@ const ValueListing = () => {
     setValues([]);
   };
 
-  const handleProposeSuccess = () => {
+  const handleProposeSuccess = useCallback(() => {
+    setValues([]);
+
+    if (currentPage === 1 && sortBy === "newest" && showOnlyVoted) {
+      fetchValues();
+      return;
+    }
     setCurrentPage(1);
     setSortBy("newest");
     setShowOnlyVoted(true);
-    setValues([]);
-  };
+  }, [currentPage, sortBy, showOnlyVoted, fetchValues]);
 
   const showLoadMore = values.length > 0 && hasMore;
 
@@ -108,7 +120,7 @@ const ValueListing = () => {
           setInvolved={handleFilterChange}
         />
         <div>
-          <ProposeValueButton onSuccess={() => handleProposeSuccess()} />
+          <ProposeValueButton onSuccess={handleProposeSuccess} />
         </div>
       </div>
       <div className={styles.featuredValues}>
