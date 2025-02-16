@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import FeaturedValue from "../featured-value/FeaturedValue";
 import ProposeValueButton from "../propose-value-button/ProposeValueButton";
 import SearchControls from "../search-controls/SearchControls";
@@ -25,38 +25,45 @@ const ValueListing = () => {
 
   const pageSize = 5;
 
-  useEffect(() => {
-    const fetchValues = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getValuesData(
-          currentPage,
-          pageSize,
-          sortBy,
-          showOnlyVoted,
-          isConnected ? address : null
-        );
+  const fetchValues = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await getValuesData(
+        currentPage,
+        pageSize,
+        sortBy,
+        showOnlyVoted,
+        isConnected ? address : null
+      );
 
-        if (currentPage === 1) {
-          setValues(data.values);
-        } else {
-          setValues((prev) => {
-            const newValues = data.values.filter(
-              (newValue) =>
-                !prev.some((existingValue) => existingValue.id === newValue.id)
-            );
-            return [...prev, ...newValues];
-          });
-        }
-
-        setHasMore(currentPage < data.totalPages);
-      } finally {
-        setIsLoading(false);
+      if (!data?.values) {
+        console.error("No values returned from getValuesData");
+        return;
       }
-    };
 
-    fetchValues();
+      if (currentPage === 1) {
+        setValues(data.values);
+      } else {
+        setValues((prev) => {
+          const newValues = data.values.filter(
+            (newValue) =>
+              !prev.some((existingValue) => existingValue.id === newValue.id)
+          );
+          return [...prev, ...newValues];
+        });
+      }
+
+      setHasMore(currentPage < data.totalPages);
+    } catch (error) {
+      console.error("Error fetching values:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [currentPage, sortBy, showOnlyVoted, address, isConnected, getValuesData]);
+
+  useEffect(() => {
+    fetchValues();
+  }, [fetchValues]);
 
   useEffect(() => {
     if (!values || !values.length) {
@@ -85,12 +92,17 @@ const ValueListing = () => {
     setValues([]);
   };
 
-  const handleProposeSuccess = () => {
+  const handleProposeSuccess = useCallback(() => {
+    setValues([]);
+
+    if (currentPage === 1 && sortBy === "newest" && showOnlyVoted) {
+      fetchValues();
+      return;
+    }
     setCurrentPage(1);
     setSortBy("newest");
     setShowOnlyVoted(true);
-    setValues([]);
-  };
+  }, [currentPage, sortBy, showOnlyVoted, fetchValues]);
 
   const showLoadMore = values.length > 0 && hasMore;
 
@@ -108,7 +120,7 @@ const ValueListing = () => {
           setInvolved={handleFilterChange}
         />
         <div>
-          <ProposeValueButton onSuccess={() => handleProposeSuccess()} />
+          <ProposeValueButton onSuccess={handleProposeSuccess} />
         </div>
       </div>
       <div className={styles.featuredValues}>

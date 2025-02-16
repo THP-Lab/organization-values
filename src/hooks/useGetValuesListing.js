@@ -79,19 +79,25 @@ export function useGetValuesListing() {
         throw error;
       }
 
-      const values = data.triples.map((triple) => ({
-        id: triple.id,
-        vaultId: triple.vault_id,
-        counterVaultId: triple.counter_vault_id,
-        valueName: triple.object.value.thing.name,
-        description: triple.object.value.thing.description,
-        totalStaked:
-          (triple.vault.total_shares || 0) +
-          (triple.counter_vault.total_shares || 0),
-        totalUsers:
-          (triple.vault.position_count || 0) +
-          (triple.counter_vault.position_count || 0),
-      }));
+      const values = data.triples
+        .filter(
+          (triple) =>
+            triple.object?.value?.thing?.name &&
+            triple.object?.value?.thing?.description
+        )
+        .map((triple) => ({
+          id: triple.id,
+          vaultId: triple.vault_id,
+          counterVaultId: triple.counter_vault_id,
+          valueName: triple.object.value.thing.name,
+          description: triple.object.value.thing.description,
+          totalStaked:
+            (triple.vault.total_shares || 0) +
+            (triple.counter_vault.total_shares || 0),
+          totalUsers:
+            (triple.vault.position_count || 0) +
+            (triple.counter_vault.position_count || 0),
+        }));
 
       return {
         values,
