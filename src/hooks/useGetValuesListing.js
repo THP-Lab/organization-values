@@ -92,8 +92,8 @@ export function useGetValuesListing() {
           valueName: triple.object.value.thing.name,
           description: triple.object.value.thing.description,
           totalStaked:
-            Number(triple.vault.total_shares || 0) +
-            Number(triple.counter_vault.total_shares || 0),
+            BigInt(triple.vault.total_shares || 0) +
+            BigInt(triple.counter_vault.total_shares || 0),
           totalUsers:
             Number(triple.vault.position_count || 0) +
             Number(triple.counter_vault.position_count || 0),
