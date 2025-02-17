@@ -106,6 +106,7 @@ const WithdrawForm = ({
             id="amount"
             name="amount"
             max={initialAmount}
+            step="any"
             defaultValue={initialAmount}
             required
             aria-describedby={errors.amount ? "amount-error" : undefined}
