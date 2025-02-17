@@ -132,7 +132,7 @@ const ValueListing = () => {
             counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
+            totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}
@@ -146,7 +146,7 @@ const ValueListing = () => {
               counterVaultId={value.counterVaultId}
               title={value.valueName}
               description={value.description}
-              totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
+              totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
               totalUsers={value.totalUsers}
             />
           </div>
@@ -161,7 +161,7 @@ const ValueListing = () => {
             counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={Number(formatEther(value.totalStaked)).toFixed(2)}
+            totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}
