@@ -39,14 +39,15 @@ const ValueActions = ({
   const [shareUrl, setShareUrl] = useState("");
   const [forPosition, setForPosition] = useState(0);
   const [againstPosition, setAgainstPosition] = useState(0);
-
   useEffect(() => {
     setShareUrl(
-      `https://x.com/intent/tweet?url=${encodeURIComponent(
+      `https://x.com/intent/tweet?text=${encodeURIComponent(
+        `${name} is important to Ethereum, do you agree? Join the discussion here:`
+      )}&url=${encodeURIComponent(
         window.location.origin + window.location.pathname
       )}`
     );
-  }, []);
+  }, [name]);
 
   useEffect(() => {
     if (!user) {
