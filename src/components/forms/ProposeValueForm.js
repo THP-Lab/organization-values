@@ -158,7 +158,7 @@ const ProposeValueForm = ({
             id="initialStake"
             name="initialStake"
             defaultValue={0.001}
-            step="0.001"
+            step="any"
             aria-describedby={
               errors.initialStake ? "initialStake-error" : undefined
             }
