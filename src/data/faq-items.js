@@ -252,7 +252,7 @@ export const FAQ_ITEMS = [
     ),
   },
   {
-    question: "Won&apos;t the values just be dominated by whales?",
+    question: "Won't the values just be dominated by whales?",
     answer: (
       <>
         With the current design, this is definitely a possibility, and it is

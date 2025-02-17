@@ -7,7 +7,14 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.content}>
         <p>
-          A collaboration between Consensys and Intuition
+          A collaboration between{" "}
+          <Link href="https://consensys.io" target="_blank">
+            Consensys
+          </Link>{" "}
+          and{" "}
+          <Link href="https://www.intuition.systems/" target="_blank">
+            Intuition
+          </Link>
           <br />
           <br />
           This is an experimental project to explore how the Ethereum community
