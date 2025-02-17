@@ -76,7 +76,7 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
             name="amount"
             defaultValue={0.001}
             min="0.001"
-            step="0.001"
+            step="any"
             required
             aria-describedby={errors.amount ? "amount-error" : undefined}
             className={styles.ethValueInput}
