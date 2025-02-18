@@ -6,6 +6,7 @@ import StepList from "@/components/step-list/StepList";
 import TextBox from "@/components/text-box/TextBox";
 import ValueListing from "@/components/value-listing/ValueListing";
 import { FAQ_ITEMS } from "@/data/faq-items";
+import Link from "next/link";
 
 export const revalidate = 600;
 
@@ -69,6 +70,17 @@ export default async function Home() {
       </section>
       <div className="wrapper">
         <hr />
+        <div className="box" data-center data-space-1 data-text-2>
+          <p>
+            You can also join the conversation on{" "}
+            <Link
+              href="https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
+              target="_blank"
+            >
+              Kialo
+            </Link>
+          </p>
+        </div>
       </div>
       <section className="section" data-space-1>
         <div className="wrapper">
