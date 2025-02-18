@@ -94,6 +94,8 @@ export function useGetValuesListing() {
           totalStaked:
             BigInt(triple.vault.total_shares || 0) +
             BigInt(triple.counter_vault.total_shares || 0),
+          totalStakedFor: BigInt(triple.vault.total_shares || 0),
+          totalStakedAgainst: BigInt(triple.counter_vault.total_shares || 0),
           totalUsers:
             Number(triple.vault.position_count || 0) +
             Number(triple.counter_vault.position_count || 0),

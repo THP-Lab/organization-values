@@ -1,7 +1,8 @@
 .stats {
   display: flex;
   gap: 2.4rem;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
 
   .totalAmount,
   .totalUsers {
@@ -15,6 +16,34 @@
       width: auto;
       margin-right: 0.8rem;
     }
+  }
+  .totalAmountTable {
+    border-collapse: collapse;
+    
+    td {
+      line-height: 1;
+      
+      &:first-child {
+        padding-right: 1rem;
+      }
+
+      span {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .totalAmountFor,
+  .totalAmountAgainst {
+    font-size: 1.4rem;
+  }
+
+  .totalAmountFor {
+    color: var(--color-green);
+  }
+
+  .totalAmountAgainst {
+    color: var(--color-red);
   }
 
   &.large {
@@ -35,4 +64,3 @@
     }
   }
 }
-

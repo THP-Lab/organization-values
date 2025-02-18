@@ -10,6 +10,8 @@ const FeaturedValue = ({
   title,
   description,
   totalAmount,
+  totalAmountFor,
+  totalAmountAgainst,
   totalUsers,
 }) => {
   return (
@@ -18,7 +20,12 @@ const FeaturedValue = ({
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>
         <div className={styles.valueStats}>
-          <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
+          <ValueStats
+            totalAmount={totalAmount}
+            totalAmountFor={totalAmountFor}
+            totalAmountAgainst={totalAmountAgainst}
+            totalUsers={totalUsers}
+          />
         </div>
         <ValueActions
           valueId={valueId}
@@ -30,6 +37,8 @@ const FeaturedValue = ({
       <div className={styles.sidebar}>
         <ValueStats
           totalAmount={totalAmount}
+          totalAmountFor={totalAmountFor}
+          totalAmountAgainst={totalAmountAgainst}
           totalUsers={totalUsers}
           large={true}
         />

@@ -12,6 +12,8 @@ const ValueCard = ({
   title,
   description,
   totalAmount,
+  totalAmountFor,
+  totalAmountAgainst,
   totalUsers,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,7 +52,12 @@ const ValueCard = ({
         {description}
       </p>
       <div className={styles.valueStats}>
-        <ValueStats totalAmount={totalAmount} totalUsers={totalUsers} />
+        <ValueStats
+          totalAmount={totalAmount}
+          totalAmountFor={totalAmountFor}
+          totalAmountAgainst={totalAmountAgainst}
+          totalUsers={totalUsers}
+        />
       </div>
       <div className={styles.actions} ref={actionsRef}>
         <ValueActions

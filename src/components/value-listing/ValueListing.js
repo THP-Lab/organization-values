@@ -133,6 +133,12 @@ const ValueListing = () => {
             title={value.valueName}
             description={value.description}
             totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
+            totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
+              3
+            )}
+            totalAmountAgainst={Number(
+              formatEther(value.totalStakedAgainst)
+            ).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}
@@ -147,6 +153,12 @@ const ValueListing = () => {
               title={value.valueName}
               description={value.description}
               totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
+              totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
+                3
+              )}
+              totalAmountAgainst={Number(
+                formatEther(value.totalStakedAgainst)
+              ).toFixed(3)}
               totalUsers={value.totalUsers}
             />
           </div>
@@ -162,6 +174,12 @@ const ValueListing = () => {
             title={value.valueName}
             description={value.description}
             totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
+            totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
+              3
+            )}
+            totalAmountAgainst={Number(
+              formatEther(value.totalStakedAgainst)
+            ).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}
