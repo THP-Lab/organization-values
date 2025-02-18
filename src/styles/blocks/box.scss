@@ -3,7 +3,24 @@
 .box {
   display: flex;
 
+  &[data-center] {
+    justify-content: center;
+    text-align: center;
+  }
+
   &[data-end] {
     justify-content: flex-end;
+  }
+
+  &[data-space-1] {
+    margin-block: 1.5rem;
+  }
+
+  &[data-text-2] {
+    font-size: 2rem;
+
+    @include mobile {
+      font-size: 1.6rem;
+    }
   }
 }
