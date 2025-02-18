@@ -25,11 +25,10 @@ export const FAQ_ITEMS = [
     question: "How does it work?",
     answer: (
       <>
-        Anyone can propose a value, which includes a name, description, and an
-        optional link to a forum post on Kialo. When you propose a value, you
-        must pay a small fee. This fee goes into a pool for that proposed value,
-        and these fees are shared pro-rata between everyone that votes on the
-        value.
+        Anyone can propose a value, which includes a name and a description.
+        When you propose a value, you must pay a small fee. This fee goes into a
+        pool for that proposed value, and these fees are shared pro-rata between
+        everyone that votes on the value.
         <br />
         <br />
         You can vote for or against a value that you propose. The amount you
@@ -83,7 +82,8 @@ export const FAQ_ITEMS = [
     answer: (
       <>
         There is a static fee to propose a new value, which is{" "}
-        <strong>0.0004 ETH</strong>. The purpose of this fee is to discourage
+        <strong>0.0004 ETH</strong> and a minimum stake of{" "}
+        <strong>0.001 ETH</strong>. The purpose of this fee is to discourage
         spam. The fees are shared between everyone who votes on the proposed
         value by depositing ETH.
         <br />
@@ -312,11 +312,6 @@ export const FAQ_ITEMS = [
           <li>Click on the Save button to save your proposed value.</li>
           <li>
             The proposed value will be added to the existing list of values.
-            Find your proposed value and hover over it to make the menu icon
-            (···) appear. Click on the menu icon and then click on &quot;Get
-            Link to Claim&quot; from the bottom of the dropdown menu that
-            appears. This is the link that you paste into the &quot;Kialo
-            link&quot; input box when creating a value on the dapp.
           </li>
         </ul>
       </>
@@ -329,9 +324,8 @@ export const FAQ_ITEMS = [
       <>
         <ul>
           <li>
-            Click on the discussion icon on the right hand side of the proposed
-            value. This will launch a new browser tab that will load the Kialo
-            discussion for that value.
+            Click on a value (called a &quot;thesis&quot; in Kialo), which will
+            load the discussion for that value.
           </li>
           <li>
             To participate in the discussion, click on the <strong>+</strong>{" "}
