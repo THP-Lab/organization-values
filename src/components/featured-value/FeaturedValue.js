@@ -25,6 +25,7 @@ const FeaturedValue = ({
             totalAmountFor={totalAmountFor}
             totalAmountAgainst={totalAmountAgainst}
             totalUsers={totalUsers}
+            greenBackground={true}
           />
         </div>
         <ValueActions

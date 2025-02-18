@@ -1,3 +1,5 @@
+@use "../../styles/viewports.scss" as *;
+
 .stats {
   display: flex;
   gap: 2.4rem;
@@ -19,31 +21,23 @@
   }
   .totalAmountTable {
     border-collapse: collapse;
-    
+
     td {
+      font-size: 1.4rem;
       line-height: 1;
-      
+
       &:first-child {
         padding-right: 1rem;
       }
 
-      span {
-        font-size: 1.4rem;
+      &.totalAmountFor {
+        color: var(--color-green);
+      }
+
+      &.totalAmountAgainst {
+        color: var(--color-red);
       }
     }
-  }
-
-  .totalAmountFor,
-  .totalAmountAgainst {
-    font-size: 1.4rem;
-  }
-
-  .totalAmountFor {
-    color: var(--color-green);
-  }
-
-  .totalAmountAgainst {
-    color: var(--color-red);
   }
 
   &.large {
@@ -61,6 +55,12 @@
       svg {
         height: 0.8em;
       }
+    }
+  }
+
+  &.greenBackground {
+    .totalAmountTable .totalAmountFor {
+      color: var(--color-green-dark);
     }
   }
 }

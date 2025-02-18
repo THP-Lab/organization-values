@@ -6,6 +6,7 @@ $color-light-border: rgba(255, 255, 255, 0.2);
 $color-accent: #c1ff14;
 $color-error: #ff0000;
 $color-green: #008837;
+$color-green-dark: #003014;
 $color-red: #FF3B30;
 
 :root {
@@ -17,5 +18,6 @@ $color-red: #FF3B30;
   --color-accent: #{$color-accent};
   --color-error: #{$color-error};
   --color-green: #{$color-green};
+  --color-green-dark: #{$color-green-dark};
   --color-red: #{$color-red};
 }

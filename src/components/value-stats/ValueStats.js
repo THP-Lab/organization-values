@@ -8,9 +8,15 @@ const ValueStats = ({
   totalAmountAgainst,
   totalUsers,
   large = false,
+  greenBackground = false,
 }) => {
   return (
-    <div className={`${styles.stats} ${large ? styles.large : ""}`}>
+    <div
+      className={`
+        ${styles.stats} 
+        ${large ? styles.large : ""} 
+        ${greenBackground ? styles.greenBackground : ""}`}
+    >
       <div className={styles.totalAmountContainer}>
         <p className={styles.totalAmount}>{totalAmount.toLocaleString()} ETH</p>
         <table className={styles.totalAmountTable}>
