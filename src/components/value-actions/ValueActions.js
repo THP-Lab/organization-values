@@ -77,43 +77,48 @@ const ValueActions = ({
 
   return (
     <>
-      <div className={`${styles.actions} ${hoverColorClass}`}>
-        <button
-          className={`${styles.voteButton} ${
-            forPosition > 0 ? styles.staked : ""
-          }`}
-          onClick={() => handleAction(() => setIsStakeForOpen(true))}
-          disabled={againstPosition > 0}
-        >
-          <VoteForIcon />
-          {forPosition > 0
-            ? `${Number(formatEther(forPosition)).toFixed(3)} Voted For`
-            : "Vote for"}
-        </button>
-        <button
-          className={`${styles.voteButton} ${
-            againstPosition > 0 ? styles.staked : ""
-          }`}
-          onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
-          disabled={forPosition > 0}
-        >
-          <VoteAgainstIcon />
-          {againstPosition > 0
-            ? `${Number(formatEther(againstPosition)).toFixed(3)} Voted Against`
-            : "Vote against"}
-        </button>
-        {(forPosition > 0 || againstPosition > 0) && (
+      <div className={styles.actionsWrapper}>
+        <h4 className={styles.actionsTitle}>My Deposits:</h4>
+        <div className={`${styles.actions} ${hoverColorClass}`}>
           <button
-            className={styles.withdrawButton}
-            onClick={() => handleAction(() => setIsWithdrawOpen(true))}
+            className={`${styles.voteButton} ${
+              forPosition > 0 ? styles.staked : ""
+            }`}
+            onClick={() => handleAction(() => setIsStakeForOpen(true))}
+            disabled={againstPosition > 0}
           >
-            Withdraw
+            <VoteForIcon />
+            {forPosition > 0
+              ? `${Number(formatEther(forPosition)).toFixed(3)} Voted For`
+              : "Vote for"}
           </button>
-        )}
-        <div className={styles.socialActions}>
-          <a href={shareUrl} target="_blank">
-            <ShareIcon />
-          </a>
+          <button
+            className={`${styles.voteButton} ${
+              againstPosition > 0 ? styles.staked : ""
+            }`}
+            onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
+            disabled={forPosition > 0}
+          >
+            <VoteAgainstIcon />
+            {againstPosition > 0
+              ? `${Number(formatEther(againstPosition)).toFixed(
+                  3
+                )} Voted Against`
+              : "Vote against"}
+          </button>
+          {(forPosition > 0 || againstPosition > 0) && (
+            <button
+              className={styles.withdrawButton}
+              onClick={() => handleAction(() => setIsWithdrawOpen(true))}
+            >
+              Withdraw
+            </button>
+          )}
+          <div className={styles.socialActions}>
+            <a href={shareUrl} target="_blank">
+              <ShareIcon />
+            </a>
+          </div>
         </div>
       </div>
       {isStakeForOpen && (
