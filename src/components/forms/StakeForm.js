@@ -1,17 +1,26 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useDepositTriple } from "@/hooks/useDepositTriple";
 import { useAccount } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { stakeFormSchema } from "./validations";
 import { parseEther } from "viem";
 
 import styles from "./form.module.scss";
 
-const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onCancel }) => {
+const StakeForm = ({
+  vaultId,
+  isSubmitting,
+  setIsSubmitting,
+  setLoadingText,
+  onCancel,
+}) => {
   const { refreshUser } = useContext(UserContext);
-  const [errors, setErrors] = useState({});
+  const { errors, validateForm, setErrors } =
+    useFormValidation(stakeFormSchema);
   const { address } = useAccount();
   const { depositTriple } = useDepositTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
@@ -27,7 +36,7 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });
-      
+
       setLoadingText("Your deposit has been successfully processed!");
       await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
@@ -36,13 +45,13 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
 
       // Handle user rejection case
       if (error.code === 4001) {
-        setErrors({ amount: "Transaction was rejected. Please try again." });
+        setErrors({ form: "Transaction was rejected. Please try again." });
         setLoadingText("");
         return;
       }
 
       // Handle other errors
-      setErrors({ amount: "Something went wrong. Please try again." });
+      setErrors({ form: "Something went wrong. Please try again." });
       setLoadingText("");
     }
   };
@@ -52,11 +61,23 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData(event.target);
-      const amount = formData.get("amount");
+      const formData = {
+        amount: Number(event.target.amount.value),
+      };
 
-      console.log("Attempting deposit", { vaultId, address, amount });
-      await handleDeposit(amount);
+      const { isValid, data } = validateForm(formData);
+
+      if (!isValid) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Attempting deposit", {
+        vaultId,
+        address,
+        amount: data.amount,
+      });
+      await handleDeposit(data.amount);
 
       console.log("Deposit completed successfully");
     } finally {
@@ -69,13 +90,15 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="amount">Amount to Deposit *</label>
+        <span className={styles.note}>
+          Note: There is also a 0.3% fee to all current depositors.
+        </span>
         <div className={styles.inputGroup}>
           <input
             type="number"
             id="amount"
             name="amount"
             defaultValue={0.001}
-            min="0.001"
             step="any"
             required
             aria-describedby={errors.amount ? "amount-error" : undefined}
@@ -88,6 +111,12 @@ const StakeForm = ({ vaultId, isSubmitting, setIsSubmitting, setLoadingText, onC
           </span>
         )}
       </div>
+
+      {errors.form && (
+        <div className={styles.formGroup}>
+          <span className={styles.error}>{errors.form}</span>
+        </div>
+      )}
 
       <div className={styles.actions}>
         <button type="submit" disabled={isSubmitting}>

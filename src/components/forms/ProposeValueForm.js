@@ -152,6 +152,9 @@ const ProposeValueForm = ({
 
       <div className={styles.formGroup}>
         <label htmlFor="initialStake">Initial Stake *</label>
+        <span className={styles.note}>
+          Note: There is a 0.004 ETH fee for proposing a value.
+        </span>
         <div className={styles.inputGroup}>
           <input
             type="number"
