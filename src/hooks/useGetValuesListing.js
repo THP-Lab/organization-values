@@ -92,10 +92,20 @@ export function useGetValuesListing() {
           valueName: triple.object.value.thing.name,
           description: triple.object.value.thing.description,
           totalStaked:
-            BigInt(triple.vault.total_shares || 0) +
-            BigInt(triple.counter_vault.total_shares || 0),
-          totalStakedFor: BigInt(triple.vault.total_shares || 0),
-          totalStakedAgainst: BigInt(triple.counter_vault.total_shares || 0),
+            BigInt(triple.vault.total_shares || 0) *
+            BigInt(triple.vault.current_share_price) /
+            BigInt(10 ** 18) +
+            BigInt(triple.counter_vault.total_shares || 0) *
+            BigInt(triple.counter_vault.current_share_price) /
+            BigInt(10 ** 18),
+          totalStakedFor:
+            BigInt(triple.vault.total_shares || 0) *
+            BigInt(triple.vault.current_share_price) /
+            BigInt(10 ** 18),
+          totalStakedAgainst:
+            BigInt(triple.counter_vault.total_shares || 0) *
+            BigInt(triple.counter_vault.current_share_price) /
+            BigInt(10 ** 18),
           totalUsers:
             Number(triple.vault.position_count || 0) +
             Number(triple.counter_vault.position_count || 0),

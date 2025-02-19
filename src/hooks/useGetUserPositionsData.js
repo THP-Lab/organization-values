@@ -37,6 +37,10 @@ export function useGetUserPositions() {
             vaultPositions.push({
               vaultId: triple.vault_id,
               shares: triple.vault.positions[0].shares,
+              assets:
+                BigInt(triple.vault.positions[0].shares) *
+                BigInt(triple.vault.current_share_price) /
+                BigInt(10 ** 18),
             });
           }
 
@@ -48,6 +52,10 @@ export function useGetUserPositions() {
             counterVaultPositions.push({
               vaultId: triple.counter_vault_id,
               shares: triple.counter_vault.positions[0].shares,
+              assets:
+                BigInt(triple.counter_vault.positions[0].shares) *
+                BigInt(triple.counter_vault.current_share_price) /
+                BigInt(10 ** 18),
             });
           }
         });

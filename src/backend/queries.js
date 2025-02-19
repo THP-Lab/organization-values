@@ -17,23 +17,10 @@ export const getTriplesWithMyPosition = gql(/* GraphQL */ `
       id
       vault_id
       counter_vault_id
-      subject {
-        id
-        vault_id
-        label
-        image
-      }
-      predicate {
-        id
-        vault_id
-        label
-        image
-      }
+
       object {
         id
         vault_id
-        label
-        image
         value {
           thing {
             name
@@ -46,6 +33,7 @@ export const getTriplesWithMyPosition = gql(/* GraphQL */ `
       vault {
         total_shares
         position_count
+        current_share_price
         positions(where: { account_id: { _eq: $address } }) {
           account {
             id
@@ -58,6 +46,7 @@ export const getTriplesWithMyPosition = gql(/* GraphQL */ `
       counter_vault {
         total_shares
         position_count
+        current_share_price
         positions(where: { account_id: { _eq: $address } }) {
           account {
             id
@@ -83,11 +72,13 @@ export const getUserPositions = gql(/* GraphQL */ `
       vault_id
       counter_vault_id
       vault {
+        current_share_price
         positions(where: { account_id: { _eq: $address } }) {
           shares
         }
       }
       counter_vault {
+        current_share_price
         positions(where: { account_id: { _eq: $address } }) {
           shares
         }

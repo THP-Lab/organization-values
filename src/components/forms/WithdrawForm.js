@@ -1,11 +1,12 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useRedeemTriple } from "@/hooks/useRedeemTriple";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { abi } from "@/backend/abi";
 import { withdrawFormSchema } from "./validations";
 import { parseEther } from "viem";
 import styles from "./form.module.scss";
@@ -13,11 +14,14 @@ import styles from "./form.module.scss";
 const WithdrawForm = ({
   vaultId,
   initialAmount,
+  totalShares,
   isSubmitting,
   setIsSubmitting,
   setLoadingText,
   onCancel,
 }) => {
+  const [amount, setAmount] = useState(initialAmount);
+  const [withdrawMax, setWithdrawMax] = useState(true);
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } =
     useFormValidation(withdrawFormSchema);
@@ -25,13 +29,20 @@ const WithdrawForm = ({
   const { redeemTriple } = useRedeemTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
+  const { data: shares } = useReadContract({
+    abi: abi,
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    functionName: "convertToShares",
+    args: [BigInt(parseEther(`${amount}`)), BigInt(vaultId)],
+  });
+
   const handleWithdraw = async (amount) => {
     try {
       setLoadingText("Transaction 1/1: Withdrawing ETH from vault");
       const hash = await redeemTriple(
         vaultId,
         address,
-        parseEther(`${amount}`)
+        withdrawMax ? totalShares : shares
       );
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
@@ -100,6 +111,9 @@ const WithdrawForm = ({
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="amount">Amount to Withdraw *</label>
+        <span className={styles.note}>
+          Note: There is also a 0.3% fee.
+        </span>
         <div className={styles.inputGroup}>
           <input
             type="number"
@@ -111,6 +125,19 @@ const WithdrawForm = ({
             required
             aria-describedby={errors.amount ? "amount-error" : undefined}
             className={styles.ethValueInput}
+            style={{ color: withdrawMax ? "gray" : "rgb(0, 0, 0)" }}
+            onChange={(e) => setAmount(e.target.value)}
+            disabled={withdrawMax}
+          />
+        </div>
+        <label htmlFor="withdrawMax">Withdraw maximum amount</label>
+        <div className={styles.inputGroup}>
+          <input
+            type="checkbox"
+            id="withdrawMax"
+            name="withdrawMax"
+            checked={withdrawMax}
+            onChange={() => setWithdrawMax(!withdrawMax)}
           />
         </div>
         {errors.amount && (
