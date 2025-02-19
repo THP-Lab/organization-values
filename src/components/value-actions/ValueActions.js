@@ -38,7 +38,9 @@ const ValueActions = ({
   const [withdrawLoadingText, setWithdrawLoadingText] = useState("");
   const [shareUrl, setShareUrl] = useState("");
   const [forPosition, setForPosition] = useState(0);
+  const [forPositionAssets, setForPositionAssets] = useState(0);
   const [againstPosition, setAgainstPosition] = useState(0);
+  const [againstPositionAssets, setAgainstPositionAssets] = useState(0);
   useEffect(() => {
     setShareUrl(
       `https://x.com/intent/tweet?text=${encodeURIComponent(
@@ -63,6 +65,8 @@ const ValueActions = ({
       (position) => position.vaultId === counterVaultId
     );
 
+    setForPositionAssets(forVaultPosition ? forVaultPosition.assets : 0);
+    setAgainstPositionAssets(againstVaultPosition ? againstVaultPosition.assets : 0);
     setForPosition(forVaultPosition ? forVaultPosition.shares : 0);
     setAgainstPosition(againstVaultPosition ? againstVaultPosition.shares : 0);
   }, [user, vaultId, counterVaultId]);
@@ -81,29 +85,27 @@ const ValueActions = ({
         <h4 className={styles.actionsTitle}>My Deposits:</h4>
         <div className={`${styles.actions} ${hoverColorClass}`}>
           <button
-            className={`${styles.voteButton} ${
-              forPosition > 0 ? styles.staked : ""
-            }`}
+            className={`${styles.voteButton} ${forPosition > 0 ? styles.staked : ""
+              }`}
             onClick={() => handleAction(() => setIsStakeForOpen(true))}
             disabled={againstPosition > 0}
           >
             <VoteForIcon />
-            {forPosition > 0
-              ? `${Number(formatEther(forPosition)).toFixed(3)} Voted For`
+            {forPositionAssets > 0
+              ? `${Number(formatEther(forPositionAssets)).toFixed(3)} Voted For`
               : "Vote for"}
           </button>
           <button
-            className={`${styles.voteButton} ${
-              againstPosition > 0 ? styles.staked : ""
-            }`}
+            className={`${styles.voteButton} ${againstPosition > 0 ? styles.staked : ""
+              }`}
             onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
             disabled={forPosition > 0}
           >
             <VoteAgainstIcon />
-            {againstPosition > 0
-              ? `${Number(formatEther(againstPosition)).toFixed(
-                  3
-                )} Voted Against`
+            {againstPositionAssets > 0
+              ? `${Number(formatEther(againstPositionAssets)).toFixed(
+                3
+              )} Voted Against`
               : "Vote against"}
           </button>
           {(forPosition > 0 || againstPosition > 0) && (
@@ -165,10 +167,15 @@ const ValueActions = ({
         >
           <WithdrawForm
             vaultId={forPosition > 0 ? vaultId : counterVaultId}
-            initialAmount={
+            totalShares={
               forPosition > 0
-                ? formatEther(forPosition)
-                : formatEther(againstPosition)
+                ? forPosition
+                : againstPosition
+            }
+            initialAmount={
+              forPositionAssets > 0
+                ? formatEther(forPositionAssets)
+                : formatEther(againstPositionAssets)
             }
             isSubmitting={isWithdrawSubmitting}
             setIsSubmitting={setIsWithdrawSubmitting}
