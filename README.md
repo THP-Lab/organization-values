@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Community Values Experiment
+
+A Next.js-based application for the Ethereum Values Initiative, allowing community members to collaboratively curate and vote on values that are at the heart of Ethereum.
+
+## Overview
+
+This application is part of Consensys' Web3 for All campaign, developed in collaboration with Intuition Systems. It enables the Ethereum community to submit, discuss, and refine the values that define the ecosystem through a stake-based voting mechanism.
+
+## Prerequisites
+
+- Node.js 20.x or later
+- npm
+- Web3 wallet (e.g., MetaMask) with Linea network configured
+
+## Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```
+NEXT_PUBLIC_ENV=
+NEXT_PUBLIC_BASE_URL=
+NEXT_PUBLIC_GRAPHQL_URL=
+NEXT_PUBLIC_CONTRACT_ADDRESS=
+NEXT_PUBLIC_PREDICATE_ID=
+NEXT_PUBLIC_SUBJECT_ID=
+```
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- View community-proposed values ranked by votes
+- Propose new values for the Ethereum community
+- Stake ETH to vote for or against values
+- Share values on social media platforms
 
-## Learn More
+## Technical Architecture
 
-To learn more about Next.js, take a look at the following resources:
+### Frontend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Built with Next.js 15+
+- Single Page Application (SPA) design
+- Web3 integration using wagmi hooks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Intuition GraphQL API integration
