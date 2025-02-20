@@ -66,7 +66,9 @@ const ValueActions = ({
     );
 
     setForPositionAssets(forVaultPosition ? forVaultPosition.assets : 0);
-    setAgainstPositionAssets(againstVaultPosition ? againstVaultPosition.assets : 0);
+    setAgainstPositionAssets(
+      againstVaultPosition ? againstVaultPosition.assets : 0
+    );
     setForPosition(forVaultPosition ? forVaultPosition.shares : 0);
     setAgainstPosition(againstVaultPosition ? againstVaultPosition.shares : 0);
   }, [user, vaultId, counterVaultId]);
@@ -85,27 +87,36 @@ const ValueActions = ({
         <h4 className={styles.actionsTitle}>My Deposits:</h4>
         <div className={`${styles.actions} ${hoverColorClass}`}>
           <button
-            className={`${styles.voteButton} ${forPosition > 0 ? styles.staked : ""
-              }`}
+            className={`${styles.voteButton} ${
+              forPosition > 0 ? styles.staked : ""
+            }`}
             onClick={() => handleAction(() => setIsStakeForOpen(true))}
             disabled={againstPosition > 0}
           >
             <VoteForIcon />
             {forPositionAssets > 0
-              ? `${Number(formatEther(forPositionAssets)).toFixed(3)} Voted For`
+              ? `${
+                  Number(formatEther(forPositionAssets)).toFixed(3) === "0.000"
+                    ? "< 0.001"
+                    : Number(formatEther(forPositionAssets)).toFixed(3)
+                } Voted For`
               : "Vote for"}
           </button>
           <button
-            className={`${styles.voteButton} ${againstPosition > 0 ? styles.staked : ""
-              }`}
+            className={`${styles.voteButton} ${
+              againstPosition > 0 ? styles.staked : ""
+            }`}
             onClick={() => handleAction(() => setIsStakeAgainstOpen(true))}
             disabled={forPosition > 0}
           >
             <VoteAgainstIcon />
             {againstPositionAssets > 0
-              ? `${Number(formatEther(againstPositionAssets)).toFixed(
-                3
-              )} Voted Against`
+              ? `${
+                  Number(formatEther(againstPositionAssets)).toFixed(3) ===
+                  "0.000"
+                    ? "< 0.001"
+                    : Number(formatEther(againstPositionAssets)).toFixed(3)
+                } Voted Against`
               : "Vote against"}
           </button>
           {(forPosition > 0 || againstPosition > 0) && (
@@ -167,11 +178,7 @@ const ValueActions = ({
         >
           <WithdrawForm
             vaultId={forPosition > 0 ? vaultId : counterVaultId}
-            totalShares={
-              forPosition > 0
-                ? forPosition
-                : againstPosition
-            }
+            totalShares={forPosition > 0 ? forPosition : againstPosition}
             initialAmount={
               forPositionAssets > 0
                 ? formatEther(forPositionAssets)
