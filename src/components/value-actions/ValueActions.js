@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useContext } from "react";
 import { useAccount, useConnect } from "wagmi";
+import { createPortal } from "react-dom";
 import StakeForm from "../forms/StakeForm";
 import WithdrawForm from "../forms/WithdrawForm";
 import ShareIcon from "../icons/ShareIcon";
@@ -26,6 +27,7 @@ const ValueActions = ({
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
 
+  const [mounted, setMounted] = useState(false);
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeForSubmitting, setIsStakeForSubmitting] = useState(false);
   const [stakeForLoadingText, setStakeForLoadingText] = useState("");
@@ -41,6 +43,12 @@ const ValueActions = ({
   const [forPositionAssets, setForPositionAssets] = useState(0);
   const [againstPosition, setAgainstPosition] = useState(0);
   const [againstPositionAssets, setAgainstPositionAssets] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   useEffect(() => {
     setShareUrl(
       `https://x.com/intent/tweet?text=${encodeURIComponent(
@@ -134,63 +142,72 @@ const ValueActions = ({
           </div>
         </div>
       </div>
-      {isStakeForOpen && (
-        <Modal
-          title={"Staking For"}
-          subtitle={name}
-          isSubmitting={isStakeForSubmitting}
-          loadingText={stakeForLoadingText}
-          onClose={() => setIsStakeForOpen(false)}
-        >
-          <StakeForm
-            vaultId={vaultId}
+      {mounted &&
+        isStakeForOpen &&
+        createPortal(
+          <Modal
+            title={"Staking For"}
+            subtitle={name}
             isSubmitting={isStakeForSubmitting}
-            setIsSubmitting={setIsStakeForSubmitting}
-            setLoadingText={setStakeForLoadingText}
-            onCancel={() => setIsStakeForOpen(false)}
-          />
-        </Modal>
-      )}
-      {isStakeAgainstOpen && (
-        <Modal
-          title={"Staking Against"}
-          subtitle={name}
-          isSubmitting={isStakeAgainstSubmitting}
-          loadingText={stakeAgainstLoadingText}
-          onClose={() => setIsStakeAgainstOpen(false)}
-        >
-          <StakeForm
-            vaultId={counterVaultId}
+            loadingText={stakeForLoadingText}
+            onClose={() => setIsStakeForOpen(false)}
+          >
+            <StakeForm
+              vaultId={vaultId}
+              isSubmitting={isStakeForSubmitting}
+              setIsSubmitting={setIsStakeForSubmitting}
+              setLoadingText={setStakeForLoadingText}
+              onCancel={() => setIsStakeForOpen(false)}
+            />
+          </Modal>,
+          document.body
+        )}
+      {mounted &&
+        isStakeAgainstOpen &&
+        createPortal(
+          <Modal
+            title={"Staking Against"}
+            subtitle={name}
             isSubmitting={isStakeAgainstSubmitting}
-            setIsSubmitting={setIsStakeAgainstSubmitting}
-            setLoadingText={setStakeAgainstLoadingText}
-            onCancel={() => setIsStakeAgainstOpen(false)}
-          />
-        </Modal>
-      )}
-      {isWithdrawOpen && (
-        <Modal
-          title={"Withdraw"}
-          subtitle={name}
-          isSubmitting={isWithdrawSubmitting}
-          loadingText={withdrawLoadingText}
-          onClose={() => setIsWithdrawOpen(false)}
-        >
-          <WithdrawForm
-            vaultId={forPosition > 0 ? vaultId : counterVaultId}
-            totalShares={forPosition > 0 ? forPosition : againstPosition}
-            initialAmount={
-              forPositionAssets > 0
-                ? formatEther(forPositionAssets)
-                : formatEther(againstPositionAssets)
-            }
+            loadingText={stakeAgainstLoadingText}
+            onClose={() => setIsStakeAgainstOpen(false)}
+          >
+            <StakeForm
+              vaultId={counterVaultId}
+              isSubmitting={isStakeAgainstSubmitting}
+              setIsSubmitting={setIsStakeAgainstSubmitting}
+              setLoadingText={setStakeAgainstLoadingText}
+              onCancel={() => setIsStakeAgainstOpen(false)}
+            />
+          </Modal>,
+          document.body
+        )}
+      {mounted &&
+        isWithdrawOpen &&
+        createPortal(
+          <Modal
+            title={"Withdraw"}
+            subtitle={name}
             isSubmitting={isWithdrawSubmitting}
-            setIsSubmitting={setIsWithdrawSubmitting}
-            setLoadingText={setWithdrawLoadingText}
-            onCancel={() => setIsWithdrawOpen(false)}
-          />
-        </Modal>
-      )}
+            loadingText={withdrawLoadingText}
+            onClose={() => setIsWithdrawOpen(false)}
+          >
+            <WithdrawForm
+              vaultId={forPosition > 0 ? vaultId : counterVaultId}
+              totalShares={forPosition > 0 ? forPosition : againstPosition}
+              initialAmount={
+                forPositionAssets > 0
+                  ? formatEther(forPositionAssets)
+                  : formatEther(againstPositionAssets)
+              }
+              isSubmitting={isWithdrawSubmitting}
+              setIsSubmitting={setIsWithdrawSubmitting}
+              setLoadingText={setWithdrawLoadingText}
+              onCancel={() => setIsWithdrawOpen(false)}
+            />
+          </Modal>,
+          document.body
+        )}
     </>
   );
 };

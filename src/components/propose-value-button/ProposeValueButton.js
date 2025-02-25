@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import PlusIcon from "../icons/PlusIcon";
 import styles from "./propose-value-button.module.scss";
 import Modal from "../modal/Modal";
@@ -14,6 +15,12 @@ const ProposeValueButton = ({ onSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingText, setLoadingText] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
@@ -32,22 +39,25 @@ const ProposeValueButton = ({ onSuccess }) => {
         <PlusIcon />
         Propose a Value
       </button>
-      {isModalOpen && (
-        <Modal
-          title={"Propose a Value"}
-          isSubmitting={isSubmitting}
-          loadingText={loadingText}
-          onClose={() => setIsModalOpen(false)}
-        >
-          <ProposeValueForm
+      {mounted &&
+        isModalOpen &&
+        createPortal(
+          <Modal
+            title={"Propose a Value"}
             isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            setLoadingText={setLoadingText}
-            onCancel={() => setIsModalOpen(false)}
-            onSuccess={() => onSuccess()}
-          />
-        </Modal>
-      )}
+            loadingText={loadingText}
+            onClose={() => setIsModalOpen(false)}
+          >
+            <ProposeValueForm
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              setLoadingText={setLoadingText}
+              onCancel={() => setIsModalOpen(false)}
+              onSuccess={() => onSuccess()}
+            />
+          </Modal>,
+          document.body
+        )}
     </>
   );
 };
