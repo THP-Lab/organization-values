@@ -34,16 +34,24 @@ const ProposeValueForm = ({
 
   const handleChainInteractions = async (ipfsUri, initialStake) => {
     try {
-      setLoadingText(
-        "Transaction 1/2: Registering your value on the blockchain"
-      );
-      const createAtomHash = await createAtom(ipfsUri, parseEther("0.0004"));
-      console.log("Transaction submitted", { ipfsUri, createAtomHash });
+      // Check if atom already exists
+      setLoadingText("Checking if value already exists...");
+      let atomId = await getAtomId(ipfsUri);
 
-      await waitForTxEvents(createAtomHash);
-      console.log("Atom created", { ipfsUri, createAtomHash });
+      if (!atomId) {
+        // Only create atom if it doesn't exist
+        setLoadingText(
+          "Transaction 1/2: Registering your value on the blockchain"
+        );
+        const createAtomHash = await createAtom(ipfsUri, parseEther("0.0004"));
+        console.log("Transaction submitted", { ipfsUri, createAtomHash });
 
-      const atomId = await getAtomId(ipfsUri);
+        await waitForTxEvents(createAtomHash);
+        console.log("Atom created", { ipfsUri, createAtomHash });
+
+        atomId = await getAtomId(ipfsUri);
+      }
+
       setLoadingText("Transaction 2/2: Connecting your value to Ethereum");
       const createTripleHash = await createTriple(
         process.env.NEXT_PUBLIC_SUBJECT_ID,
