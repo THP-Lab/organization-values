@@ -28,7 +28,8 @@ const ConnectWalletButton = () => {
       {connectors.length > 0 && (
         <button
           className={styles.button}
-          onClick={() => connect({ connector: connectors[0] })}
+          onClick={() => alert("This feature is currently under maintenance. Please try again later.")}
+          // onClick={() => connect({ connector: connectors[0] })}
           disabled={isPending}
         >
           <ConnectWalletIcon />
