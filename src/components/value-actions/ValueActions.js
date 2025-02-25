@@ -83,7 +83,8 @@ const ValueActions = ({
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
-      connect({ connector: connectors[0] });
+      alert("This feature is currently under maintenance. Please try again later.")
+      // connect({ connector: connectors[0] });
       return;
     }
     action();
