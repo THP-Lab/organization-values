@@ -111,9 +111,7 @@ const WithdrawForm = ({
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="amount">Amount to Withdraw *</label>
-        <span className={styles.note}>
-          Note: There is also a 0.3% fee.
-        </span>
+        <span className={styles.note}>Note: There is also a 0.3% fee.</span>
         <div className={styles.inputGroup}>
           <input
             type="number"
@@ -130,15 +128,17 @@ const WithdrawForm = ({
             disabled={withdrawMax}
           />
         </div>
-        <label htmlFor="withdrawMax">Withdraw maximum amount</label>
-        <div className={styles.inputGroup}>
-          <input
-            type="checkbox"
-            id="withdrawMax"
-            name="withdrawMax"
-            checked={withdrawMax}
-            onChange={() => setWithdrawMax(!withdrawMax)}
-          />
+        <div className={`${styles.inputGroup} ${styles.checkboxGroup}`}>
+          <label htmlFor="withdrawMax">
+            <input
+              type="checkbox"
+              id="withdrawMax"
+              name="withdrawMax"
+              checked={withdrawMax}
+              onChange={() => setWithdrawMax(!withdrawMax)}
+            />
+            <span>Withdraw maximum amount</span>
+          </label>
         </div>
         {errors.amount && (
           <span id="amount-error" className={styles.error}>
