@@ -131,6 +131,10 @@
       &:active {
         transform: scale(0.98);
       }
+
+      @include mobile {
+        padding-inline: 1.6rem;
+      }
     }
 
     .cancelButton {
