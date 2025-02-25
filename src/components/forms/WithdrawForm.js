@@ -2,14 +2,18 @@
 
 import { useContext, useState } from "react";
 import { useRedeemTriple } from "@/hooks/useRedeemTriple";
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useReadContract, useSwitchChain } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { abi } from "@/backend/abi";
 import { withdrawFormSchema } from "./validations";
 import { parseEther } from "viem";
+import { baseSepolia, linea } from "viem/chains";
 import styles from "./form.module.scss";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 const WithdrawForm = ({
   vaultId,
@@ -25,7 +29,8 @@ const WithdrawForm = ({
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } =
     useFormValidation(withdrawFormSchema);
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
   const { redeemTriple } = useRedeemTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
@@ -78,6 +83,12 @@ const WithdrawForm = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Return early if not on correct chain
+    if (chain?.id !== DEFAULT_CHAIN_ID) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -104,6 +115,14 @@ const WithdrawForm = ({
     } finally {
       refreshUser();
       setIsSubmitting(false);
+    }
+  };
+
+  const correctChain = chain?.id === DEFAULT_CHAIN_ID;
+
+  const handleSwitch = () => {
+    if (switchChain) {
+      switchChain({ chainId: DEFAULT_CHAIN_ID });
     }
   };
 
@@ -154,9 +173,19 @@ const WithdrawForm = ({
       )}
 
       <div className={styles.actions}>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Loading..." : "Withdraw ETH"}
-        </button>
+        {correctChain ? (
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : "Withdraw ETH"}
+          </button>
+        ) : (
+          <button
+            className={styles.switchNetworkButton}
+            type="button"
+            onClick={handleSwitch}
+          >
+            Switch to Linea Network
+          </button>
+        )}
         <button
           type="button"
           className={styles.cancelButton}

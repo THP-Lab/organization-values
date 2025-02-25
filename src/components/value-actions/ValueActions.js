@@ -12,6 +12,10 @@ import Modal from "../modal/Modal";
 import styles from "./value-actions.module.scss";
 import { UserContext } from "../../contexts/UserContext";
 import { formatEther } from "viem";
+import { linea, baseSepolia } from "viem/chains";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 // Supports dark and accent hover colors
 const ValueActions = ({
@@ -83,8 +87,7 @@ const ValueActions = ({
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
-      alert("This feature is currently under maintenance. Please try again later.")
-      // connect({ connector: connectors[0] });
+      connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID });
       return;
     }
     action();

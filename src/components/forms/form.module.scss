@@ -104,7 +104,8 @@
     gap: 2.4rem;
     justify-content: center;
 
-    button[type="submit"] {
+    button[type="submit"],
+    .switchNetworkButton {
       cursor: pointer;
       font-weight: 400;
       font-size: 2rem;
