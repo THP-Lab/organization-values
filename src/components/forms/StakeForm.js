@@ -2,14 +2,18 @@
 
 import { useContext } from "react";
 import { useDepositTriple } from "@/hooks/useDepositTriple";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { stakeFormSchema } from "./validations";
 import { parseEther } from "viem";
+import { baseSepolia, linea } from "viem/chains";
 
 import styles from "./form.module.scss";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 const StakeForm = ({
   vaultId,
@@ -21,7 +25,8 @@ const StakeForm = ({
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } =
     useFormValidation(stakeFormSchema);
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
   const { depositTriple } = useDepositTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
@@ -58,6 +63,12 @@ const StakeForm = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Return early if not on correct chain
+    if (chain?.id !== DEFAULT_CHAIN_ID) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -83,6 +94,14 @@ const StakeForm = ({
     } finally {
       refreshUser();
       setIsSubmitting(false);
+    }
+  };
+
+  const correctChain = chain?.id === DEFAULT_CHAIN_ID;
+
+  const handleSwitch = () => {
+    if (switchChain) {
+      switchChain({ chainId: DEFAULT_CHAIN_ID });
     }
   };
 
@@ -119,9 +138,19 @@ const StakeForm = ({
       )}
 
       <div className={styles.actions}>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Loading..." : "Deposit ETH"}
-        </button>
+        {correctChain ? (
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Loading..." : "Deposit ETH"}
+          </button>
+        ) : (
+          <button
+            className={styles.switchNetworkButton}
+            type="button"
+            onClick={handleSwitch}
+          >
+            Switch to Linea Network
+          </button>
+        )}
         <button
           type="button"
           className={styles.cancelButton}

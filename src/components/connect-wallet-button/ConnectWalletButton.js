@@ -3,6 +3,10 @@
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import ConnectWalletIcon from "../icons/ConnectWalletIcon";
 import styles from "./connect-wallet-button.module.scss";
+import { baseSepolia, linea } from "viem/chains";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 const ConnectWalletButton = () => {
   const { isConnected, address } = useAccount();
@@ -28,7 +32,9 @@ const ConnectWalletButton = () => {
       {connectors.length > 0 && (
         <button
           className={styles.button}
-          onClick={() => connect({ connector: connectors[0] })}
+          onClick={() =>
+            connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID })
+          }
           disabled={isPending}
         >
           <ConnectWalletIcon />

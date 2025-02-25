@@ -3,8 +3,9 @@
 import { useContext } from "react";
 import { useCreateAtom } from "@/hooks/useCreateAtom";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 import { parseEther } from "viem";
+import { baseSepolia, linea } from "viem/chains";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
 import { useCreateTriple } from "@/hooks/useCreateTriple";
 import { UserContext } from "@/contexts/UserContext";
@@ -14,6 +15,9 @@ import { gqlClient } from "@/backend/gqlClient";
 import { pinThingMutation } from "@/backend/mutations";
 
 import styles from "./form.module.scss";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 const ProposeValueForm = ({
   isSubmitting,
@@ -26,7 +30,8 @@ const ProposeValueForm = ({
   const { errors, validateForm, setErrors } = useFormValidation(
     proposeValueFormSchema
   );
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
   const { createAtom } = useCreateAtom();
   const { waitForTxEvents } = useWaitForTxEvents();
   const { getAtomId } = useGetAtomId();
@@ -87,6 +92,12 @@ const ProposeValueForm = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Return early if not on correct chain
+    if (chain?.id !== DEFAULT_CHAIN_ID) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -129,6 +140,14 @@ const ProposeValueForm = ({
     } finally {
       setIsSubmitting(false);
       refreshUser();
+    }
+  };
+
+  const correctChain = chain?.id === DEFAULT_CHAIN_ID;
+
+  const handleSwitch = () => {
+    if (switchChain) {
+      switchChain({ chainId: DEFAULT_CHAIN_ID });
     }
   };
 
@@ -200,9 +219,19 @@ const ProposeValueForm = ({
       )}
 
       <div className={styles.actions}>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </button>
+        {correctChain ? (
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+        ) : (
+          <button
+            className={styles.switchNetworkButton}
+            type="button"
+            onClick={handleSwitch}
+          >
+            Switch to Linea Network
+          </button>
+        )}
       </div>
     </form>
   );

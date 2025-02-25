@@ -7,6 +7,10 @@ import styles from "./propose-value-button.module.scss";
 import Modal from "../modal/Modal";
 import ProposeValueForm from "../forms/ProposeValueForm";
 import { useAccount, useConnect } from "wagmi";
+import { linea, baseSepolia } from "viem/chains";
+
+export const DEFAULT_CHAIN_ID =
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
 
 const ProposeValueButton = ({ onSuccess }) => {
   const { isConnected } = useAccount();
@@ -24,7 +28,7 @@ const ProposeValueButton = ({ onSuccess }) => {
 
   const handleAction = (action) => {
     if (!isConnected && connectors.length > 0) {
-      connect({ connector: connectors[0] });
+      connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID });
       return;
     }
     action();
