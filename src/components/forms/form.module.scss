@@ -24,6 +24,27 @@
       letter-spacing: 0.05em;
     }
 
+    .checkboxGroup {
+      margin-top: 0.5rem;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 400;
+
+        input[type="checkbox"] {
+          width: 1.6rem;
+          height: 1.6rem;
+          margin: 0;
+        }
+
+        span {
+          padding-top: 0.2em;
+        }
+      }
+    }
+
     .note {
       font-size: 1rem;
       font-weight: 400;
