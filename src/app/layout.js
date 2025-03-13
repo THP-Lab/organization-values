@@ -23,10 +23,8 @@ export const metadata = {
     ],
   },
   robots: {
-    index: false,
-    follow: false,
-    noimageindex: true,
-    noarchive: true,
+    index: true,
+    follow: true,
   },
 };
 
