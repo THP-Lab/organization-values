@@ -8,8 +8,8 @@ const Footer = () => {
       <div className={styles.content}>
         <p>
           A collaboration between{" "}
-          <Link href="https://consensys.io" target="_blank">
-            Consensys
+          <Link href="https://www.thehackingproject.org/" target="_blank">
+            The Hacking Project
           </Link>{" "}
           and{" "}
           <Link href="https://www.intuition.systems/" target="_blank">
@@ -17,8 +17,8 @@ const Footer = () => {
           </Link>
           <br />
           <br />
-          This is an experimental project to explore how the Ethereum community
-          can surface and align on the values that matter the most, in a
+          This is an experimental project to explore how the community can
+          surface and align on the values that matter the most, in a
           transparent and inclusive way.
           <br />
           <br />

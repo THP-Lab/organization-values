@@ -8,15 +8,15 @@ import Script from "next/script";
  */
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
-  title: "Ethereum Values",
+  title: "Organization Values",
   description:
-    "Join the community in an experiment to collectively align on the values at the core of Ethereum.",
+    "Join this community project in an experiment to collectively align on the values at the core of any organization.",
   openGraph: {
     type: "website",
-    title: "Ethereum Values",
+    title: "Organization Values",
     description:
-      "Join the community in an experiment to collectively align on the values at the core of Ethereum.",
-    siteName: "Ethereum Values",
+      "Join this community project in an experiment to collectively align on the values at the core of any organization.",
+    siteName: "Organization Values",
     images: [
       {
         url: "/images/og-image.png",

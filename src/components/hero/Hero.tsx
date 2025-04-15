@@ -18,13 +18,13 @@ const Hero = () => {
       />
       <h1 className={styles.title}>
         <span>What are</span>
-        <span>Ethereum&apos;s</span>
+        <span>Organization&apos;s</span>
         <span>Values?</span>
       </h1>
       <div className={styles.description}>
         <p>
           Join the community in an experiment to collectively align on the
-          values at the core of Ethereum.
+          values at the core of any Organization.
         </p>
         <div className={styles.scrollIndicator}>
           <ScrollIndicator />
