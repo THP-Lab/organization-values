@@ -38,7 +38,7 @@ export function useGetValuesListing() {
       // Build where clause
       const where = {
         predicate_id: { _eq: process.env.NEXT_PUBLIC_PREDICATE_ID }, // has value
-        subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID }, // Ethereum
+        subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID }, // Organization ID
       };
 
       // Add filter for user's positions if onlyVoted is true
