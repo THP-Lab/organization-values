@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import { useCreateAtom } from "@/hooks/useCreateAtom";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
-import { useAccount, useSwitchChain } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { parseEther } from "viem";
 import { baseSepolia, linea } from "viem/chains";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
@@ -30,8 +30,11 @@ const ProposeValueForm = ({
   const { errors, validateForm, setErrors } = useFormValidation(
     proposeValueFormSchema
   );
+  
+  const { useAccount, useSwitchChain } = usePrivyAdapter();
   const { address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
+  
   const { createAtom } = useCreateAtom();
   const { waitForTxEvents } = useWaitForTxEvents();
   const { getAtomId } = useGetAtomId();

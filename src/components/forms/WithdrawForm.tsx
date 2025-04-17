@@ -2,7 +2,7 @@
 
 import { useContext, useState } from "react";
 import { useRedeemTriple } from "@/hooks/useRedeemTriple";
-import { useAccount, useReadContract, useSwitchChain } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
@@ -29,6 +29,7 @@ const WithdrawForm = ({
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } =
     useFormValidation(withdrawFormSchema);
+  const { useAccount, useSwitchChain, useReadContract } = usePrivyAdapter();
   const { address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
   const { redeemTriple } = useRedeemTriple();
@@ -44,11 +45,22 @@ const WithdrawForm = ({
   const handleWithdraw = async (amount) => {
     try {
       setLoadingText("Transaction 1/1: Withdrawing ETH from vault");
+      
+      // Assurez-vous que les arguments sont du bon type
+      const sharesValue = withdrawMax ? totalShares : shares;
+      
+      console.log("Withdraw params:", {
+        vaultId,
+        address,
+        shares: sharesValue
+      });
+      
       const hash = await redeemTriple(
         vaultId,
         address,
-        withdrawMax ? totalShares : shares
+        sharesValue
       );
+      
       console.log("Transaction submitted", { vaultId, amount, hash });
       await waitForTxEvents(hash);
       console.log("Transaction confirmed", { vaultId, amount, hash });

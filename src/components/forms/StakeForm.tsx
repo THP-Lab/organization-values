@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { useDepositTriple } from "@/hooks/useDepositTriple";
-import { useAccount, useSwitchChain } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
 import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
@@ -25,6 +25,7 @@ const StakeForm = ({
   const { refreshUser } = useContext(UserContext);
   const { errors, validateForm, setErrors } =
     useFormValidation(stakeFormSchema);
+  const { useAccount, useSwitchChain } = usePrivyAdapter();
   const { address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
   const { depositTriple } = useDepositTriple();

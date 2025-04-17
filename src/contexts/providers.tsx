@@ -1,30 +1,10 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { http, WagmiProvider, createConfig } from "wagmi";
-import { metaMask } from "wagmi/connectors";
-import { linea, baseSepolia } from "wagmi/chains";
-import { UserProvider } from "./UserContext";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-
-const targetChain =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia : linea;
-
-export const wagmiConfig = createConfig({
-  chains: [targetChain],
-  connectors: [
-    metaMask({
-      chains: [targetChain],
-      defaultChainId: targetChain.id,
-      shimDisconnect: true,
-      shimChainChangedNavigate: true,
-    }),
-  ],
-  transports: {
-    [targetChain.id]: http(),
-  },
-  ssr: true,
-});
+import { UserProvider } from "./UserContext";
+import { PrivyProvider } from '@privy-io/react-auth';
+import { useEffect, useState } from "react";
 
 export const apolloClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
@@ -34,16 +14,37 @@ export const apolloClient = new ApolloClient({
 const client = new QueryClient();
 
 const Providers = ({ children }) => {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  if (!isMounted) {
+    return null; // Ne rend rien côté serveur
+  }
+  
   return (
-    <>
-      <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={client}>
-          <ApolloProvider client={apolloClient}>
-            <UserProvider>{children}</UserProvider>
-          </ApolloProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </>
+    <PrivyProvider
+      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
+      config={{
+        loginMethods: ['wallet', 'email', 'google'],
+        appearance: {
+          theme: 'light',
+          accentColor: '#676FFF',
+        },
+        embeddedWallets: {
+          createOnLogin: 'users-without-wallets',
+          noPromptOnSignature: true,
+        },
+      }}
+    >
+      <QueryClientProvider client={client}>
+        <ApolloProvider client={apolloClient}>
+          <UserProvider>{children}</UserProvider>
+        </ApolloProvider>
+      </QueryClientProvider>
+    </PrivyProvider>
   );
 };
 

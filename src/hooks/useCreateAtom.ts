@@ -1,8 +1,9 @@
-import { useWriteContract } from "wagmi";
+import { usePrivyAdapter } from "./usePrivyAuth";
 import { toHex } from "viem";
 import { abi } from "@/backend/abi";
 
 export function useCreateAtom() {
+  const { useWriteContract } = usePrivyAdapter();
   const { writeContractAsync } = useWriteContract();
 
   const createAtom = async (uri, initialDeposit = 0n) => {

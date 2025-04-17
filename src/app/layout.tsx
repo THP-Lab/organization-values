@@ -42,17 +42,16 @@ export const metadata = {
   },
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${AtypDisplay.variable} ${AtypText.variable}`}>
-      <head>
-        <Script
-          src="https://cmp.osano.com/AzZMxHTbQDOQD8c1J/6bd42b63-9020-409c-a672-b8cbca7dea09/osano.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <body>
         <Providers>{children}</Providers>
+        <Script
+          src="https://cmp.osano.com/AzZMxHTbQDOQD8c1J/6bd42b63-9020-409c-a672-b8cbca7dea09/osano.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
