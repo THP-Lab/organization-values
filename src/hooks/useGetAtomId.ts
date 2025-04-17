@@ -1,6 +1,13 @@
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, gql } from "@apollo/client";
 import { useCallback } from "react";
-import { getAtomIDsByUriQuery } from "@/backend/queries";
+
+const GET_ATOM_BY_DATA = gql`
+  query GetAtomByData($data: String!) {
+    atoms(where: { data: { _eq: $data } }) {
+      id
+    }
+  }
+`;
 
 export function useGetAtomId() {
   const client = useApolloClient();
@@ -9,22 +16,14 @@ export function useGetAtomId() {
     async (uri) => {
       try {
         const { data, error } = await client.query({
-          query: getAtomIDsByUriQuery,
-          variables: {
-            uri,
-          },
-          fetchPolicy: "network-only", // Disable caching
+          query: GET_ATOM_BY_DATA,
+          variables: { data: uri },
+          fetchPolicy: "network-only",
         });
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        if (data.atoms && data.atoms.length > 0) {
-          return data.atoms[0].id;
-        }
-
-        return null;
+        return data.atoms?.[0]?.id ?? null;
       } catch (err) {
         console.error("Error getting atom ID:", err);
         throw err;
@@ -35,3 +34,4 @@ export function useGetAtomId() {
 
   return { getAtomId };
 }
+

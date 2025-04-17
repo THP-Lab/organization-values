@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@0xintuition/graphql": "^0.8.0",
     "@apollo/client": "^3.12.11",
     "@metamask/sdk": "^0.32.0",
     "@tanstack/react-query": "^5.66.0",
