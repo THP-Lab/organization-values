@@ -8,21 +8,34 @@ import Script from "next/script";
  */
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
-  title: "Ethereum Values",
+  title: "Community Values Platform | Collective Intelligence for Organizations",
   description:
-    "Join the community in an experiment to collectively align on the values at the core of Ethereum.",
+    "A participatory platform where communities define, discuss, and align on their core values through transparent voting and meaningful dialogue.",
   openGraph: {
     type: "website",
-    title: "Ethereum Values",
+    title: "Community Values Platform | Define What Matters Together",
     description:
-      "Join the community in an experiment to collectively align on the values at the core of Ethereum.",
-    siteName: "Ethereum Values",
+      "Join our experiment in collective intelligence where communities discover and align on the principles that guide their future through transparent participation and meaningful dialogue.",
+    siteName: "Organization Values",
     images: [
       {
         url: "/images/og-image.png",
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Define Your Community's Values Together",
+    description: "A platform for collaborative value discovery and alignment"
+  },
+  keywords: [
+    "organizational values", 
+    "community values", 
+    "collective intelligence", 
+    "value alignment", 
+    "participatory governance", 
+    "community building"
+  ],
   robots: {
     index: true,
     follow: true,

@@ -17,14 +17,15 @@ const Hero = () => {
         className={styles.heroImage}
       />
       <h1 className={styles.title}>
-        <span>What are</span>
-        <span>Ethereum&apos;s</span>
-        <span>Values?</span>
+        <span>Discover Our</span>
+        <span>Collective</span>
+        <span>Values</span>
       </h1>
       <div className={styles.description}>
         <p>
-          Join the community in an experiment to collectively align on the
-          values at the core of Ethereum.
+          Join a vibrant community shaping its future through open dialogue 
+          and collaborative decision-making. Together, we'll define the 
+          principles that unite and guide us.
         </p>
         <div className={styles.scrollIndicator}>
           <ScrollIndicator />

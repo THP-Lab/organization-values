@@ -56,7 +56,7 @@ const ValueActions = ({
   useEffect(() => {
     setShareUrl(
       `https://x.com/intent/tweet?text=${encodeURIComponent(
-        `${name} is important to Ethereum, do you agree? Join the discussion here:`
+        `${name} is important to our organization, do you agree? Join the discussion here:`
       )}&url=${encodeURIComponent(
         window.location.origin + window.location.pathname
       )}`

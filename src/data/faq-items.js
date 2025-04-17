@@ -5,12 +5,12 @@ export const FAQ_ITEMS = [
     question: "What's this all about?",
     answer: (
       <>
-        Consensys is partnering with{" "}
+        This platform is partnering with{" "}
         <Link href="https://www.intuition.systems/" target="_blank">
           Intuition Systems
         </Link>{" "}
         to run a social experiment that allows people to propose, discuss, and
-        vote on values they feel are important to Ethereum.
+        vote on values they feel are important to the organization.
         <br />
         <br />
         The objective of the experiment is to see how certain mechanisms and
@@ -164,7 +164,7 @@ export const FAQ_ITEMS = [
       <>
         Yes, we aim to publish the findings and learnings from the experiment a
         number of weeks after the initial run. We will publish the findings via
-        Consensys and Intuition channels.
+        our organization and partner channels.
       </>
     ),
   },
@@ -172,10 +172,10 @@ export const FAQ_ITEMS = [
     question: "What's the motivation for running this experiment?",
     answer: (
       <>
-        We believe that the community&apos;s values are part of the DNA of
-        Ethereum, and are what guides the development of Ethereum. The core
-        values of the Ethereum ecosystem are what makes it so robust and strong,
-        and are why Ethereum is such important infrastructure for the world.
+        We believe that community values are part of the DNA of any 
+        organization, and are what guides its development. The core
+        values of an organization's ecosystem are what makes it robust and strong,
+        and are why organizations become important infrastructure for the world.
         <br />
         <br />
         However, these values should come from the ground-up, surfaced as a
@@ -230,10 +230,10 @@ export const FAQ_ITEMS = [
     question: "How secure is this platform?",
     answer: (
       <>
-        Intuitions&apos;s contracts are open source and have been fully audited.
-        The contracts themselves are upgradeable but are owned with a multisig
-        that has the power to update some parameters, but these are timelocked,
-        giving users the ability to remove funds before any changes take effect.
+        The platform's infrastructure is open source and has been fully audited.
+        The underlying systems are upgradeable but are managed by a multi-signature
+        security process that has the power to update some parameters, but these are timelocked,
+        giving users the ability to remove deposits before any changes take effect.
       </>
     ),
   },
@@ -252,14 +252,14 @@ export const FAQ_ITEMS = [
     ),
   },
   {
-    question: "Won't the values just be dominated by whales?",
+    question: "Won't the values just be dominated by large stakeholders?",
     answer: (
       <>
         With the current design, this is definitely a possibility, and it is
         something that we would like to improve upon. Any future iterations of
         this experiment will likely use more sophisticated mechanisms such as
         Quadratic Voting or Connection Oriented Cluster Matching, in order to
-        reduce the impact that whales can have. However, these sophisticated
+        reduce the impact that larger stakeholders can have. However, these sophisticated
         mechanisms require an identity and reputation layer that would introduce
         too much UX friction for such an early experiment. Therefore, this is
         something we have chosen to iterate towards over time.
@@ -267,12 +267,12 @@ export const FAQ_ITEMS = [
     ),
   },
   {
-    question: "What is Kialo?",
+    question: "What is the discussion forum integration?",
     answer: (
       <>
-        Kialo is an online platform designed to facilitate structured debates
+        Our platform integrates with discussion forums designed to facilitate structured debates
         and discussions, primarily aimed at enhancing critical thinking and
-        reasoning skills. It operates through a visual format known as argument
+        reasoning skills. These forums operate through a visual format known as argument
         mapping, where users can explore various perspectives on a central
         thesis by adding supporting or opposing arguments in a tree-like
         structure. We want to explore how effective argument mapping can be in a
@@ -282,36 +282,24 @@ export const FAQ_ITEMS = [
     ),
   },
   {
-    question: "How do I create a Kialo thread for a value I'm proposing?",
+    question: "How do I create a discussion thread for a value I'm proposing?",
     answer: (
       <>
         <ul>
           <li>
-            Click on the{" "}
-            <Link
-              href="https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
-              target="_blank"
-            >
-              link
-            </Link>{" "}
-            to go to the Kialo forum.
+            Click on the discussion forum link available on the platform homepage.
           </li>
           <li>
-            Click on the <strong>+</strong> button on the right hand side of the
-            section in the middle of the page that contains &quot;x
-            Theses&quot;. (<em>&apos;theses&apos;</em> ={" "}
-            <em>&apos;proposed values&apos;</em> in this instance).
+            Click on the <strong>+</strong> button to create a new topic.
           </li>
           <li>
-            A box will appear that reads &quot;Please enter a thesis&quot;.
-            Enter the name of the proposed value followed by a description. The
-            description should be exactly the same as the description that you
-            will enter on the Ethereum values website. There is a max. limit of
-            500 characters.
+            A form will appear where you can enter the name of your proposed value followed by its description.
+            The description should be exactly the same as the description that you
+            entered on the values platform. There is a character limit for these entries.
           </li>
-          <li>Click on the Save button to save your proposed value.</li>
+          <li>Save your proposed value to add it to the list of discussion topics.</li>
           <li>
-            The proposed value will be added to the existing list of values.
+            The proposed value will now be available for community discussion.
           </li>
         </ul>
       </>
@@ -319,23 +307,20 @@ export const FAQ_ITEMS = [
   },
   {
     question:
-      "How do I participate in a conversation for an existing value in Kialo?",
+      "How do I participate in a conversation for an existing value in the discussion forum?",
     answer: (
       <>
         <ul>
           <li>
-            Click on a value (called a &quot;thesis&quot; in Kialo), which will
-            load the discussion for that value.
+            Click on a value in the discussion forum, which will load the conversation thread for that value.
           </li>
           <li>
-            To participate in the discussion, click on the <strong>+</strong>{" "}
-            button in either the <strong>Pros</strong> column or the{" "}
-            <strong>+</strong> button in either the <strong>Cons</strong>{" "}
-            column, depending on your point of view.
+            To participate in the discussion, locate the response options which may be organized as
+            <strong> For</strong> arguments or <strong>Against</strong> arguments,
+            depending on your point of view.
           </li>
           <li>
-            Write your contribution in the input box that appears and click on
-            &quot;Save&quot;.
+            Write your contribution in the input box that appears and save your comment.
           </li>
         </ul>
         <strong>Rules for posting:</strong>
@@ -343,8 +328,8 @@ export const FAQ_ITEMS = [
           <li>
             Conversation must be respectful and civil and relevant. Any posts
             that are deemed inappropriate or disrespectful will be removed.
-            Similarly, any shilling or scamming will be deleted and authors will
-            be reported to Kialo.
+            Similarly, any promotion of unrelated products/services or inappropriate content
+            will be deleted and users may face restrictions.
           </li>
         </ul>
       </>
@@ -354,8 +339,8 @@ export const FAQ_ITEMS = [
     question: "Disclaimer",
     answer: (
       <>
-        This software is provided for use at the user&apos;s own risk. ConsenSys
-        Software Inc. and Intuition Systems are not liable for any unforeseen
+        This software is provided for use at the user&apos;s own risk. The platform 
+        operators and Intuition Systems are not liable for any unforeseen
         circumstances that may result in the loss of funds. As this is
         experimental software, users acknowledge the possibility of bugs or
         unexpected issues. It is strongly recommended that users only deposit
@@ -367,7 +352,7 @@ export const FAQ_ITEMS = [
         contact our support team with any questions or concerns.
         <br />
         <br />
-        ConsenSys Software Inc. reserves the right to discontinue this program
+        The organization reserves the right to discontinue this program
         at any time without prior notice. In such cases, all deposited funds
         will remain accessible for withdrawal. While we strive to deliver
         innovative solutions, we urge users to engage with the platform

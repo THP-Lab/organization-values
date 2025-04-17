@@ -46,7 +46,7 @@ const ProposeValueForm = ({
       if (!atomId) {
         // Only create atom if it doesn't exist
         setLoadingText(
-          "Transaction 1/2: Registering your value on the blockchain"
+          "Transaction 1/2: Registering your value on the decentralized ledger"
         );
         const createAtomHash = await createAtom(ipfsUri, parseEther("0.0004"));
         console.log("Transaction submitted", { ipfsUri, createAtomHash });
@@ -57,7 +57,7 @@ const ProposeValueForm = ({
         atomId = await getAtomId(ipfsUri);
       }
 
-      setLoadingText("Transaction 2/2: Connecting your value to Ethereum");
+      setLoadingText("Transaction 2/2: Connecting your value to the community registry");
       const createTripleHash = await createTriple(
         process.env.NEXT_PUBLIC_SUBJECT_ID,
         process.env.NEXT_PUBLIC_PREDICATE_ID,
@@ -69,7 +69,7 @@ const ProposeValueForm = ({
       await waitForTxEvents(createTripleHash);
       console.log("Triple created", { atomId, createTripleHash });
 
-      setLoadingText("Your value has been successfully proposed!");
+      setLoadingText("Your value has been successfully proposed and is now visible to the community!");
       await new Promise((resolve) => setTimeout(resolve, 3000));
       onSuccess();
       onCancel();
@@ -167,7 +167,7 @@ const ProposeValueForm = ({
           type="text"
           id="valueName"
           name="valueName"
-          placeholder="Credible Neutrality"
+          placeholder="Collaborative Innovation"
           aria-describedby={errors.valueName ? "valueName-error" : undefined}
         />
         {errors.valueName && (
@@ -208,7 +208,7 @@ const ProposeValueForm = ({
           id="description"
           name="description"
           rows="3"
-          placeholder="Ethereum should above all strive to be credibly neutral because..."
+          placeholder="Our community should prioritize transparency because it builds trust and enables better decision making for all stakeholders..."
           aria-describedby={
             errors.description ? "description-error" : undefined
           }
@@ -229,7 +229,7 @@ const ProposeValueForm = ({
       <div className={styles.actions}>
         {correctChain ? (
           <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? "Submitting..." : "Propose Value"}
           </button>
         ) : (
           <button
@@ -237,7 +237,7 @@ const ProposeValueForm = ({
             type="button"
             onClick={handleSwitch}
           >
-            Switch to Linea Network
+            Switch to Required Network
           </button>
         )}
       </div>

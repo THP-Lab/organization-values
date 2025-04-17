@@ -18,7 +18,7 @@ export function useGetUserPositions() {
           variables: {
             where: {
               predicate_id: { _eq: process.env.NEXT_PUBLIC_PREDICATE_ID }, // has value
-              subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID }, // Ethereum
+              subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID }, // Organization ID
             },
             address: address.toLowerCase(),
             limit: batchSize,

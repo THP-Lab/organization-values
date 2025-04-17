@@ -32,15 +32,15 @@ export default async function Home() {
           <TextBox>
             <div className="prose">
               <p>
-                Ethereum is more than a blockchain—it&apos;s a cultural movement
-                built on deeply held values which have helped to guide the
-                ecosystem and enable it to grow into a global, trustless
-                platform for all.
+                An organization is more than its structure—it&apos;s a cultural movement
+                built on deeply held values which help guide decision-making and
+                enable sustainable growth into a thriving community with shared
+                purpose.
               </p>
               <p>
-                But as Ethereum continues to evolve, so too do the
-                interpretations and applications of these core values. As mass
-                adoption nears, we need to collectively re-assert the values
+                But as organizations continue to evolve, so too do the
+                interpretations and applications of these core values. As they
+                grow and mature, we need to collectively define the values
                 that are important to us as a community.
               </p>
             </div>
