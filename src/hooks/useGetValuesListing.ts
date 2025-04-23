@@ -109,7 +109,8 @@ export function useGetValuesListing() {
           totalUsers:
             Number(triple.vault.position_count || 0) +
             Number(triple.counter_vault.position_count || 0),
-        }));
+        }))
+        .filter(value => value.totalUsers > 0);
 
       return {
         values,
