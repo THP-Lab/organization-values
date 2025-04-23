@@ -8,12 +8,12 @@ import { UserContext } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { stakeFormSchema } from "./validations";
 import { parseEther } from "viem";
-import { baseSepolia, linea } from "viem/chains";
+import { baseSepolia, base } from "viem/chains";
 
 import styles from "./form.module.scss";
 
 export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 const StakeForm = ({
   vaultId,
@@ -149,7 +149,7 @@ const StakeForm = ({
             type="button"
             onClick={handleSwitch}
           >
-            Switch to Linea Network
+            Switch to base Network
           </button>
         )}
         <button

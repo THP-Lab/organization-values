@@ -7,10 +7,10 @@ import styles from "./propose-value-button.module.scss";
 import Modal from "../modal/Modal";
 import ProposeValueForm from "../forms/ProposeValueForm";
 import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
-import { linea, baseSepolia } from "viem/chains";
+import { base, baseSepolia } from "viem/chains";
 
 export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 const ProposeValueButton = ({ onSuccess }) => {
   const { useAccount, useConnect } = usePrivyAdapter();

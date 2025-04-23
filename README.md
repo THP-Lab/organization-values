@@ -10,7 +10,7 @@ This application is part of Consensys' Web3 for All campaign, developed in colla
 
 - Node.js 20.x or later
 - npm
-- Web3 wallet (e.g., MetaMask) with Linea network configured
+- Web3 wallet (e.g., MetaMask) with base network configured
 
 ## Environment Setup
 

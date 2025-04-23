@@ -2,15 +2,15 @@
 
 import { usePrivy } from '@privy-io/react-auth';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { baseSepolia, linea } from 'viem/chains';
+import { baseSepolia, base } from 'viem/chains';
 import { encodeFunctionData, createPublicClient, http } from 'viem';
 
 export const DEFAULT_CHAIN_ID = 
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 // Créer un client public Viem pour interagir avec la blockchain
 const publicClient = createPublicClient({
-  chain: DEFAULT_CHAIN_ID === baseSepolia.id ? baseSepolia : linea,
+  chain: DEFAULT_CHAIN_ID === baseSepolia.id ? baseSepolia : base,
   transport: http(),
 });
 
@@ -49,15 +49,15 @@ const switchToRequiredNetwork = async () => {
             blockExplorerUrls: ['https://sepolia.basescan.org'],
           }
         : {
-            chainId: `0x${linea.id.toString(16)}`,
-            chainName: 'Linea Mainnet',
+            chainId: `0x${base.id.toString(16)}`,
+            chainName: 'base Mainnet',
             nativeCurrency: {
               name: 'Ether',
               symbol: 'ETH',
               decimals: 18,
             },
-            rpcUrls: ['https://rpc.linea.build'],
-            blockExplorerUrls: ['https://lineascan.build'],
+            rpcUrls: ['https://rpc.base.build'],
+            blockExplorerUrls: ['https://basescan.build'],
           };
       
       // Cette méthode déclenche aussi une confirmation dans le wallet
@@ -112,15 +112,15 @@ export function usePrivyAdapter() {
                       blockExplorerUrls: ['https://sepolia.basescan.org'],
                     }
                   : {
-                      chainId: `0x${linea.id.toString(16)}`,
-                      chainName: 'Linea Mainnet',
+                      chainId: `0x${base.id.toString(16)}`,
+                      chainName: 'base Mainnet',
                       nativeCurrency: {
                         name: 'Ether',
                         symbol: 'ETH',
                         decimals: 18,
                       },
-                      rpcUrls: ['https://rpc.linea.build'],
-                      blockExplorerUrls: ['https://lineascan.build'],
+                      rpcUrls: ['https://rpc.base.build'],
+                      blockExplorerUrls: ['https://basescan.build'],
                     };
                 
                 await window.ethereum.request({
@@ -196,15 +196,15 @@ export function usePrivyAdapter() {
                   blockExplorerUrls: ['https://sepolia.basescan.org'],
                 }
               : {
-                  chainId: `0x${linea.id.toString(16)}`,
-                  chainName: 'Linea Mainnet',
+                  chainId: `0x${base.id.toString(16)}`,
+                  chainName: 'Base Mainnet',
                   nativeCurrency: {
                     name: 'Ether',
                     symbol: 'ETH',
                     decimals: 18,
                   },
-                  rpcUrls: ['https://rpc.linea.build'],
-                  blockExplorerUrls: ['https://lineascan.build'],
+                  rpcUrls: ['https://rpc.base.build'],
+                  blockExplorerUrls: ['https://basescan.build'],
                 };
             
             await window.ethereum.request({
@@ -221,7 +221,7 @@ export function usePrivyAdapter() {
       setCurrentChainId(chainId);
       return { id: chainId };
     },
-    chains: [baseSepolia, linea],
+    chains: [baseSepolia, base],
   }), []);
   
   // Adapter pour useReadContract
