@@ -1,32 +1,33 @@
 import Image from "next/image";
 import ScrollIndicator from "../scroll-indicator/ScrollIndicator";
+import { organizationConfig } from "@/config/organization-config";
 
+// Importation dynamique de l'image - à remplacer par une approche compatible avec les images externes
 import heroImage from "./hero.png";
 
 import styles from "./hero.module.scss";
 
 const Hero = () => {
+  // Destructurer les éléments nécessaires du config
+  const { hero } = organizationConfig;
+  
   return (
     <div className={styles.hero}>
       <Image
         aria-hidden="true"
-        src={heroImage}
+        src={heroImage} // Idéalement, ceci devrait être remplacé par organizationConfig.branding.hero
         alt="hero"
         width={1322}
         height={2328}
         className={styles.heroImage}
       />
       <h1 className={styles.title}>
-        <span>Discover Our</span>
-        <span>Collective</span>
+        <span>Discover</span>
+        <span>{hero.title}</span>
         <span>Values</span>
       </h1>
       <div className={styles.description}>
-        <p>
-          Join a vibrant community shaping its future through open dialogue 
-          and collaborative decision-making. Together, we'll define the 
-          principles that unite and guide us.
-        </p>
+        <p>{hero.description}</p>
         <div className={styles.scrollIndicator}>
           <ScrollIndicator />
         </div>

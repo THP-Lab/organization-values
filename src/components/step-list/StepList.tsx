@@ -2,43 +2,7 @@ import { formatCompactNumber } from "@/utils/formatCompactNumber";
 import Step from "../step/Step";
 import styles from "./step-list.module.scss";
 import Carousel from "../carousel/Carousel";
-
-const STEPS = [
-  {
-    number: 1,
-    title: "Propose Values",
-    description:
-      "Propose a value that you feel is important and / or view the values others have explored",
-    statImageSrc: "/images/steps/propose.svg",
-    getStats: (valuesCount) => `${valuesCount} Values Proposed`,
-  },
-  {
-    number: 2,
-    title: "Vote with ETH",
-    description:
-      "Vote on proposed values by depositing ETH For or Against, and pay a small fee to the value pool",
-    statImageSrc: "/images/steps/vote.svg",
-    getStats: (_, totalStakedEth) => `${totalStakedEth} ETH in votes`,
-  },
-  {
-    number: 3,
-    title: "Earn Rewards",
-    description:
-      "As more people vote on the same value, your shares accrue a portion of their fees",
-    statImageSrc: "/images/steps/earn.svg",
-    getStats: (_, __, totalRewards) =>
-      `${formatCompactNumber(totalRewards)} in Rewards`,
-  },
-  {
-    number: 4,
-    title: "Shape the Future",
-    description:
-      "Values are ranked by total ETH voted for. You can withdraw your ETH at any time",
-    statImageSrc: "/images/steps/shape.svg",
-    getStats: (_, __, ___, totalUsers) =>
-      `${formatCompactNumber(totalUsers)}+ Contributors`,
-  },
-];
+import { organizationConfig } from "@/config/organization-config";
 
 const StepList = ({
   valuesCount,
@@ -46,39 +10,47 @@ const StepList = ({
   totalRewards,
   totalUsers,
 }) => {
+  // Récupérer les étapes depuis la configuration
+  const STEPS = organizationConfig.sections.steps;
+  
+  // Fonction pour obtenir la valeur statistique appropriée pour chaque étape
+  const getStepStat = (step, index) => {
+    const statValues = [
+      valuesCount,
+      totalStakedEth,
+      totalRewards,
+      totalUsers
+    ];
+    
+    // Utiliser la fonction getStatText ou une valeur par défaut
+    return step.getStatText ? 
+      step.getStatText(statValues[index] || 0) : 
+      `${statValues[index] || 0}`;
+  };
+
   return (
     <>
       <ol className={styles.stepList} role="list">
-        {STEPS.map((step) => (
+        {STEPS.map((step, index) => (
           <li key={step.number}>
             <Step
               number={step.number}
               title={step.title}
               description={step.description}
-              stats={step.getStats(
-                valuesCount,
-                totalStakedEth,
-                totalRewards,
-                totalUsers
-              )}
+              stats={getStepStat(step, index)}
               statImageSrc={step.statImageSrc}
             />
           </li>
         ))}
       </ol>
       <Carousel className={styles.carousel}>
-        {STEPS.map((step) => (
+        {STEPS.map((step, index) => (
           <div key={step.number} className={styles.carouselItem}>
             <Step
               number={step.number}
               title={step.title}
               description={step.description}
-              stats={step.getStats(
-                valuesCount,
-                totalStakedEth,
-                totalRewards,
-                totalUsers
-              )}
+              stats={getStepStat(step, index)}
               statImageSrc={step.statImageSrc}
             />
           </div>

@@ -10,6 +10,7 @@ import TextBox from "@/components/text-box/TextBox";
 import ValueListing from "@/components/value-listing/ValueListing";
 import Link from "next/link";
 import { FAQ_ITEMS } from "@/data/faq-items";
+import { organizationConfig } from "@/config/organization-config";
 
 export default function ClientPage() {
   const [isClient, setIsClient] = useState(false);
@@ -26,6 +27,9 @@ export default function ClientPage() {
   const totalStakedEth = 0;
   const totalRewards = 0;
   const totalUsers = 0;
+  
+  // Destructurer les sections pour faciliter l'accès
+  const { sections, externalLinks } = organizationConfig;
 
   return (
     <main className="page">
@@ -39,28 +43,19 @@ export default function ClientPage() {
       </section>
       <section className="section" data-green data-space-1>
         <div className="wrapper repel">
-          <h2 className="section-title">Defining Our&nbsp;Future</h2>
+          <h2 className="section-title">{sections.definingFuture.title}</h2>
           <TextBox>
             <div className="prose">
-              <p>
-                An organization is more than its structure—it&apos;s a cultural movement
-                built on deeply held values which help guide decision-making and
-                enable sustainable growth into a thriving community with shared
-                purpose.
-              </p>
-              <p>
-                But as organizations continue to evolve, so too do the
-                interpretations and applications of these core values. As they
-                grow and mature, we need to collectively define the values
-                that are important to us as a community.
-              </p>
+              {sections.definingFuture.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
           </TextBox>
         </div>
       </section>
       <section className="section" data-space-2>
         <div className="wrapper">
-          <h2 className="section-title">Propose&nbsp;/&nbsp;Vote on Values</h2>
+          <h2 className="section-title">{sections.proposeVote.title}</h2>
           <div className="box" data-end>
             <StepList
               valuesCount={valuesCount}
@@ -73,7 +68,7 @@ export default function ClientPage() {
       </section>
       <section className="section" data-space-1>
         <div className="wrapper">
-          <h2 className="section-title">Join the Discussion</h2>
+          <h2 className="section-title">{sections.joinDiscussion.title}</h2>
         </div>
         <div className="wrapper">
           <ValueListing />
@@ -85,7 +80,7 @@ export default function ClientPage() {
           <p>
             You can also join the conversation on{" "}
             <Link
-              href="https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
+              href={externalLinks.discussion.kialo}
               target="_blank"
             >
               Kialo
@@ -95,7 +90,7 @@ export default function ClientPage() {
       </div>
       <section className="section" data-space-1>
         <div className="wrapper">
-          <h2 className="section-title-small">Frequently Asked Questions</h2>
+          <h2 className="section-title-small">{sections.faqSection.title}</h2>
           <Accordion items={FAQ_ITEMS} />
         </div>
       </section>
