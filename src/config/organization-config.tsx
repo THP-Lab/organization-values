@@ -99,13 +99,31 @@ This means that if you deposit some ETH into the pool for a specific value, you 
   externalLinks: {
     community: "https://discord.com/invite/your-organization",
     documentation: "https://docs.your-organization.com",
+    contactEmail: "contact@organization-values.com",
     social: {
-      twitter: "https://twitter.com/your-organization",
-      // Other links...
+      twitter: "https://twitter.com/organization",
+      youtube: "https://youtube.com/organization",
+      discord: "https://discord.com/invite/organization",
+      instagram: "https://instagram.com/organization"
+    },
+    legal: {
+      privacy: "https://organization-values.com/privacy",
+      terms: "https://organization-values.com/terms"
     },
     discussion: {
       kialo: "https://www.kialo.com/p/dd0be798-fae9-407e-b30c-a6392b59dea5/67726"
     }
+  },
+  
+  // Footer content
+  footer: {
+    title: "Values are the foundation of any thriving community.",
+    description: [
+      "This platform is a collaborative experiment in collective intelligence, enabling communities to surface, discuss and align on shared values through transparent and inclusive participation.",
+      "By making values explicit and measurable, we create a framework for better decision-making and stronger collective identity."
+    ],
+    connectTitle: "Connect With Us",
+    copyright: "Organization Values. All rights reserved."
   },
   
   // Technical configuration
@@ -139,8 +157,4 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     allowAnonymousViewing: true,
     requireConnectForProposing: true,
   },
-  
-
-  
- 
 };
