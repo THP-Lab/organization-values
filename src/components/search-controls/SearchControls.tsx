@@ -13,12 +13,14 @@ const SearchControls = ({ sortValue, setSortValue, involved, setInvolved }) => {
     <div className={styles.controls}>
       <div className={styles.orderby}>
         <label htmlFor="rankSelect">Ranked by</label>
-        <select id="rankSelect" value={sortValue} onChange={handleSortChange}>
-          <option value="upvotes">Most Upvoted</option>
-          <option value="downvotes">Most Downvoted</option>
-          <option value="newest">Most Recent</option>
-          <option value="oldest">Least Recent</option>
-        </select>
+        <div className={styles.selectWrapper}>
+          <select id="rankSelect" value={sortValue} onChange={handleSortChange}>
+            <option value="upvotes">Most Upvoted</option>
+            <option value="downvotes">Most Downvoted</option>
+            <option value="newest">Most Recent</option>
+            <option value="oldest">Least Recent</option>
+          </select>
+        </div>
       </div>
       <div className={styles.involved}>
         <label className={styles.checkbox}>

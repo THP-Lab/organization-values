@@ -37,7 +37,7 @@ export default function ClientPage() {
           <Hero />
         </div>
       </section>
-      <section className="section" data-green data-decorated data-space-1>
+      <section className="section" data-green data-space-1>
         <div className="wrapper repel">
           <h2 className="section-title">Defining Our&nbsp;Future</h2>
           <TextBox>
