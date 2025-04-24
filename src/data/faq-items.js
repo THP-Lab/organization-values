@@ -2,18 +2,18 @@ import React from "react";
 import Link from "next/link";
 import { organizationConfig } from "@/config/organization-config";
 
-// Fonction pour transformer le texte en JSX avec formatage approprié
+// Function to transform text into JSX with appropriate formatting
 const processAnswer = (faqItem) => {
   if (!faqItem.answer) return null;
   
-  // Diviser le texte en paragraphes
+  // Split text into paragraphs
   const paragraphs = faqItem.answer.split("\n\n");
   
-  // Fonction pour mettre en évidence des termes
+  // Function to highlight terms
   const emphasize = (text, termsToEmphasize) => {
     if (!termsToEmphasize || !termsToEmphasize.length) return text;
     
-    // Parcourir chaque terme à mettre en évidence
+    // Process each term to highlight
     let result = text;
     termsToEmphasize.forEach(term => {
       result = result.replace(
@@ -25,9 +25,9 @@ const processAnswer = (faqItem) => {
     return result;
   };
 
-  // Transformer les paragraphes en JSX
+  // Transform paragraphs into JSX
   const processedParagraphs = paragraphs.map((para, index) => {
-    // Vérifier s'il s'agit d'une liste à puces
+    // Check if it's a bullet list
     if (para.startsWith('- ')) {
       const listItems = para.split('\n- ').map(item => item.replace(/^- /, ''));
       return (
@@ -41,7 +41,7 @@ const processAnswer = (faqItem) => {
       );
     }
     
-    // Paragraphe standard
+    // Standard paragraph
     return (
       <p key={index} dangerouslySetInnerHTML={{ 
         __html: emphasize(para, faqItem.emphasize) 
@@ -49,11 +49,11 @@ const processAnswer = (faqItem) => {
     );
   });
 
-  // Ajouter des liens s'ils existent
+  // Add links if they exist
   if (faqItem.links && faqItem.links.length) {
     const firstPara = processedParagraphs[0];
     
-    // Créer un nouveau paragraphe avec des liens
+    // Create a new paragraph with links
     const paraWithLinks = (
       <p key="linked-para">
         {firstPara.props.dangerouslySetInnerHTML.__html}
@@ -69,11 +69,11 @@ const processAnswer = (faqItem) => {
       </p>
     );
     
-    // Remplacer le premier paragraphe
+    // Replace the first paragraph
     processedParagraphs[0] = paraWithLinks;
   }
 
-  // Retourner un fragment avec tous les paragraphes
+  // Return a fragment with all paragraphs
   return (
     <>
       {processedParagraphs.map((para, idx) => (
@@ -86,7 +86,7 @@ const processAnswer = (faqItem) => {
   );
 };
 
-// Transformer la configuration en éléments FAQ utilisables
+// Transform the configuration into usable FAQ items
 export const FAQ_ITEMS = organizationConfig.faq.map(item => ({
   question: item.question,
   answer: processAnswer(item)

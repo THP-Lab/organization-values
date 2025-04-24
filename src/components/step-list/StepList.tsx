@@ -10,10 +10,10 @@ const StepList = ({
   totalRewards,
   totalUsers,
 }) => {
-  // Récupérer les étapes depuis la configuration
+  // Get steps from configuration
   const STEPS = organizationConfig.sections.steps;
   
-  // Fonction pour obtenir la valeur statistique appropriée pour chaque étape
+  // Function to get the appropriate statistical value for each step
   const getStepStat = (step, index) => {
     const statValues = [
       valuesCount,
@@ -22,7 +22,7 @@ const StepList = ({
       totalUsers
     ];
     
-    // Utiliser la fonction getStatText ou une valeur par défaut
+    // Use the getStatText function or a default value
     return step.getStatText ? 
       step.getStatText(statValues[index] || 0) : 
       `${statValues[index] || 0}`;

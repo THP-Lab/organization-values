@@ -7,7 +7,7 @@ export function useRedeemTriple() {
 
   const redeemTriple = async (vaultId, address, shares = 0n) => {
     try {
-      // Convertir en BigInt avec précaution
+      // Convert to BigInt carefully
       const sharesBigInt = BigInt(shares || 0);
       const vaultIdBigInt = BigInt(vaultId);
       
@@ -17,7 +17,7 @@ export function useRedeemTriple() {
         vaultId: vaultIdBigInt
       });
       
-      // Passons les arguments dans le bon ordre selon l'ABI
+      // Pass arguments in the correct order according to the ABI
       const hash = await writeContractAsync({
         abi: abi,
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,

@@ -46,7 +46,7 @@ const WithdrawForm = ({
     try {
       setLoadingText("Transaction 1/1: Withdrawing ETH from vault");
       
-      // Assurez-vous que les arguments sont du bon type
+      // Make sure arguments are of the correct type
       const sharesValue = withdrawMax ? totalShares : shares;
       
       console.log("Withdraw params:", {

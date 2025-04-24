@@ -20,7 +20,7 @@ export default function ClientPage() {
   }, []);
   
   if (!isClient) {
-    return <div>Loading...</div>; // Un simple loader pendant l'initialisation côté client
+    return <div>Loading...</div>; // A simple loader during client-side initialization
   }
   
   const valuesCount = 0;
@@ -28,7 +28,7 @@ export default function ClientPage() {
   const totalRewards = 0;
   const totalUsers = 0;
   
-  // Destructurer les sections pour faciliter l'accès
+  // Destructure sections for easier access
   const { sections, externalLinks } = organizationConfig;
 
   return (

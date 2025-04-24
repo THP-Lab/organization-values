@@ -8,13 +8,13 @@ import { encodeFunctionData, createPublicClient, http } from 'viem';
 export const DEFAULT_CHAIN_ID = 
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
-// Créer un client public Viem pour interagir avec la blockchain
+// Create a Viem public client to interact with the blockchain
 const publicClient = createPublicClient({
   chain: DEFAULT_CHAIN_ID === baseSepolia.id ? baseSepolia : base,
   transport: http(),
 });
 
-// Fonction pour convertir les BigInt en chaînes pour la sérialisation
+// Function to convert BigInt to strings for serialization
 const stringifyArgs = (args) => {
   if (!args) return '';
   return args.map(arg => 
@@ -22,19 +22,19 @@ const stringifyArgs = (args) => {
   ).join(',');
 };
 
-// Simplifiez la fonction pour utiliser directement l'API du wallet
+// Simplify the function to directly use the wallet API
 const switchToRequiredNetwork = async () => {
   if (!window.ethereum) return false;
   
   try {
-    // Cette méthode déclenche automatiquement la confirmation dans le wallet
+    // This method automatically triggers confirmation in the wallet
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: `0x${DEFAULT_CHAIN_ID.toString(16)}` }],
     });
     return true;
   } catch (switchError) {
-    // Si le réseau n'est pas ajouté au wallet
+    // If the network is not added to the wallet
     if (switchError.code === 4902) {
       const networkParams = DEFAULT_CHAIN_ID === baseSepolia.id 
         ? {
@@ -60,7 +60,7 @@ const switchToRequiredNetwork = async () => {
             blockExplorerUrls: ['https://basescan.build'],
           };
       
-      // Cette méthode déclenche aussi une confirmation dans le wallet
+      // This method also triggers a confirmation in the wallet
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [networkParams],
@@ -72,32 +72,32 @@ const switchToRequiredNetwork = async () => {
   }
 };
 
-// Ce hook adapte l'interface Privy à celle utilisée par Wagmi dans votre codebase
+// This hook adapts the Privy interface to the one used by Wagmi in your codebase
 export function usePrivyAdapter() {
   const privy = usePrivy();
   const [currentChainId, setCurrentChainId] = useState<number | null>(null);
   
-  // Vérifier et demander le changement de réseau si nécessaire
+  // Check and request network change if necessary
   useEffect(() => {
     const checkAndSwitchChain = async () => {
       if (privy.authenticated && privy.user?.wallet?.address && window.ethereum) {
         try {
-          // Obtenir la chaîne actuelle
+          // Get the current chain
           const chainIdHex = await window.ethereum.request({ method: 'eth_chainId' });
           const chainId = parseInt(chainIdHex, 16);
           
-          // Si l'utilisateur n'est pas sur la bonne chaîne, demander de changer
+          // If the user is not on the correct chain, ask to change
           if (chainId !== DEFAULT_CHAIN_ID) {
             console.log(`User on chain ${chainId}, need to switch to ${DEFAULT_CHAIN_ID}`);
             try {
-              // Essayer de changer de réseau
+              // Try to switch networks
               await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: `0x${DEFAULT_CHAIN_ID.toString(16)}` }],
               });
               console.log("Switched to required network");
             } catch (switchError) {
-              // Si le réseau n'est pas configuré, proposer de l'ajouter
+              // If the network is not configured, offer to add it
               if (switchError.code === 4902) {
                 const networkParams = DEFAULT_CHAIN_ID === baseSepolia.id 
                   ? {
@@ -139,20 +139,20 @@ export function usePrivyAdapter() {
     checkAndSwitchChain();
   }, [privy.authenticated, privy.user?.wallet?.address]);
   
-  // Adapter pour useAccount
+  // Adapter for useAccount
   const account = useMemo(() => ({
     isConnected: privy.authenticated && !!privy.user?.wallet?.address,
     address: privy.user?.wallet?.address,
     chain: { id: DEFAULT_CHAIN_ID },
   }), [privy.authenticated, privy.user?.wallet?.address]);
   
-  // Adapter pour useConnect
+  // Adapter for useConnect
   const connectAdapter = useMemo(() => ({
     connectors: privy.authenticated ? [] : [{ id: 'privy' }],
     connect: async ({ chainId }) => {
       setCurrentChainId(chainId);
       try {
-        // Connecter l'utilisateur avec son wallet externe
+        // Connect the user with their external wallet
         await privy.login();
         return true;
       } catch (err) {
@@ -163,15 +163,15 @@ export function usePrivyAdapter() {
     isPending: privy.authenticated === null || privy.isLoading,
   }), [privy.authenticated, privy.isLoading, privy.login]);
   
-  // Adapter pour useDisconnect
+  // Adapter for useDisconnect
   const disconnectAdapter = useMemo(() => ({
     disconnect: privy.logout,
   }), [privy.logout]);
   
-  // Adapter pour useSwitchChain
+  // Adapter for useSwitchChain
   const switchChainAdapter = useMemo(() => ({
     switchChain: async ({ chainId }) => {
-      // Pour les wallets externes, utiliser les méthodes natives du wallet
+      // For external wallets, use the native wallet methods
       if (window.ethereum) {
         try {
           await window.ethereum.request({
@@ -181,7 +181,7 @@ export function usePrivyAdapter() {
           setCurrentChainId(chainId);
           return { id: chainId };
         } catch (error) {
-          // Si le réseau n'est pas configuré, proposer de l'ajouter
+          // If the network is not configured, offer to add it
           if (error.code === 4902) {
             const networkParams = chainId === baseSepolia.id 
               ? {
@@ -224,7 +224,7 @@ export function usePrivyAdapter() {
     chains: [baseSepolia, base],
   }), []);
   
-  // Adapter pour useReadContract
+  // Adapter for useReadContract
   const readContractAdapter = useCallback(({ abi, address, functionName, args }) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -255,13 +255,13 @@ export function usePrivyAdapter() {
     return { data, isLoading, error };
   }, []);
   
-  // Adapter pour useWriteContract
+  // Adapter for useWriteContract
   const writeContractAdapter = useMemo(() => ({
     writeContractAsync: async (params) => {
       if (!privy.authenticated) throw new Error("User not authenticated");
       if (!privy.user?.wallet?.address) throw new Error("No wallet connected");
       
-      // Encoder les données de fonction avec viem
+      // Encode function data with viem
       const data = encodeFunctionData({
         abi: params.abi,
         functionName: params.functionName,
@@ -269,12 +269,12 @@ export function usePrivyAdapter() {
       });
       
       try {
-        // Pour les wallets externes (comme MetaMask), utiliser l'interface ethereum
+        // For external wallets (like MetaMask), use the ethereum interface
         if (window.ethereum) {
-          // Convertir value en hex
+          // Convert value to hex
           let valueHex = '0x0';
           if (params.value) {
-            // Assurer que value est géré correctement, qu'il soit un BigInt ou un nombre
+            // Ensure value is handled correctly, whether it's a BigInt or a number
             const valueBigInt = typeof params.value === 'bigint' 
               ? params.value 
               : BigInt(params.value.toString());
@@ -302,7 +302,7 @@ export function usePrivyAdapter() {
   }), [privy.authenticated, privy.user?.wallet?.address]);
 
   return {
-    // Exports correspondant aux hooks Wagmi que vous utilisez
+    // Exports corresponding to the hooks Wagmi that you use
     useAccount: () => account,
     useConnect: () => connectAdapter,
     useDisconnect: () => disconnectAdapter,
@@ -310,7 +310,7 @@ export function usePrivyAdapter() {
     useWriteContract: () => writeContractAdapter,
     useReadContract: readContractAdapter,
     
-    // Accès direct à Privy pour les fonctionnalités spécifiques
+    // Direct access to Privy for specific features
     privy,
   };
 }

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-// Importez le composant client de manière dynamique avec ssr: false
+// Import the client component dynamically with ssr: false
 const ClientPage = dynamic(() => import('./client-page'), { ssr: false });
 
 export default function Home() {

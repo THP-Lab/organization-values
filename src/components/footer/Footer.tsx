@@ -8,7 +8,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { footer, externalLinks } = organizationConfig;
   
-  // Définir les réseaux sociaux à afficher avec leurs noms d'affichage
+  // Define social media links to display with their display names
   const socialMediaLinks = [
     { key: 'twitter', name: 'X', url: externalLinks.social.twitter },
     { key: 'youtube', name: 'Youtube', url: externalLinks.social.youtube },

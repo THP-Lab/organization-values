@@ -5,7 +5,7 @@ import { organizationConfig } from "@/config/organization-config";
 import styles from "./hero.module.scss";
 
 const Hero = () => {
-  // Destructurer les éléments nécessaires du config
+  // Extract necessary elements from the config
   const { hero } = organizationConfig;
   
   return (
@@ -17,7 +17,7 @@ const Hero = () => {
         width={1322}
         height={2328}
         className={styles.heroImage}
-        priority // Pour assurer le chargement prioritaire
+        priority // To ensure priority loading
       />
       <h1 className={styles.title}>
         <span>Discover</span>
