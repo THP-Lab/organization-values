@@ -2,9 +2,6 @@ import Image from "next/image";
 import ScrollIndicator from "../scroll-indicator/ScrollIndicator";
 import { organizationConfig } from "@/config/organization-config";
 
-// Importation dynamique de l'image - à remplacer par une approche compatible avec les images externes
-import heroImage from "./hero.png";
-
 import styles from "./hero.module.scss";
 
 const Hero = () => {
@@ -15,11 +12,12 @@ const Hero = () => {
     <div className={styles.hero}>
       <Image
         aria-hidden="true"
-        src={heroImage} // Idéalement, ceci devrait être remplacé par organizationConfig.branding.hero
+        src={organizationConfig.branding.hero.backgroundImage}
         alt="hero"
         width={1322}
         height={2328}
         className={styles.heroImage}
+        priority // Pour assurer le chargement prioritaire
       />
       <h1 className={styles.title}>
         <span>Discover</span>

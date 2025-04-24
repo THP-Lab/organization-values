@@ -291,7 +291,7 @@ This means that if you deposit some ETH into the pool for a specific value, you 
       bodyFont: "'Open Sans', sans-serif",     // Font for body text
     },
     hero: {
-      backgroundImage: "/images/hero.png", // Hero section background image
+      backgroundImage: "/images/hero.png", // Hero section background image, put your hero in public/images 
     },
   },
   
