@@ -6,8 +6,7 @@
  * 
  * INSTRUCTIONS:
  * 1. Replace all placeholder values with your organization's information
- * 2. For images, place them in the public folder and reference them with paths like "/images/your-image.png"
- * 3. Custom fonts should be imported in the proper font files and referenced here
+ * 2. For images, place them in the public/images folder and reference them with paths like "/images/your-image.png"
  */
 
 export const organizationConfig = {
@@ -246,25 +245,7 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     copyright: "Organization Values. All rights reserved."
   },
   
-  /**
-   * Technical configuration for blockchain integration
-   * These values connect to the smart contracts that power the voting system
-   * 
-   * Used in: Smart contract hooks (useCreateTriple, useDepositTriple, etc.)
-   * Referenced in blockchain transaction functions
-   * 
-   * Impact: Essential for the platform's core voting and rewards functionality
-   * 
-   * Note: For production, set these values in your environment variables
-   * Example:
-   * In .env.local:
-   * NEXT_PUBLIC_CONTRACT_ADDRESS=0x1234...
-   */
-  contracts: {
-    predicateId: process.env.NEXT_PUBLIC_PREDICATE_ID || "default_predicate_id",
-    subjectId: process.env.NEXT_PUBLIC_SUBJECT_ID || "default_subject_id",
-    votingContractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x...",
-  },
+  
   
   /**
    * Extended branding configuration
@@ -294,27 +275,5 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     hero: {
       backgroundImage: "/images/hero.png", // Hero section background image
     },
-  },
-  
-  /**
-   * Application settings and behavior configuration
-   * Define how the application functions and what features are available
-   * 
-   * Used in: Various components and hooks that control application behavior
-   * minStakeAmount used in ProposeValueForm and voting components
-   * featuredValuesCount used in ValueListing component
-   * 
-   * Impact: Controls core platform functionality and user experience
-   * 
-   * Example:
-   * minStakeAmount: "0.005" // Lower minimum stake to encourage participation
-   * allowAnonymousViewing: true // Let anyone view values without connecting wallet
-   */
-  appSettings: {
-    minStakeAmount: "0.01",  // Minimum amount of ETH required to stake on a value
-    featuredValuesCount: 5,  // Number of values to show in the featured section
-    defaultSortMethod: "stake", // How values are sorted by default: "stake", "newest", etc.
-    allowAnonymousViewing: true, // Whether users can view values without connecting a wallet
-    requireConnectForProposing: true, // Whether users must connect a wallet to propose values
   },
 };
