@@ -279,19 +279,20 @@ This means that if you deposit some ETH into the pool for a specific value, you 
    * Example:
    * logo: { main: "/images/acme-logo.svg" }
    * typography: { headingFont: "'Raleway', sans-serif" }
+   * put your images in public/images 
    */
   branding: {
     logo: {
       main: "/images/logo.svg",          // Main logo used in header and key locations
       alternative: "/images/logo-alt.svg", // Alternative version (e.g., for dark backgrounds)
-      favicon: "/favicon.ico",           // Browser tab icon
+      favicon: "/images/favicon.ico",           // Browser tab icon
     },
     typography: {
       headingFont: "'Montserrat', sans-serif", // Font for headings
       bodyFont: "'Open Sans', sans-serif",     // Font for body text
     },
     hero: {
-      backgroundImage: "/images/hero.png", // Hero section background image, put your hero in public/images 
+      backgroundImage: "/images/hero.png", // Hero section background image
     },
   },
   

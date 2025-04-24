@@ -2,6 +2,7 @@ import { AtypDisplay, AtypText } from "@/fonts/fonts";
 import "../styles/global.scss";
 import Providers from "@/contexts/providers";
 import Script from "next/script";
+import { organizationConfig } from "@/config/organization-config";
 
 /**
  * @type {import('next').Metadata}
@@ -11,6 +12,9 @@ export const metadata = {
   title: "Community Values Platform | Collective Intelligence for Organizations",
   description:
     "A participatory platform where communities define, discuss, and align on their core values through transparent voting and meaningful dialogue.",
+  icons: {
+    icon: organizationConfig.branding.logo.favicon,
+  },
   openGraph: {
     type: "website",
     title: "Community Values Platform | Define What Matters Together",
