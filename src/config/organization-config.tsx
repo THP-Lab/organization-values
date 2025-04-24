@@ -1,17 +1,65 @@
+/**
+ * Organization Values Configuration
+ * 
+ * This file contains all the configuration for your organization's values platform.
+ * Each section can be customized to match your organization's branding, content, and needs.
+ * 
+ * INSTRUCTIONS:
+ * 1. Replace all placeholder values with your organization's information
+ * 2. For images, place them in the public folder and reference them with paths like "/images/your-image.png"
+ * 3. Custom fonts should be imported in the proper font files and referenced here
+ */
+
 export const organizationConfig = {
-  // General information
+  /**
+   * General information about your organization
+   * These values are used throughout the site, including meta tags
+   * 
+   * Used in: Header component, SEO metadata, and various page titles
+   * 
+   * Example:
+   * name: "Acme Corporation"
+   * tagline: "Building a Better Tomorrow"
+   */
   name: "Organization Name",
   tagline: "Organization Slogan",
   description: "Detailed description of the organization and its mission...",
   
-  // Content
+  /**
+   * Hero section content
+   * This is the main banner section at the top of the landing page
+   * 
+   * Used in: Hero.tsx component on the homepage
+   * 
+   * Impact: Defines the first impression visitors get of your platform
+   * 
+   * Example:
+   * title: "Acme Values"
+   * description: "Join us in shaping our collective future through shared values and principles."
+   */
   hero: {
     title: "Organization",
     description: "An organization is more than a structure, it's a cultural movement..."
   },
   
-  // Sections content
+  /**
+   * All content sections of the platform
+   * Customize the text for each section to align with your organization's voice
+   * 
+   * Used in: Various components across the landing page
+   */
   sections: {
+    /**
+     * The introductory section explaining the purpose of the platform
+     * 
+     * Used in: TextBox component displaying the mission statement
+     * 
+     * Impact: Sets the context for why values matter to your organization
+     * 
+     * Example:
+     * title: "Our Collective Future"
+     * paragraphs: ["At Acme, we believe in the power of...", "Together, we can..."]
+     */
     definingFuture: {
       title: "Defining Our Future",
       paragraphs: [
@@ -19,15 +67,51 @@ export const organizationConfig = {
         "But as organizations continue to evolve, so too do the interpretations and applications of these core values. As they grow and mature, we need to collectively define the values that are important to us as a community."
       ]
     },
+    /**
+     * Title for the section where users can propose and vote on values
+     * 
+     * Used in: ValueListing component section header
+     * 
+     * Impact: Labels the interactive part of your platform
+     */
     proposeVote: {
       title: "Propose / Vote on Values"
     },
+    /**
+     * Title for the section where users can join discussions about values
+     * 
+     * Used in: Discussion section component
+     * 
+     * Impact: Encourages community engagement beyond just voting
+     */
     joinDiscussion: {
       title: "Join the Discussion"
     },
+    /**
+     * Title for the FAQ section
+     * 
+     * Used in: Accordion FAQ component
+     * 
+     * Impact: Helps users find answers to common questions
+     */
     faqSection: {
       title: "Frequently Asked Questions"
     },
+    /**
+     * The steps that explain how the platform works
+     * Each step includes a number, title, description, image, and a function to format statistics
+     * 
+     * Used in: StepList component that displays the workflow steps
+     * 
+     * Impact: Guides users through the core functionality of the platform
+     * 
+     * Example:
+     * number: 1
+     * title: "Submit Ideas"
+     * description: "Share your thoughts on values that matter to our organization"
+     * statImageSrc: "/images/steps/submit.svg"
+     * getStatText: (count) => `${count} Ideas Shared`
+     */
     steps: [
       {
         number: 1,
@@ -60,7 +144,21 @@ export const organizationConfig = {
     ]
   },
   
-  // FAQ items - chaque answer sera transformé en JSX dans le composant
+  /**
+   * Frequently Asked Questions
+   * Each FAQ item includes a question, answer, and optional links
+   * The answers will be transformed into JSX in the component
+   * 
+   * Used in: Accordion component that displays FAQ items
+   * Data is processed in src/data/faq-items.js
+   * 
+   * Impact: Helps users understand how the platform works and addresses common concerns
+   * 
+   * Example:
+   * question: "How can I participate?"
+   * answer: "You can participate by proposing values, voting on existing proposals..."
+   * links: [{ text: "Learn more", url: "https://example.com/learn-more" }]
+   */
   faq: [
     {
       question: "What's this all about?",
@@ -95,7 +193,18 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     
   ],
   
-  // External links and resources
+  /**
+   * External links and resources
+   * All URLs for your organization's external presence
+   * 
+   * Used in: Footer component, social links, and various CTAs throughout the site
+   * 
+   * Impact: Connects your values platform with your broader community and resources
+   * 
+   * Example:
+   * community: "https://discord.com/invite/acme-community"
+   * contactEmail: "values@acme-corp.com"
+   */
   externalLinks: {
     community: "https://discord.com/invite/your-organization",
     documentation: "https://docs.your-organization.com",
@@ -115,7 +224,18 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     }
   },
   
-  // Footer content
+  /**
+   * Footer content
+   * Text that appears at the bottom of all pages
+   * 
+   * Used in: Footer.tsx component on all pages
+   * 
+   * Impact: Reinforces your organization's mission and provides key links
+   * 
+   * Example:
+   * title: "Join us in building a values-driven organization."
+   * description: ["Our platform enables transparent...", "Together we can..."] 
+   */
   footer: {
     title: "Values are the foundation of any thriving community.",
     description: [
@@ -126,35 +246,74 @@ This means that if you deposit some ETH into the pool for a specific value, you 
     copyright: "Organization Values. All rights reserved."
   },
   
-  // Technical configuration
+  /**
+   * Technical configuration for blockchain integration
+   * These values connect to the smart contracts that power the voting system
+   * 
+   * Used in: Smart contract hooks (useCreateTriple, useDepositTriple, etc.)
+   * Referenced in blockchain transaction functions
+   * 
+   * Impact: Essential for the platform's core voting and rewards functionality
+   * 
+   * Note: For production, set these values in your environment variables
+   * Example:
+   * In .env.local:
+   * NEXT_PUBLIC_CONTRACT_ADDRESS=0x1234...
+   */
   contracts: {
     predicateId: process.env.NEXT_PUBLIC_PREDICATE_ID || "default_predicate_id",
     subjectId: process.env.NEXT_PUBLIC_SUBJECT_ID || "default_subject_id",
     votingContractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x...",
   },
   
-  // Extended branding
+  /**
+   * Extended branding configuration
+   * Define visual elements that create your brand identity across the platform
+   * 
+   * Used in: Layout components, theme providers, and various UI elements
+   * Logo used in Header.tsx and favicon in app metadata
+   * Typography applied via CSS variables
+   * 
+   * Impact: Creates visual consistency and reinforces your brand
+   * 
+   * Example:
+   * logo: { main: "/images/acme-logo.svg" }
+   * typography: { headingFont: "'Raleway', sans-serif" }
+   */
   branding: {
     logo: {
-      main: "/images/logo.svg",
-      alternative: "/images/logo-alt.svg", 
-      favicon: "/favicon.ico",
+      main: "/images/logo.svg",          // Main logo used in header and key locations
+      alternative: "/images/logo-alt.svg", // Alternative version (e.g., for dark backgrounds)
+      favicon: "/favicon.ico",           // Browser tab icon
     },
     typography: {
-      headingFont: "'Montserrat', sans-serif",
-      bodyFont: "'Open Sans', sans-serif",
+      headingFont: "'Montserrat', sans-serif", // Font for headings
+      bodyFont: "'Open Sans', sans-serif",     // Font for body text
     },
     hero: {
-      backgroundImage: "/images/hero.png", // Relative path from public folder
+      backgroundImage: "/images/hero.png", // Hero section background image
     },
   },
   
-  // Application settings
+  /**
+   * Application settings and behavior configuration
+   * Define how the application functions and what features are available
+   * 
+   * Used in: Various components and hooks that control application behavior
+   * minStakeAmount used in ProposeValueForm and voting components
+   * featuredValuesCount used in ValueListing component
+   * 
+   * Impact: Controls core platform functionality and user experience
+   * 
+   * Example:
+   * minStakeAmount: "0.005" // Lower minimum stake to encourage participation
+   * allowAnonymousViewing: true // Let anyone view values without connecting wallet
+   */
   appSettings: {
-    minStakeAmount: "0.01",  // in ETH
-    featuredValuesCount: 5,
-    defaultSortMethod: "stake", // "stake", "newest", etc.
-    allowAnonymousViewing: true,
-    requireConnectForProposing: true,
+    minStakeAmount: "0.01",  // Minimum amount of ETH required to stake on a value
+    featuredValuesCount: 5,  // Number of values to show in the featured section
+    defaultSortMethod: "stake", // How values are sorted by default: "stake", "newest", etc.
+    allowAnonymousViewing: true, // Whether users can view values without connecting a wallet
+    requireConnectForProposing: true, // Whether users must connect a wallet to propose values
   },
 };
