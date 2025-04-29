@@ -5,28 +5,21 @@ export function useRedeemTriple() {
   const { useWriteContract } = usePrivyAdapter();
   const { writeContractAsync } = useWriteContract();
 
-  const redeemTriple = async (vaultId, address, shares = 0n) => {
+  const redeemTriple = async (vaultId: bigint | string | number, address: string, shares: bigint | string | number = 0n) => {
     try {
       // Convertir en BigInt avec précaution
       const sharesBigInt = BigInt(shares || 0);
-      const vaultIdBigInt = BigInt(vaultId);
       
-      console.log("Redeeming triple with params:", {
-        shares: sharesBigInt,
-        receiver: address,
-        vaultId: vaultIdBigInt
-      });
-      
-      // Passons les arguments dans le bon ordre selon l'ABI
       const hash = await writeContractAsync({
         abi: abi,
-        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
         functionName: "redeemTriple",
-        args: [sharesBigInt, address.toLowerCase(), vaultIdBigInt],
+        args: [BigInt(vaultId), address, sharesBigInt],
       });
+      
       return hash;
     } catch (err) {
-      console.error("Error redeeming triple:", err);
+      console.error("Error redeeming from triple:", err);
       throw err;
     }
   };

@@ -3,7 +3,7 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { baseSepolia, base } from 'viem/chains';
-import { encodeFunctionData, createPublicClient, http } from 'viem';
+import { encodeFunctionData, createPublicClient, http, createWalletClient, custom } from 'viem';
 
 export const DEFAULT_CHAIN_ID = 
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
@@ -258,7 +258,7 @@ export function usePrivyAdapter() {
           abi,
           address: address as `0x${string}`,
           functionName,
-          args,
+          args: args || [],
         });
         setData(result);
         setIsLoading(false);
@@ -275,47 +275,62 @@ export function usePrivyAdapter() {
     return { data, isLoading, error };
   }, []);
   
+  // Modifier l'interface WriteContractParams pour accepter différents types pour value
+  interface WriteContractParams {
+    abi: any[];
+    address: string;
+    functionName: string;
+    args?: any[];
+    value?: bigint | string | number; // Accepter différents types pour la valeur
+  }
+
   // Adapter pour useWriteContract
   const writeContractAdapter = useMemo(() => ({
-    writeContractAsync: async (params) => {
+    writeContractAsync: async (params: WriteContractParams) => {
       if (!privy.authenticated) throw new Error("User not authenticated");
       if (!privy.user?.wallet?.address) throw new Error("No wallet connected");
       
-      // Encoder les données de fonction avec viem
-      const data = encodeFunctionData({
-        abi: params.abi,
-        functionName: params.functionName,
-        args: params.args,
-      });
-      
       try {
-        // Pour les wallets externes (comme MetaMask), utiliser l'interface ethereum
-        if (window.ethereum) {
-          // Convertir value en hex
-          let valueHex = '0x0';
-          if (params.value) {
-            // Assurer que value est géré correctement, qu'il soit un BigInt ou un nombre
-            const valueBigInt = typeof params.value === 'bigint' 
-              ? params.value 
-              : BigInt(params.value.toString());
-            valueHex = `0x${valueBigInt.toString(16)}`;
+        // Créer un walletClient temporaire
+        const walletClient = createWalletClient({
+          chain: DEFAULT_CHAIN_ID === baseSepolia.id ? baseSepolia : base,
+          transport: custom(window.ethereum),
+        });
+        
+        // Générer les données de transaction
+        const data = encodeFunctionData({
+          abi: params.abi,
+          functionName: params.functionName, 
+          args: params.args || [],
+        });
+        
+        // Préparer la valeur si elle existe
+        let valueHex;
+        if (params.value !== undefined) {
+          if (typeof params.value === 'bigint') {
+            valueHex = `0x${params.value.toString(16)}`;
+          } else if (typeof params.value === 'number') {
+            valueHex = `0x${params.value.toString(16)}`;
+          } else {
+            // Si c'est une chaîne, on suppose qu'elle peut être convertie en BigInt
+            valueHex = `0x${BigInt(params.value).toString(16)}`;
           }
-          
-          const txHash = await window.ethereum.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              from: privy.user.wallet.address,
-              to: params.address,
-              data,
-              value: valueHex,
-            }],
-          });
-          return txHash;
-        } else {
-          throw new Error("No Ethereum provider found");
         }
+        
+        // Exécuter la transaction avec ethereum.request
+        const hash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{
+            from: privy.user.wallet.address,
+            to: params.address,
+            data, // Maintenant data est défini!
+            ...(valueHex ? { value: valueHex } : {}),
+          }],
+        });
+        
+        return hash;
       } catch (error) {
-        console.error("Error sending transaction:", error);
+        console.error("Transaction error:", error);
         throw error;
       }
     }

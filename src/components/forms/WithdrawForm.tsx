@@ -84,6 +84,10 @@ const WithdrawForm = ({
         throw new Error("No shares available to withdraw");
       }
       
+      if (!address) {
+        throw new Error("No wallet address available for withdrawal");
+      }
+      
       const hash = await redeemTriple(
         vaultId,
         address,

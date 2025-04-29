@@ -96,10 +96,18 @@ const ValueActions: React.FC<ValueActionsProps> = ({
     );
 
     setForPositionAssets(
-      forVaultPosition && forVaultPosition.value ? BigInt(forVaultPosition.value) : 0n
+      forVaultPosition && forVaultPosition.value 
+        ? typeof forVaultPosition.value === 'string' || Number.isInteger(forVaultPosition.value)
+          ? BigInt(forVaultPosition.value)
+          : BigInt(Math.floor(Number(forVaultPosition.value)))
+        : 0n
     );
     setAgainstPositionAssets(
-      againstVaultPosition && againstVaultPosition.value ? BigInt(againstVaultPosition.value) : 0n
+      againstVaultPosition && againstVaultPosition.value 
+        ? typeof againstVaultPosition.value === 'string' || Number.isInteger(againstVaultPosition.value)
+          ? BigInt(againstVaultPosition.value)
+          : BigInt(Math.floor(Number(againstVaultPosition.value)))
+        : 0n
     );
     setForPosition(
       forVaultPosition && forVaultPosition.shares ? BigInt(forVaultPosition.shares) : 0n
