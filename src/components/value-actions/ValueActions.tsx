@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { createPortal } from "react-dom";
 import StakeForm from "../forms/StakeForm";
@@ -17,8 +17,16 @@ import { base, baseSepolia } from "viem/chains";
 export const DEFAULT_CHAIN_ID =
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
+interface ValueActionsProps {
+  name: string;
+  valueId: string | number;
+  vaultId: string | number;
+  counterVaultId: string | number;
+  hoverColor?: "dark" | "accent";
+}
+
 // Supports dark and accent hover colors
-const ValueActions = ({
+const ValueActions: React.FC<ValueActionsProps> = ({
   name,
   valueId,
   vaultId,
@@ -27,27 +35,34 @@ const ValueActions = ({
 }) => {
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
 
-  const { user } = useContext(UserContext);
+  const userContext = useContext(UserContext);
+  
+  if (!userContext) {
+    throw new Error("ValueActions must be used within a UserProvider");
+  }
+  
+  const { user } = userContext;
+  
   const { useAccount, useConnect } = usePrivyAdapter();
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
 
+  // Typer les états
   const [mounted, setMounted] = useState(false);
   const [isStakeForOpen, setIsStakeForOpen] = useState(false);
   const [isStakeForSubmitting, setIsStakeForSubmitting] = useState(false);
   const [stakeForLoadingText, setStakeForLoadingText] = useState("");
   const [isStakeAgainstOpen, setIsStakeAgainstOpen] = useState(false);
-  const [isStakeAgainstSubmitting, setIsStakeAgainstSubmitting] =
-    useState(false);
+  const [isStakeAgainstSubmitting, setIsStakeAgainstSubmitting] = useState(false);
   const [stakeAgainstLoadingText, setStakeAgainstLoadingText] = useState("");
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isWithdrawSubmitting, setIsWithdrawSubmitting] = useState(false);
   const [withdrawLoadingText, setWithdrawLoadingText] = useState("");
   const [shareUrl, setShareUrl] = useState("");
-  const [forPosition, setForPosition] = useState(0);
-  const [forPositionAssets, setForPositionAssets] = useState(0);
-  const [againstPosition, setAgainstPosition] = useState(0);
-  const [againstPositionAssets, setAgainstPositionAssets] = useState(0);
+  const [forPosition, setForPosition] = useState<bigint>(0n);
+  const [forPositionAssets, setForPositionAssets] = useState<bigint>(0n);
+  const [againstPosition, setAgainstPosition] = useState<bigint>(0n);
+  const [againstPositionAssets, setAgainstPositionAssets] = useState<bigint>(0n);
 
   useEffect(() => {
     setMounted(true);
@@ -66,8 +81,10 @@ const ValueActions = ({
 
   useEffect(() => {
     if (!user) {
-      setForPosition(0);
-      setAgainstPosition(0);
+      setForPosition(0n);
+      setAgainstPosition(0n);
+      setForPositionAssets(0n);
+      setAgainstPositionAssets(0n);
       return;
     }
 
@@ -78,17 +95,23 @@ const ValueActions = ({
       (position) => position.vaultId === counterVaultId
     );
 
-    setForPositionAssets(forVaultPosition ? forVaultPosition.assets : 0);
-    setAgainstPositionAssets(
-      againstVaultPosition ? againstVaultPosition.assets : 0
+    setForPositionAssets(
+      forVaultPosition && forVaultPosition.value ? BigInt(forVaultPosition.value) : 0n
     );
-    setForPosition(forVaultPosition ? forVaultPosition.shares : 0);
-    setAgainstPosition(againstVaultPosition ? againstVaultPosition.shares : 0);
+    setAgainstPositionAssets(
+      againstVaultPosition && againstVaultPosition.value ? BigInt(againstVaultPosition.value) : 0n
+    );
+    setForPosition(
+      forVaultPosition && forVaultPosition.shares ? BigInt(forVaultPosition.shares) : 0n
+    );
+    setAgainstPosition(
+      againstVaultPosition && againstVaultPosition.shares ? BigInt(againstVaultPosition.shares) : 0n
+    );
   }, [user, vaultId, counterVaultId]);
 
-  const handleAction = (action) => {
+  const handleAction = (action: () => void) => {
     if (!isConnected && connectors.length > 0) {
-      connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID });
+      connect({ chainId: DEFAULT_CHAIN_ID });
       return;
     }
     action();

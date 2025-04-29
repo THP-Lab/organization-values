@@ -8,16 +8,25 @@ import { parseEther } from "viem";
 import { baseSepolia, base } from "viem/chains";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
 import { useCreateTriple } from "@/hooks/useCreateTriple";
-import { UserContext } from "@/contexts/UserContext";
+import { UserContext, UserContextType } from "@/contexts/UserContext";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { proposeValueFormSchema } from "./validations";
 import { gqlClient } from "@/backend/gqlClient";
 import { pinThingMutation } from "@/backend/mutations";
+import { WalletError, WalletErrorCodes, isWalletError } from "@/types/errors";
 
 import styles from "./form.module.scss";
 
 export const DEFAULT_CHAIN_ID =
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
+
+interface ProposeValueFormProps {
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+  setLoadingText: (text: string) => void;
+  onCancel: () => void;
+  onSuccess: () => void;
+}
 
 const ProposeValueForm = ({
   isSubmitting,
@@ -25,8 +34,14 @@ const ProposeValueForm = ({
   setLoadingText,
   onCancel,
   onSuccess,
-}) => {
-  const { refreshUser } = useContext(UserContext);
+}: ProposeValueFormProps) => {
+  const userContext = useContext(UserContext);
+  
+  if (!userContext) {
+    throw new Error("ProposeValueForm must be used within a UserProvider");
+  }
+  
+  const { refreshUser } = userContext;
   const { errors, validateForm, setErrors } = useFormValidation(
     proposeValueFormSchema
   );
@@ -40,7 +55,7 @@ const ProposeValueForm = ({
   const { getAtomId } = useGetAtomId();
   const { createTriple } = useCreateTriple();
 
-  const handleChainInteractions = async (ipfsUri, initialStake) => {
+  const handleChainInteractions = async (ipfsUri: string, initialStake: number) => {
     try {
       // Check if atom already exists
       setLoadingText("Checking if value already exists...");
@@ -62,9 +77,9 @@ const ProposeValueForm = ({
 
       setLoadingText("Transaction 2/2: Connecting your value to the community registry");
       const createTripleHash = await createTriple(
-        process.env.NEXT_PUBLIC_SUBJECT_ID,
-        process.env.NEXT_PUBLIC_PREDICATE_ID,
-        Number(atomId),
+        BigInt(process.env.NEXT_PUBLIC_SUBJECT_ID || "0"),
+        BigInt(process.env.NEXT_PUBLIC_PREDICATE_ID || "0"),
+        BigInt(atomId || "0"),
         parseEther(`${initialStake}`)
       );
 
@@ -76,20 +91,22 @@ const ProposeValueForm = ({
       await new Promise((resolve) => setTimeout(resolve, 3000));
       onSuccess();
       onCancel();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error during chain interactions:", {
         error,
         address,
-        message: error.message,
+        message: error instanceof Error ? error.message : String(error),
       });
 
-      console.log("error code: ", error.code);
-
-      // Handle user rejection case
-      if (error.code === 4001) {
-        setErrors({ form: "Transaction was rejected. Please try again." });
-        setLoadingText("");
-        return;
+      // Utiliser les types et utilitaires partagés
+      if (isWalletError(error)) {
+        console.log("error code:", error.code);
+        
+        if (error.code === WalletErrorCodes.USER_REJECTED) {
+          setErrors({ form: "Transaction was rejected. Please try again." });
+          setLoadingText("");
+          return;
+        }
       }
 
       // Handle other errors
@@ -101,7 +118,7 @@ const ProposeValueForm = ({
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Return early if not on correct chain
@@ -112,14 +129,22 @@ const ProposeValueForm = ({
     setIsSubmitting(true);
 
     try {
+      const form = event.target as HTMLFormElement;
+      
       const formData = {
-        valueName: event.target.valueName.value,
-        initialStake: Number(event.target.initialStake.value),
-        description: event.target.description.value,
+        valueName: (form.elements.namedItem('valueName') as HTMLInputElement).value,
+        initialStake: Number((form.elements.namedItem('initialStake') as HTMLInputElement).value),
+        description: (form.elements.namedItem('description') as HTMLTextAreaElement).value,
       };
 
-      const { isValid, data } = validateForm(formData);
-      if (!isValid) return;
+      const validation = validateForm(formData);
+      
+      if (!validation.isValid || !validation.data) {
+        setIsSubmitting(false);
+        return;
+      }
+      
+      const { data } = validation;
 
       // Upload value to IPFS
       const result = await gqlClient.mutate({
@@ -144,7 +169,7 @@ const ProposeValueForm = ({
         result.data.pinThing.uri,
         data.initialStake
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error during proposal:", error);
       setErrors({ form: "Something went wrong. Please try again." });
       setLoadingText("");
@@ -210,7 +235,7 @@ const ProposeValueForm = ({
         <textarea
           id="description"
           name="description"
-          rows="3"
+          rows={3}
           placeholder="Our community should prioritize transparency because it builds trust and enables better decision making for all stakeholders..."
           aria-describedby={
             errors.description ? "description-error" : undefined

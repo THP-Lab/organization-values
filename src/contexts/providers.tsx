@@ -1,10 +1,10 @@
 "use client";
 
+import React, { ReactNode, useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { UserProvider } from "./UserContext";
 import { PrivyProvider } from '@privy-io/react-auth';
-import { useEffect, useState } from "react";
 
 export const apolloClient = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
@@ -13,20 +13,30 @@ export const apolloClient = new ApolloClient({
 
 const client = new QueryClient();
 
-const Providers = ({ children }) => {
+interface ProvidersProps {
+  children: ReactNode;
+}
+
+const Providers: React.FC<ProvidersProps> = ({ children }) => {
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
     setIsMounted(true);
   }, []);
   
+  const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  if (!privyAppId) {
+    console.error("NEXT_PUBLIC_PRIVY_APP_ID environment variable is not defined");
+    return <div>Error: Configuration issue. Please contact support.</div>;
+  }
+  
   if (!isMounted) {
-    return null; // Ne rend rien côté serveur
+    return null;
   }
   
   return (
     <PrivyProvider
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
+      appId={privyAppId}
       config={{
         loginMethods: ['wallet', 'email', 'google'],
         appearance: {
@@ -35,7 +45,6 @@ const Providers = ({ children }) => {
         },
         embeddedWallets: {
           createOnLogin: 'users-without-wallets',
-          noPromptOnSignature: true,
         },
       }}
     >

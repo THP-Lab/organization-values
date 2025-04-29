@@ -1,9 +1,24 @@
+import React from 'react';
 import Image from "next/image";
 import styles from "./step.module.scss";
 
-const Step = ({ number, title, description, stats, statImageSrc }) => {
-  const formatNumber = (number) => {
-    return number < 10 ? `0${number}` : number;
+interface StepProps {
+  number: number;
+  title: string;
+  description: string;
+  stats: string;
+  statImageSrc: string;
+}
+
+const Step: React.FC<StepProps> = ({ 
+  number, 
+  title, 
+  description, 
+  stats, 
+  statImageSrc 
+}) => {
+  const formatNumber = (num: number): string => {
+    return num < 10 ? `0${num}` : String(num);
   };
 
   return (

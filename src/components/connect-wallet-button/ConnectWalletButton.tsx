@@ -30,9 +30,7 @@ const ConnectWalletButton = () => {
       {connectors.length > 0 && (
         <button
           className={styles.button}
-          onClick={() =>
-            connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID })
-          }
+          onClick={() => connect({ chainId: DEFAULT_CHAIN_ID })}
           disabled={isPending}
         >
           <ConnectWalletIcon />

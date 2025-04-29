@@ -1,16 +1,41 @@
 "use client";
 
-import { createContext, useState, useEffect, useCallback } from "react";
-import { useGetUserPositions } from "@/hooks/useGetUserPositionsData";
+import { createContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { useGetUserPositionsData } from "@/hooks/useGetUserPositionsData";
 import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 
-export const UserContext = createContext();
+export interface User {
+  address: string;
+  vaultPositions: Array<{ 
+    vaultId: string; 
+    tripleId: string;
+    shares: string; 
+    value: string; 
+  }>;
+  counterVaultPositions: Array<{ 
+    vaultId: string; 
+    tripleId: string;
+    shares: string; 
+    value: string;  
+  }>;
+}
 
-export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export interface UserContextType {
+  user: User | null;
+  refreshUser: () => Promise<void>;
+}
+
+export const UserContext = createContext<UserContextType | undefined>(undefined);
+
+interface UserProviderProps {
+  children: ReactNode;
+}
+
+export const UserProvider = ({ children }: UserProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
   const { useAccount } = usePrivyAdapter();
   const { address, isConnected } = useAccount();
-  const { getUserPositionsData } = useGetUserPositions();
+  const { getUserPositionsData } = useGetUserPositionsData();
 
   const refreshUser = useCallback(async () => {
     if (!isConnected || !address) {
@@ -19,8 +44,15 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const data = await getUserPositionsData(address);
-      setUser(data);
+      const { vaultPositions, counterVaultPositions } = await getUserPositionsData(address);
+      
+      const userData: User = {
+        address,
+        vaultPositions,
+        counterVaultPositions
+      };
+      
+      setUser(userData);
     } catch (error) {
       console.error("Error fetching user data:", error);
       setUser(null);

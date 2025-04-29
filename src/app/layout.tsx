@@ -2,12 +2,15 @@ import { AtypDisplay, AtypText } from "@/fonts/fonts";
 import "../styles/global.scss";
 import Providers from "@/contexts/providers";
 import Script from "next/script";
+import { ReactNode } from 'react';
 
 /**
  * @type {import('next').Metadata}
  */
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+  ),
   title: "Community Values Platform | Collective Intelligence for Organizations",
   description:
     "A participatory platform where communities define, discuss, and align on their core values through transparent voting and meaningful dialogue.",
@@ -43,7 +46,7 @@ export const metadata = {
 };
 
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${AtypDisplay.variable} ${AtypText.variable}`}>
       <body>

@@ -1,35 +1,52 @@
+import React from 'react';
 import styles from "./search-controls.module.scss";
 
-const SearchControls = ({ sortValue, setSortValue, involved, setInvolved }) => {
-  const handleSortChange = (e) => {
+interface SearchControlsProps {
+  sortValue: string;
+  setSortValue: (value: string) => void;
+  involved: boolean;
+  setInvolved: (value: boolean) => void;
+}
+
+const SearchControls = ({ 
+  sortValue, 
+  setSortValue, 
+  involved, 
+  setInvolved 
+}: SearchControlsProps) => {
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortValue(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
+  const handleInvolvedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInvolved(e.target.checked);
   };
 
   return (
     <div className={styles.controls}>
-      <div className={styles.orderby}>
-        <label htmlFor="rankSelect">Ranked by</label>
-        <div className={styles.selectWrapper}>
-          <select id="rankSelect" value={sortValue} onChange={handleSortChange}>
-            <option value="upvotes">Most Upvoted</option>
-            <option value="downvotes">Most Downvoted</option>
-            <option value="newest">Most Recent</option>
-            <option value="oldest">Least Recent</option>
-          </select>
-        </div>
+      <div className={styles.sortControl}>
+        <label htmlFor="sort-select">Sort by:</label>
+        <select
+          id="sort-select"
+          value={sortValue}
+          onChange={handleSortChange}
+          className={styles.select}
+        >
+          <option value="mostStaked">Most staked</option>
+          <option value="newest">Newest</option>
+          <option value="alphabetical">A-Z</option>
+        </select>
       </div>
-      <div className={styles.involved}>
-        <label className={styles.checkbox}>
+      <div className={styles.filterControl}>
+        <label htmlFor="involved-checkbox" className={styles.checkboxLabel}>
           <input
+            id="involved-checkbox"
             type="checkbox"
             checked={involved}
-            onChange={handleFilterChange}
+            onChange={handleInvolvedChange}
+            className={styles.checkbox}
           />
-          <span>Show only values I&apos;ve voted on</span>
+          <span>Show only values I've voted on</span>
         </label>
       </div>
     </div>

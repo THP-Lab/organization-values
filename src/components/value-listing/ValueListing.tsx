@@ -11,42 +11,57 @@ import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useGetValuesListing } from "@/hooks/useGetValuesListing";
 import { formatEther } from "viem";
 
+interface Value {
+  id: string | number;
+  valueName: string;
+  description: string;
+  vaultId: string | number;
+  counterVaultId: string | number;
+  totalStaked: string;
+  totalStakedFor: string;
+  totalStakedAgainst: string;
+  totalUsers: number;
+}
+
+// Définir un type pour les options de tri disponibles
+type SortOption = "mostStaked" | "newest" | "alphabetical";
+
 const ValueListing = () => {
   const { useAccount } = usePrivyAdapter();
   const { address, isConnected } = useAccount();
   const { getValuesData } = useGetValuesListing();
 
-  const [featuredValues, setFeaturedValues] = useState([]);
-  const [values, setValues] = useState([]);
+  const [featuredValues, setFeaturedValues] = useState<Value[]>([]);
+  const [values, setValues] = useState<Value[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [sortBy, setSortBy] = useState("stake");
+  const [sortBy, setSortBy] = useState<SortOption>("mostStaked");
   const [showOnlyVoted, setShowOnlyVoted] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
 
   const pageSize = 5;
 
-  const fetchValues = useCallback(async () => {
+  const fetchValues = async () => {
     setIsLoading(true);
     try {
-      const data = await getValuesData(
+      const { values: fetchedValues, currentPage: page, totalPages } = await getValuesData(
         currentPage,
         pageSize,
         sortBy,
         showOnlyVoted,
-        isConnected ? address : null
+        null
       );
 
-      if (!data?.values) {
-        console.error("No values returned from getValuesData");
-        return;
-      }
+      setValues(fetchedValues || []);
+      setCurrentPage(page);
+      setTotalPages(totalPages);
 
       if (currentPage === 1) {
-        setValues(data.values);
+        setFeaturedValues(values.slice(0, 5));
       } else {
-        setValues((prev) => {
-          const newValues = data.values.filter(
+        setFeaturedValues((prev) => {
+          const newValues = values.filter(
             (newValue) =>
               !prev.some((existingValue) => existingValue.id === newValue.id)
           );
@@ -54,26 +69,18 @@ const ValueListing = () => {
         });
       }
 
-      setHasMore(currentPage < data.totalPages);
-    } catch (error) {
+      setHasMore(currentPage < totalPages);
+    } catch (error: unknown) {
       console.error("Error fetching values:", error);
+      setValues([]);
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, sortBy, showOnlyVoted, address, isConnected, getValuesData]);
+  };
 
   useEffect(() => {
     fetchValues();
   }, [fetchValues]);
-
-  useEffect(() => {
-    if (!values || !values.length) {
-      setFeaturedValues([]);
-      return;
-    }
-
-    setFeaturedValues(values.slice(0, 5));
-  }, [values]);
 
   const handleLoadMore = () => {
     if (!isLoading) {
@@ -81,16 +88,26 @@ const ValueListing = () => {
     }
   };
 
-  const handleSortChange = (newSortBy) => {
+  const handleSortChange = (newSortBy: SortOption) => {
     setSortBy(newSortBy);
     setCurrentPage(1);
     setValues([]);
+    fetchValues();
   };
 
-  const handleFilterChange = (checked) => {
+  const handleSortChangeWrapper = (value: string) => {
+    if (value === "mostStaked" || value === "newest" || value === "alphabetical") {
+      handleSortChange(value as SortOption);
+    } else {
+      console.error(`Invalid sort option: ${value}`);
+    }
+  };
+
+  const handleFilterChange = (checked: boolean) => {
     setShowOnlyVoted(checked);
     setCurrentPage(1);
     setValues([]);
+    fetchValues();
   };
 
   const handleProposeSuccess = useCallback(() => {
@@ -116,7 +133,7 @@ const ValueListing = () => {
       <div className={styles.toolbar}>
         <SearchControls
           sortValue={sortBy}
-          setSortValue={handleSortChange}
+          setSortValue={handleSortChangeWrapper}
           involved={showOnlyVoted}
           setInvolved={handleFilterChange}
         />
@@ -133,13 +150,9 @@ const ValueListing = () => {
             counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
-            totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
-              3
-            )}
-            totalAmountAgainst={Number(
-              formatEther(value.totalStakedAgainst)
-            ).toFixed(3)}
+            totalAmount={Number(formatEther(BigInt(value.totalStaked))).toFixed(3)}
+            totalAmountFor={Number(formatEther(BigInt(value.totalStakedFor))).toFixed(3)}
+            totalAmountAgainst={Number(formatEther(BigInt(value.totalStakedAgainst))).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}
@@ -153,13 +166,9 @@ const ValueListing = () => {
               counterVaultId={value.counterVaultId}
               title={value.valueName}
               description={value.description}
-              totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
-              totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
-                3
-              )}
-              totalAmountAgainst={Number(
-                formatEther(value.totalStakedAgainst)
-              ).toFixed(3)}
+              totalAmount={Number(formatEther(BigInt(value.totalStaked))).toFixed(3)}
+              totalAmountFor={Number(formatEther(BigInt(value.totalStakedFor))).toFixed(3)}
+              totalAmountAgainst={Number(formatEther(BigInt(value.totalStakedAgainst))).toFixed(3)}
               totalUsers={value.totalUsers}
             />
           </div>
@@ -174,13 +183,9 @@ const ValueListing = () => {
             counterVaultId={value.counterVaultId}
             title={value.valueName}
             description={value.description}
-            totalAmount={Number(formatEther(value.totalStaked)).toFixed(3)}
-            totalAmountFor={Number(formatEther(value.totalStakedFor)).toFixed(
-              3
-            )}
-            totalAmountAgainst={Number(
-              formatEther(value.totalStakedAgainst)
-            ).toFixed(3)}
+            totalAmount={Number(formatEther(BigInt(value.totalStaked))).toFixed(3)}
+            totalAmountFor={Number(formatEther(BigInt(value.totalStakedFor))).toFixed(3)}
+            totalAmountAgainst={Number(formatEther(BigInt(value.totalStakedAgainst))).toFixed(3)}
             totalUsers={value.totalUsers}
           />
         ))}

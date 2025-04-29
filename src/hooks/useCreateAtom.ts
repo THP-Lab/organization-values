@@ -6,11 +6,11 @@ export function useCreateAtom() {
   const { useWriteContract } = usePrivyAdapter();
   const { writeContractAsync } = useWriteContract();
 
-  const createAtom = async (uri, initialDeposit = 0n) => {
+  const createAtom = async (uri: string, initialDeposit: bigint = 0n) => {
     try {
       const hash = await writeContractAsync({
         abi: abi,
-        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
         functionName: "createAtom",
         args: [toHex(uri)],
         value: initialDeposit,

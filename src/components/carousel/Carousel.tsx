@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, ReactNode } from "react";
 import ArrowIcon from "../icons/ArrowIcon";
 
 import styles from "./carousel.module.scss";
 
-const Carousel = ({ children, className }) => {
+// Définir l'interface pour les props du Carousel
+interface CarouselProps {
+  children: ReactNode;
+  className?: string;
+}
+
+const Carousel = ({ children, className }: CarouselProps) => {
   const [prevDisabled, setPrevDisabled] = useState(true);
   const [nextDisabled, setNextDisabled] = useState(true);
 
-  const trackRef = useRef(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef(null);
 
   const updateNav = () => {

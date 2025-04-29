@@ -2,6 +2,81 @@ import { getTriplesWithMyPosition } from "@/backend/queries";
 import { useApolloClient } from "@apollo/client";
 import { useCallback } from "react";
 
+interface WhereClause {
+  predicate_id: { _eq: string | undefined };
+  subject_id: { _eq: string | undefined };
+  _or?: Array<{
+    vault?: {
+      positions?: {
+        account_id?: { _eq: string };
+        shares?: { _gt: number };
+      };
+    };
+    counter_vault?: {
+      positions?: {
+        account_id?: { _eq: string };
+        shares?: { _gt: number };
+      };
+    };
+  }>;
+}
+
+interface Triple {
+  id: string;
+  vault_id: string;
+  counter_vault_id: string;
+  object?: {
+    id?: string;
+    vault_id?: string;
+    value?: {
+      thing?: {
+        name?: string;
+        image?: string;
+        description?: string;
+        url?: string;
+      };
+    };
+  };
+  vault: {
+    total_shares?: string;
+    position_count?: number;
+    current_share_price: string;
+    positions?: Array<{
+      account?: {
+        id?: string;
+        label?: string;
+        image?: string;
+      };
+      shares?: string;
+    }>;
+  };
+  counter_vault: {
+    total_shares?: string;
+    position_count?: number;
+    current_share_price: string;
+    positions?: Array<{
+      account?: {
+        id?: string;
+        label?: string;
+        image?: string;
+      };
+      shares?: string;
+    }>;
+  };
+}
+
+interface ValueData {
+  id: string;
+  vaultId: string;
+  counterVaultId: string;
+  valueName: string;
+  description: string;
+  totalStaked: bigint;
+  totalStakedFor: bigint;
+  totalStakedAgainst: bigint;
+  totalUsers: number;
+}
+
 export function useGetValuesListing() {
   const client = useApolloClient();
 
@@ -11,7 +86,7 @@ export function useGetValuesListing() {
       pageSize = 5,
       sortBy = "upvotes",
       onlyVoted = false,
-      address = null
+      address: string | null = null
     ) => {
       // Calculate offset for pagination
       const offset = (page - 1) * pageSize;
@@ -36,18 +111,19 @@ export function useGetValuesListing() {
       }
 
       // Build where clause
-      const where = {
-        predicate_id: { _eq: process.env.NEXT_PUBLIC_PREDICATE_ID }, // has value
-        subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID }, // Organization ID
+      const where: WhereClause = {
+        predicate_id: { _eq: process.env.NEXT_PUBLIC_PREDICATE_ID },
+        subject_id: { _eq: process.env.NEXT_PUBLIC_SUBJECT_ID },
       };
 
       // Add filter for user's positions if onlyVoted is true
       if (onlyVoted && address) {
+        const addressLower = address.toLowerCase();
         where._or = [
           {
             vault: {
               positions: {
-                account_id: { _eq: address.toLowerCase() },
+                account_id: { _eq: addressLower },
                 shares: { _gt: 0 },
               },
             },
@@ -55,7 +131,7 @@ export function useGetValuesListing() {
           {
             counter_vault: {
               positions: {
-                account_id: { _eq: address.toLowerCase() },
+                account_id: { _eq: addressLower },
                 shares: { _gt: 0 },
               },
             },
@@ -81,16 +157,16 @@ export function useGetValuesListing() {
 
       const values = data.triples
         .filter(
-          (triple) =>
+          (triple: Triple) =>
             triple.object?.value?.thing?.name &&
             triple.object?.value?.thing?.description
         )
-        .map((triple) => ({
+        .map((triple: Triple) => ({
           id: triple.id,
           vaultId: triple.vault_id,
           counterVaultId: triple.counter_vault_id,
-          valueName: triple.object.value.thing.name,
-          description: triple.object.value.thing.description,
+          valueName: triple.object!.value!.thing!.name!,
+          description: triple.object!.value!.thing!.description!,
           totalStaked:
             BigInt(triple.vault.total_shares || 0) *
             BigInt(triple.vault.current_share_price) /
@@ -110,7 +186,7 @@ export function useGetValuesListing() {
             Number(triple.vault.position_count || 0) +
             Number(triple.counter_vault.position_count || 0),
         }))
-        .filter(value => value.totalUsers > 0);
+        .filter((value: ValueData) => value.totalUsers > 0);
 
       return {
         values,

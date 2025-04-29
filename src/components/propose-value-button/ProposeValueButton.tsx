@@ -12,7 +12,11 @@ import { base, baseSepolia } from "viem/chains";
 export const DEFAULT_CHAIN_ID =
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
-const ProposeValueButton = ({ onSuccess }) => {
+interface ProposeValueButtonProps {
+  onSuccess: () => void;
+}
+
+const ProposeValueButton = ({ onSuccess }: ProposeValueButtonProps) => {
   const { useAccount, useConnect } = usePrivyAdapter();
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
@@ -27,9 +31,9 @@ const ProposeValueButton = ({ onSuccess }) => {
     return () => setMounted(false);
   }, []);
 
-  const handleAction = (action) => {
+  const handleAction = (action: () => void) => {
     if (!isConnected && connectors.length > 0) {
-      connect({ connector: connectors[0], chainId: DEFAULT_CHAIN_ID });
+      connect({ chainId: DEFAULT_CHAIN_ID });
       return;
     }
     action();
@@ -49,6 +53,7 @@ const ProposeValueButton = ({ onSuccess }) => {
         createPortal(
           <Modal
             title={"Propose a Value"}
+            subtitle={"Submit a new value for the community to consider"}
             isSubmitting={isSubmitting}
             loadingText={loadingText}
             onClose={() => setIsModalOpen(false)}

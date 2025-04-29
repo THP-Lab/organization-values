@@ -8,10 +8,15 @@ export const withdrawFormSchema = z.object({
   amount: z
     .number()
     .nonnegative("Amount must be positive")
-    .min(0.000000000000000001, "Minimum withdrawal amount is 1e-18 ETH")
-    .max(z.number(), "Cannot withdraw more than available balance"),
+    .min(0.000000000000000001, "Minimum withdrawal amount is 1e-18 ETH"),
   maxAmount: z.number(),
-});
+}).refine(
+  (data) => data.amount <= data.maxAmount,
+  {
+    message: "Cannot withdraw more than available balance",
+    path: ["amount"]
+  }
+);
 
 export const proposeValueFormSchema = z.object({
   valueName: z

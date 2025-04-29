@@ -1,8 +1,18 @@
+import React from 'react';
 import UserIcon from "../icons/UserIcon";
 
 import styles from "./value-stats.module.scss";
 
-const ValueStats = ({
+interface ValueStatsProps {
+  totalAmount: string;
+  totalAmountFor: string;
+  totalAmountAgainst: string;
+  totalUsers: number;
+  large?: boolean;
+  greenBackground?: boolean;
+}
+
+const ValueStats: React.FC<ValueStatsProps> = ({
   totalAmount,
   totalAmountFor,
   totalAmountAgainst,

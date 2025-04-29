@@ -1,7 +1,20 @@
+import { ReactNode } from 'react';
 import ValueActions from "../value-actions/ValueActions";
 import ValueStats from "../value-stats/ValueStats";
 
 import styles from "./featured-value.module.scss";
+
+interface FeaturedValueProps {
+  valueId: string | number;
+  vaultId: string | number;
+  counterVaultId: string | number;
+  title: string;
+  description: string;
+  totalAmount: string;
+  totalAmountFor: string;
+  totalAmountAgainst: string;
+  totalUsers: number;
+}
 
 const FeaturedValue = ({
   valueId,
@@ -13,7 +26,7 @@ const FeaturedValue = ({
   totalAmountFor,
   totalAmountAgainst,
   totalUsers,
-}) => {
+}: FeaturedValueProps) => {
   return (
     <div className={styles.featuredValue}>
       <div className={styles.card}>

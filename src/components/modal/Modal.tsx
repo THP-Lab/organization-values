@@ -1,14 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, ReactNode } from 'react';
 import styles from "./modal.module.scss";
 import CloseIcon from "../icons/CloseIcon";
+
+interface ModalProps {
+  title: string;
+  subtitle?: string;
+  isSubmitting: boolean;
+  loadingText?: string;
+  onClose: () => void;
+  children: ReactNode;
+}
 
 const ModalLoadingSpinner = () => {
   return <div className={styles.spinner} />;
 };
 
-const Modal = ({
+const Modal: React.FC<ModalProps> = ({
   title,
   subtitle,
   isSubmitting,
@@ -16,41 +25,42 @@ const Modal = ({
   onClose,
   children,
 }) => {
-  const closeButtonRef = useRef(null);
-  const containerRef = useRef(null);
 
-  const handleClose = useCallback(() => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClose = () => {
     if (!isSubmitting) {
       onClose();
     }
-  }, [isSubmitting, onClose]);
+  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
-    const handleFocus = (e) => {
-      if (!containerRef.current?.contains(e.target)) {
+    const handleFocus = (e: FocusEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) {
         e.preventDefault();
         closeButtonRef.current?.focus();
       }
     };
 
-    const handleEscape = (e) => {
-      if (e.key === "Escape") {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isSubmitting) {
         handleClose();
       }
     };
 
     document.addEventListener("focusin", handleFocus);
-    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = "unset";
       document.removeEventListener("focusin", handleFocus);
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose, handleClose]);
+  }, [isSubmitting, onClose, handleClose]);
 
   return (
     <div

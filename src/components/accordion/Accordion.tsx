@@ -3,11 +3,23 @@ import { useState, useId } from "react";
 import styles from "./accordion.module.scss";
 import CaretDownIcon from "../icons/CaretDownIcon";
 
-const Accordion = ({ items }) => {
-  const [openIndexes, setOpenIndexes] = useState([]);
+interface AccordionItem {
+  title?: string;
+  content?: React.ReactNode;
+  question?: string;
+  answer?: React.ReactNode;
+  id?: string;
+}
+
+interface AccordionProps {
+  items: AccordionItem[];
+}
+
+const Accordion = ({ items }: AccordionProps) => {
+  const [openIndexes, setOpenIndexes] = useState<number[]>([]);
   const accordionId = useId();
 
-  const toggleItem = (index) => {
+  const toggleItem = (index: number) => {
     setOpenIndexes((prevIndexes) => {
       if (prevIndexes.includes(index)) {
         return prevIndexes.filter((i) => i !== index);
@@ -19,14 +31,14 @@ const Accordion = ({ items }) => {
 
   return (
     <div id={accordionId} className={styles.accordion}>
-      {items?.map((item, index) => {
+      {items.map((item, index) => {
         const headerId = `${accordionId}-header-${index}`;
         const panelId = `${accordionId}-panel-${index}`;
         const isExpanded = openIndexes.includes(index);
 
         return (
           <div
-            key={index}
+            key={item.id || `${accordionId}-${index}`}
             className={`${styles.item} ${isExpanded ? styles.open : ""}`}
           >
             <button
@@ -37,7 +49,7 @@ const Accordion = ({ items }) => {
               aria-controls={panelId}
               id={headerId}
             >
-              <span className={styles.title}>{item.question}</span>
+              <span className={styles.title}>{item.title || item.question}</span>
               <i className={styles.icon} aria-hidden="true">
                 <CaretDownIcon />
               </i>
@@ -49,7 +61,7 @@ const Accordion = ({ items }) => {
               aria-labelledby={headerId}
               hidden={!isExpanded}
             >
-              <div className={styles.inner}>{item.answer}</div>
+              <div className={styles.inner}>{item.content || item.answer}</div>
             </div>
           </div>
         );

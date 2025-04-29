@@ -15,12 +15,22 @@ const publicClient = createPublicClient({
 });
 
 // Fonction pour convertir les BigInt en chaînes pour la sérialisation
-const stringifyArgs = (args) => {
+const stringifyArgs = (args: any[] | undefined): string => {
   if (!args) return '';
   return args.map(arg => 
     typeof arg === 'bigint' ? arg.toString() : arg
   ).join(',');
 };
+
+// Fonction utilitaire pour vérifier si une erreur a un code spécifique
+function isErrorWithCode(error: unknown, code: number): boolean {
+  return (
+    typeof error === 'object' && 
+    error !== null && 
+    'code' in error && 
+    (error as { code: number }).code === code
+  );
+}
 
 // Simplifiez la fonction pour utiliser directement l'API du wallet
 const switchToRequiredNetwork = async () => {
@@ -33,9 +43,8 @@ const switchToRequiredNetwork = async () => {
       params: [{ chainId: `0x${DEFAULT_CHAIN_ID.toString(16)}` }],
     });
     return true;
-  } catch (switchError) {
-    // Si le réseau n'est pas ajouté au wallet
-    if (switchError.code === 4902) {
+  } catch (switchError: unknown) {
+    if (isErrorWithCode(switchError, 4902)) {
       const networkParams = DEFAULT_CHAIN_ID === baseSepolia.id 
         ? {
             chainId: `0x${baseSepolia.id.toString(16)}`,
@@ -98,7 +107,7 @@ export function usePrivyAdapter() {
               console.log("Switched to required network");
             } catch (switchError) {
               // Si le réseau n'est pas configuré, proposer de l'ajouter
-              if (switchError.code === 4902) {
+              if (isErrorWithCode(switchError, 4902)) {
                 const networkParams = DEFAULT_CHAIN_ID === baseSepolia.id 
                   ? {
                       chainId: `0x${baseSepolia.id.toString(16)}`,
@@ -149,19 +158,17 @@ export function usePrivyAdapter() {
   // Adapter pour useConnect
   const connectAdapter = useMemo(() => ({
     connectors: privy.authenticated ? [] : [{ id: 'privy' }],
-    connect: async ({ chainId }) => {
+    connect: async ({ chainId }: { chainId: number }) => {
       setCurrentChainId(chainId);
       try {
         // Connecter l'utilisateur avec son wallet externe
         await privy.login();
-        return true;
-      } catch (err) {
-        console.error("Error connecting:", err);
-        return false;
+      } catch (error) {
+        console.error("Erreur lors de la connexion Privy:", error);
       }
     },
-    isPending: privy.authenticated === null || privy.isLoading,
-  }), [privy.authenticated, privy.isLoading, privy.login]);
+    isPending: privy.authenticated === null || !privy.ready,
+  }), [privy.authenticated, privy.ready, privy.login]);
   
   // Adapter pour useDisconnect
   const disconnectAdapter = useMemo(() => ({
@@ -170,7 +177,7 @@ export function usePrivyAdapter() {
   
   // Adapter pour useSwitchChain
   const switchChainAdapter = useMemo(() => ({
-    switchChain: async ({ chainId }) => {
+    switchChain: async ({ chainId }: { chainId: number }) => {
       // Pour les wallets externes, utiliser les méthodes natives du wallet
       if (window.ethereum) {
         try {
@@ -180,9 +187,9 @@ export function usePrivyAdapter() {
           });
           setCurrentChainId(chainId);
           return { id: chainId };
-        } catch (error) {
+        } catch (switchError: unknown) {
           // Si le réseau n'est pas configuré, proposer de l'ajouter
-          if (error.code === 4902) {
+          if (isErrorWithCode(switchError, 4902)) {
             const networkParams = chainId === baseSepolia.id 
               ? {
                   chainId: `0x${baseSepolia.id.toString(16)}`,
@@ -213,8 +220,8 @@ export function usePrivyAdapter() {
             });
             return { id: chainId };
           }
-          console.error("Error switching chain:", error);
-          throw error;
+          console.error("Error switching chain:", switchError);
+          throw switchError;
         }
       }
       
@@ -224,33 +231,46 @@ export function usePrivyAdapter() {
     chains: [baseSepolia, base],
   }), []);
   
+  // Modifier l'interface ReadContractParams pour utiliser le bon type d'adresse
+  interface ReadContractParams {
+    abi: any[]; // Idéalement, utilisez un type plus précis pour l'ABI
+    address: string; // Garder string ici pour la compatibilité
+    functionName: string;
+    args?: any[]; // Arguments de fonction, optionnels
+  }
+
   // Adapter pour useReadContract
-  const readContractAdapter = useCallback(({ abi, address, functionName, args }) => {
-    const [data, setData] = useState(null);
+  const readContractAdapter = useCallback(({ 
+    abi, 
+    address, 
+    functionName, 
+    args 
+  }: ReadContractParams) => {
+    const [data, setData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<Error | null>(null);
 
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        // Utiliser une assertion de type pour convertir address en `0x${string}`
         const result = await publicClient.readContract({
           abi,
-          address,
+          address: address as `0x${string}`,
           functionName,
           args,
         });
         setData(result);
         setIsLoading(false);
       } catch (err) {
-        console.error('Error reading contract:', err);
-        setError(err);
+        setError(err as Error);
         setIsLoading(false);
       }
     };
 
     useEffect(() => {
       fetchData();
-    }, [address, functionName, stringifyArgs(args)]);
+    }, [abi, address, functionName, args]);
 
     return { data, isLoading, error };
   }, []);

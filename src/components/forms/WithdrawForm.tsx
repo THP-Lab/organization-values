@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRedeemTriple } from "@/hooks/useRedeemTriple";
 import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
@@ -11,9 +11,21 @@ import { withdrawFormSchema } from "./validations";
 import { parseEther } from "viem";
 import { baseSepolia, base } from "viem/chains";
 import styles from "./form.module.scss";
+import { isWalletError, WalletErrorCodes } from "@/types/errors";
 
 export const DEFAULT_CHAIN_ID =
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
+
+
+interface WithdrawFormProps {
+  vaultId: string | number;
+  initialAmount: string | number;
+  totalShares: bigint | string;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+  setLoadingText: (text: string) => void;
+  onCancel: () => void;
+}
 
 const WithdrawForm = ({
   vaultId,
@@ -23,10 +35,18 @@ const WithdrawForm = ({
   setIsSubmitting,
   setLoadingText,
   onCancel,
-}) => {
+}: WithdrawFormProps) => {
   const [amount, setAmount] = useState(initialAmount);
   const [withdrawMax, setWithdrawMax] = useState(true);
-  const { refreshUser } = useContext(UserContext);
+  
+  const userContext = useContext(UserContext);
+  
+  if (!userContext) {
+    throw new Error("WithdrawForm must be used within a UserProvider");
+  }
+  
+  const { refreshUser } = userContext;
+  
   const { errors, validateForm, setErrors } =
     useFormValidation(withdrawFormSchema);
   const { useAccount, useSwitchChain, useReadContract } = usePrivyAdapter();
@@ -37,23 +57,32 @@ const WithdrawForm = ({
 
   const { data: shares } = useReadContract({
     abi: abi,
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string,
     functionName: "convertToShares",
     args: [BigInt(parseEther(`${amount}`)), BigInt(vaultId)],
   });
 
-  const handleWithdraw = async (amount) => {
+  const handleWithdraw = async (amount: number) => {
     try {
       setLoadingText("Transaction 1/1: Withdrawing ETH from vault");
       
-      // Assurez-vous que les arguments sont du bon type
-      const sharesValue = withdrawMax ? totalShares : shares;
+
+      const totalSharesBigInt = typeof totalShares === 'string' ? BigInt(totalShares) : totalShares;
+      const sharesBigInt = shares ? (typeof shares === 'string' ? BigInt(shares) : shares) : 0n;
+      
+      // Utiliser la valeur appropriée pour les shares
+      const sharesValue = withdrawMax ? totalSharesBigInt : sharesBigInt;
       
       console.log("Withdraw params:", {
         vaultId,
         address,
         shares: sharesValue
       });
+      
+     
+      if (!sharesValue) {
+        throw new Error("No shares available to withdraw");
+      }
       
       const hash = await redeemTriple(
         vaultId,
@@ -68,18 +97,16 @@ const WithdrawForm = ({
       setLoadingText("Your withdrawal has been successfully processed!");
       await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error during withdrawal:", error);
 
-      // Handle user rejection case
-      if (error.code === 4001) {
+      if (isWalletError(error) && error.code === WalletErrorCodes.USER_REJECTED) {
         setErrors({ form: "Transaction was rejected. Please try again." });
         setLoadingText("");
         return;
       }
 
-      // Handle transaction revert
-      if (error.message.includes("Transaction failed")) {
+      if (error instanceof Error && error.message.includes("Transaction failed")) {
         setErrors({
           form: "Transaction failed. The withdrawal could not be processed. Please try again.",
         });
@@ -87,13 +114,12 @@ const WithdrawForm = ({
         return;
       }
 
-      // Handle other errors
       setErrors({ form: "Something went wrong. Please try again." });
       setLoadingText("");
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Return early if not on correct chain
@@ -104,17 +130,22 @@ const WithdrawForm = ({
     setIsSubmitting(true);
 
     try {
+      const form = event.target as HTMLFormElement;
+      const amountInput = form.elements.namedItem('amount') as HTMLInputElement;
+      
       const formData = {
-        amount: Number(event.target.amount.value),
+        amount: Number(amountInput.value),
         maxAmount: Number(initialAmount),
       };
 
-      const { isValid, data } = validateForm(formData);
+      const validation = validateForm(formData);
 
-      if (!isValid) {
+      if (!validation.isValid || !validation.data) {
         setIsSubmitting(false);
         return;
       }
+      
+      const { data } = validation;
 
       console.log("Attempting withdrawal", {
         vaultId,
@@ -124,6 +155,10 @@ const WithdrawForm = ({
       await handleWithdraw(data.amount);
 
       console.log("Withdrawal completed successfully");
+    } catch (error: unknown) {
+      console.error("Error during withdrawal attempt:", error);
+      setErrors({ form: "Something went wrong. Please try again." });
+      setLoadingText("");
     } finally {
       refreshUser();
       setIsSubmitting(false);

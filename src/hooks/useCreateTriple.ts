@@ -6,17 +6,17 @@ export function useCreateTriple() {
   const { writeContractAsync } = useWriteContract();
 
   const createTriple = async (
-    subjectId,
-    predicateId,
-    objectId,
-    initialDeposit = 0n
+    subjectId: bigint,
+    predicateId: bigint,
+    objectId: bigint,
+    initialDeposit: bigint = 0n
   ) => {
     try {
       const hash = await writeContractAsync({
         abi: abi,
-        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
         functionName: "createTriple",
-        args: [BigInt(subjectId), BigInt(predicateId), BigInt(objectId)],
+        args: [subjectId, predicateId, objectId],
         value: initialDeposit,
       });
       return hash;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { useDepositTriple } from "@/hooks/useDepositTriple";
 import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
@@ -9,11 +9,20 @@ import { useFormValidation } from "@/hooks/useFormValidation";
 import { stakeFormSchema } from "./validations";
 import { parseEther } from "viem";
 import { baseSepolia, base } from "viem/chains";
+import { isWalletError, WalletErrorCodes } from "@/types/errors";
 
 import styles from "./form.module.scss";
 
 export const DEFAULT_CHAIN_ID =
   process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
+
+interface StakeFormProps {
+  vaultId: string | number;
+  isSubmitting: boolean;
+  setIsSubmitting: (isSubmitting: boolean) => void;
+  setLoadingText: (text: string) => void;
+  onCancel: () => void;
+}
 
 const StakeForm = ({
   vaultId,
@@ -21,8 +30,15 @@ const StakeForm = ({
   setIsSubmitting,
   setLoadingText,
   onCancel,
-}) => {
-  const { refreshUser } = useContext(UserContext);
+}: StakeFormProps) => {
+  const userContext = useContext(UserContext);
+  
+  if (!userContext) {
+    throw new Error("StakeForm must be used within a UserProvider");
+  }
+  
+  const { refreshUser } = userContext;
+  
   const { errors, validateForm, setErrors } =
     useFormValidation(stakeFormSchema);
   const { useAccount, useSwitchChain } = usePrivyAdapter();
@@ -31,12 +47,12 @@ const StakeForm = ({
   const { depositTriple } = useDepositTriple();
   const { waitForTxEvents } = useWaitForTxEvents();
 
-  const handleDeposit = async (amount) => {
+  const handleDeposit = async (amount: number) => {
     try {
       setLoadingText("Transaction 1/1: Depositing ETH into vault");
       const hash = await depositTriple(
-        vaultId,
-        address,
+        BigInt(vaultId),
+        address || "",
         parseEther(`${amount}`)
       );
       console.log("Transaction submitted", { vaultId, amount, hash });
@@ -46,11 +62,10 @@ const StakeForm = ({
       setLoadingText("Your deposit has been successfully processed!");
       await new Promise((resolve) => setTimeout(resolve, 3000));
       onCancel();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error during deposit:", error);
 
-      // Handle user rejection case
-      if (error.code === 4001) {
+      if (isWalletError(error) && error.code === WalletErrorCodes.USER_REJECTED) {
         setErrors({ form: "Transaction was rejected. Please try again." });
         setLoadingText("");
         return;
@@ -62,7 +77,7 @@ const StakeForm = ({
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Return early if not on correct chain
@@ -73,16 +88,21 @@ const StakeForm = ({
     setIsSubmitting(true);
 
     try {
+      const form = event.target as HTMLFormElement;
+      const amountInput = form.elements.namedItem('amount') as HTMLInputElement;
+      
       const formData = {
-        amount: Number(event.target.amount.value),
+        amount: Number(amountInput.value),
       };
 
-      const { isValid, data } = validateForm(formData);
+      const validation = validateForm(formData);
 
-      if (!isValid) {
+      if (!validation.isValid || !validation.data) {
         setIsSubmitting(false);
         return;
       }
+      
+      const { data } = validation;
 
       console.log("Attempting deposit", {
         vaultId,
@@ -92,6 +112,10 @@ const StakeForm = ({
       await handleDeposit(data.amount);
 
       console.log("Deposit completed successfully");
+    } catch (error: unknown) {
+      console.error("Error during deposit attempt:", error);
+      setErrors({ form: "Something went wrong. Please try again." });
+      setLoadingText("");
     } finally {
       refreshUser();
       setIsSubmitting(false);
