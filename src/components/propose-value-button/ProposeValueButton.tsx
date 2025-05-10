@@ -6,13 +6,14 @@ import PlusIcon from "../icons/PlusIcon";
 import styles from "./propose-value-button.module.scss";
 import Modal from "../modal/Modal";
 import ProposeValueForm from "../forms/ProposeValueForm";
-import { useAccount, useConnect } from "wagmi";
-import { linea, baseSepolia } from "viem/chains";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
+import { base, baseSepolia } from "viem/chains";
 
 export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 const ProposeValueButton = ({ onSuccess }) => {
+  const { useAccount, useConnect } = usePrivyAdapter();
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
 

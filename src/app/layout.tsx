@@ -2,6 +2,7 @@ import { AtypDisplay, AtypText } from "@/fonts/fonts";
 import "../styles/global.scss";
 import Providers from "@/contexts/providers";
 import Script from "next/script";
+import { organizationConfig } from "@/config/organization-config";
 
 /**
  * @type {import('next').Metadata}
@@ -11,6 +12,9 @@ export const metadata = {
   title: "Community Values Platform | Collective Intelligence for Organizations",
   description:
     "A participatory platform where communities define, discuss, and align on their core values through transparent voting and meaningful dialogue.",
+  icons: {
+    icon: organizationConfig.branding.logo.favicon,
+  },
   openGraph: {
     type: "website",
     title: "Community Values Platform | Define What Matters Together",
@@ -42,17 +46,16 @@ export const metadata = {
   },
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${AtypDisplay.variable} ${AtypText.variable}`}>
-      <head>
-        <Script
-          src="https://cmp.osano.com/AzZMxHTbQDOQD8c1J/6bd42b63-9020-409c-a672-b8cbca7dea09/osano.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <body>
         <Providers>{children}</Providers>
+        <Script
+          src="https://cmp.osano.com/AzZMxHTbQDOQD8c1J/6bd42b63-9020-409c-a672-b8cbca7dea09/osano.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

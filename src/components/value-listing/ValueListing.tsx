@@ -7,11 +7,12 @@ import SearchControls from "../search-controls/SearchControls";
 import ValueCard from "../value-card/ValueCard";
 import styles from "./value-listing.module.scss";
 import Carousel from "../carousel/Carousel";
-import { useAccount } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { useGetValuesListing } from "@/hooks/useGetValuesListing";
 import { formatEther } from "viem";
 
 const ValueListing = () => {
+  const { useAccount } = usePrivyAdapter();
   const { address, isConnected } = useAccount();
   const { getValuesData } = useGetValuesListing();
 

@@ -1,7 +1,8 @@
-import { useWriteContract } from "wagmi";
+import { usePrivyAdapter } from "./usePrivyAuth";
 import { abi } from "@/backend/abi";
 
 export function useDepositTriple() {
+  const { useWriteContract } = usePrivyAdapter();
   const { writeContractAsync } = useWriteContract();
 
   const depositTriple = async (vaultId, address, value = 0n) => {

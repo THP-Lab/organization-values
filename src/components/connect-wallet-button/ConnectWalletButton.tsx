@@ -1,14 +1,12 @@
 "use client";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import ConnectWalletIcon from "../icons/ConnectWalletIcon";
 import styles from "./connect-wallet-button.module.scss";
-import { baseSepolia, linea } from "viem/chains";
-
-export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+import { DEFAULT_CHAIN_ID } from "@/hooks/usePrivyAuth";
 
 const ConnectWalletButton = () => {
+  const { useAccount, useConnect, useDisconnect } = usePrivyAdapter();
   const { isConnected, address } = useAccount();
   const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();

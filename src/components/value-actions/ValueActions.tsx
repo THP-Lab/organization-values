@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useContext } from "react";
-import { useAccount, useConnect } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { createPortal } from "react-dom";
 import StakeForm from "../forms/StakeForm";
 import WithdrawForm from "../forms/WithdrawForm";
@@ -12,10 +12,10 @@ import Modal from "../modal/Modal";
 import styles from "./value-actions.module.scss";
 import { UserContext } from "../../contexts/UserContext";
 import { formatEther } from "viem";
-import { linea, baseSepolia } from "viem/chains";
+import { base, baseSepolia } from "viem/chains";
 
 export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 // Supports dark and accent hover colors
 const ValueActions = ({
@@ -28,6 +28,7 @@ const ValueActions = ({
   const hoverColorClass = styles[hoverColor] ? styles[hoverColor] : "";
 
   const { user } = useContext(UserContext);
+  const { useAccount, useConnect } = usePrivyAdapter();
   const { isConnected } = useAccount();
   const { connectors, connect } = useConnect();
 

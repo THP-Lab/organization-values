@@ -1,12 +1,14 @@
+"use client";
+
 import { createContext, useState, useEffect, useCallback } from "react";
-import { useAccount } from "wagmi";
 import { useGetUserPositions } from "@/hooks/useGetUserPositionsData";
-import { set } from "zod";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const { useAccount } = usePrivyAdapter();
   const { address, isConnected } = useAccount();
   const { getUserPositionsData } = useGetUserPositions();
 

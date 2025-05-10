@@ -3,9 +3,9 @@
 import { useContext } from "react";
 import { useCreateAtom } from "@/hooks/useCreateAtom";
 import { useWaitForTxEvents } from "@/hooks/useWaitForTxEvents";
-import { useAccount, useSwitchChain } from "wagmi";
+import { usePrivyAdapter } from "@/hooks/usePrivyAuth";
 import { parseEther } from "viem";
-import { baseSepolia, linea } from "viem/chains";
+import { baseSepolia, base } from "viem/chains";
 import { useGetAtomId } from "@/hooks/useGetAtomId";
 import { useCreateTriple } from "@/hooks/useCreateTriple";
 import { UserContext } from "@/contexts/UserContext";
@@ -17,7 +17,7 @@ import { pinThingMutation } from "@/backend/mutations";
 import styles from "./form.module.scss";
 
 export const DEFAULT_CHAIN_ID =
-  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : linea.id;
+  process.env.NEXT_PUBLIC_ENV === "development" ? baseSepolia.id : base.id;
 
 const ProposeValueForm = ({
   isSubmitting,
@@ -30,8 +30,11 @@ const ProposeValueForm = ({
   const { errors, validateForm, setErrors } = useFormValidation(
     proposeValueFormSchema
   );
+  
+  const { useAccount, useSwitchChain } = usePrivyAdapter();
   const { address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
+  
   const { createAtom } = useCreateAtom();
   const { waitForTxEvents } = useWaitForTxEvents();
   const { getAtomId } = useGetAtomId();
